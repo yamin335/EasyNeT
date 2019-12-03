@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#24272c</color>
+    <color name="colorPrimaryDark">#F8F8F8</color>
+    <color name="colorAccent">#19af2c</color>
+    <color name="colorWhite">#ffffff</color>
+
+    <!-- Custom colors -->
+    <color name="colorPrimaryLight">#3d3d3d</color>
+    <color name="colorPrimaryLightDark">#313131</color>
+    <color name="colorYellow">#F1CB00</color>
+    <color name="colorGray">#FF808080</color>
+    <color name="colorGrayLight">#D3D3D3</color>
+    <color name="colorSilver">#C0C0C0</color>
+    <color name="colorDarkGray">#A9A9A9</color>
+    <color name="colorGrayVeryLight">#FFcfcfcf</color>
+    <color name="colorLightGreen">#B2FF59</color>
+    <color name="colorDarkGreen">#46AC06</color>
+    <color name="colorGreen">#50C503</color>
+    <color name="colorGreenTheme">#0AB939</color>
+    <color name="colorRed">#F81616</color>
+    <color name="textColor1">#27a4b0</color>
+    <color name="textColor2">#2763cb</color>
+    <color name="colorCustom1">#24272c</color>
+    <color name="customColor1">#F5FFEC</color>
+    <color name="customColor2">#F5F9FA</color>
+    <color name="customColor3">#F9F9F9</color>
+
+    <!-- Colors for pie chart -->
+    <color name="pieColor1">#FEBF00</color>
+    <color name="pieColor2">#29990B</color>
+
+    <!-- Colors for bar chart -->
+    <color name="barColor1">#29990B</color>
+    <color name="barColor2">#FEBF00</color>
+    <color name="barColor3">#c4ea7c</color>
+    <color name="barColor4">#fd973c</color>
+
+    <color name="test">#C6FF00</color>
 </resources>
