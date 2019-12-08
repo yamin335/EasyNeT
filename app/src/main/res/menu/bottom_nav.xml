@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dashboard_nav_graph"
+        android:icon="@drawable/dashboard_50"
+        android:contentDescription="@string/dashboard_des"
+        android:title="@string/dashboard" />
+    <item
+        android:id="@+id/profile_nav_graph"
+        android:icon="@drawable/user_profile_50"
+        android:contentDescription="@string/profile_des"
+        android:title="@string/profile" />
+    <item
+        android:id="@+id/billing_nav_graph"
+        android:icon="@drawable/billing_50"
+        android:contentDescription="@string/billing_des"
+        android:title="@string/billing" />
+    <item
+        android:id="@+id/support_nav_graph"
+        android:icon="@drawable/support_50"
+        android:contentDescription="@string/support_des"
+        android:title="@string/support" />
+</menu>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="ltd.royalgreen.pacenet.login.LoginViewModel"/>
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbarThumbVertical="@null"
+        android:fillViewport="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ProgressBar
+                style="?android:attr/progressBarStyleHorizontal"
+                android:id="@+id/loader"
+                android:layout_alignParentTop="true"
+                android:layout_width="match_parent"
+                android:layout_marginTop="-6dp"
+                android:layout_height="15dp"
+                android:indeterminate="true"
+                app:showLoader="@{viewModel.apiCallStatus}"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/loginFormLinear"
+                android:layout_alignParentTop="true"
+                android:id="@+id/headerLayout">
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:padding="16dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    app:srcCompat="@drawable/pace_net_logo"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="0dp"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/loginFormLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/usernametInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/username"
+                    android:windowSoftInputMode="adjustResize"
+                    app:boxCornerRadiusBottomStart="2dp"
+                    app:boxCornerRadiusBottomEnd="2dp"
+                    app:boxCornerRadiusTopStart="2dp"
+                    app:boxCornerRadiusTopEnd="2dp"
+                    app:boxStrokeColor="@color/edittext_box_stroke_color"
+                    app:errorTextColor="@color/colorRed"
+                    app:hintTextColor="@color/colorGreenTheme"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/colorDarkGray"
+                    android:textColorHint="@color/colorGrayVeryLight"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="10dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/username"
+                        android:drawableStart="@drawable/user_20"
+                        android:drawableTint="@color/edittext_icon_color"
+                        android:drawablePadding="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={viewModel.userName}"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:textColor="@color/colorPrimaryLight"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/passwordInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/password"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:windowSoftInputMode="adjustResize"
+                    app:boxCornerRadiusBottomStart="2dp"
+                    app:boxCornerRadiusBottomEnd="2dp"
+                    app:boxCornerRadiusTopStart="2dp"
+                    app:boxCornerRadiusTopEnd="2dp"
+                    app:boxStrokeColor="@color/edittext_box_stroke_color"
+                    app:endIconMode="password_toggle"
+                    app:errorTextColor="@color/colorRed"
+                    app:hintTextColor="@color/colorGreenTheme"
+                    android:textColorHint="@color/colorGrayVeryLight"
+                    app:endIconTint="@color/colorDarkGray">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/password"
+                        android:drawableStart="@drawable/password_20"
+                        android:drawableTint="@color/edittext_icon_color"
+                        android:drawablePadding="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={viewModel.password}"
+                        app:hideKeyboardOnInputDone="@{true}"
+                        android:imeOptions="actionDone"
+                        android:inputType="textPassword"
+                        android:textColor="@color/colorPrimaryLight"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/loginButton"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/signin"
+                    android:textSize="16sp"
+                    android:enabled="false"
+                    android:textColor="@color/button_state_colors"
+                    android:windowSoftInputMode="adjustResize"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:backgroundTint="@color/colorGreenTheme"
+                    app:cornerRadius="2dp"/>
+
+                <TextView
+                    android:id="@+id/errorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorRed"
+                    android:layout_gravity="center_horizontal"
+                    app:showIfInvalid="@{viewModel.errorMessage}"
+                    android:visibility="gone"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@string/invalid_username_or_password"/>
+
+                <TextView
+                    android:id="@+id/forgotPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forgot_password"
+                    android:layout_gravity="center_horizontal"
+                    android:textAllCaps="false"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
+                    android:textColor="@color/colorDarkGreen"
+                    android:textSize="16sp"/>
+
+                <LinearLayout
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/signUpLabel"
+                        android:textColor="@color/colorGray"
+                        android:text="Don't have an account yet?"
+                        android:gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="2dp"/>
+
+                    <TextView
+                        android:id="@+id/signUp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/sign_up_now"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackground"
+                        android:layout_marginStart="6dp"
+                        android:textColor="@color/colorDarkGreen"
+                        android:textAllCaps="false"
+                        android:textSize="16sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/loginFormLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:id="@+id/bottomMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/copyright"
+                        app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.9">
+
+                        <TextView
+                            android:id="@+id/faq"
+                            android:text="FAQs"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:textColor="@color/colorDarkGreen"
+                            android:textAllCaps="false"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="2dp"
+                            android:layout_height="13dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@color/colorDarkGreen"/>
+
+                        <TextView
+                            android:id="@+id/privacy"
+                            android:text="Privacy"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:textColor="@color/colorDarkGreen"
+                            android:textAllCaps="false"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_marginStart="2dp"
+                            android:layout_marginEnd="2dp"
+                            android:layout_height="13dp"
+                            android:layout_gravity="center_vertical"
+                            android:background="@color/colorDarkGreen"/>
+
+                        <TextView
+                            android:id="@+id/contact"
+                            android:text="Contact"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackground"
+                            android:textColor="@color/colorDarkGreen"
+                            android:textAllCaps="false"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/copyright"
+                        android:gravity="center"
+                        android:padding="2dp"
+                        android:textSize="10sp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/copyright" app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintVertical_bias="1.0"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+</layout>

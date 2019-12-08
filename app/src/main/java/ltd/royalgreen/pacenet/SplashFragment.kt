@@ -1,0 +1,72 @@
+package ltd.royalgreen.pacenet
+
+import android.content.SharedPreferences
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import kotlinx.android.synthetic.main.splash_fragment.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import ltd.royalgreen.pacenet.dinjectors.Injectable
+import javax.inject.Inject
+
+class SplashFragment : Fragment(), Injectable {
+
+    @Inject
+    lateinit var preferences: SharedPreferences
+
+    private lateinit var animation: Animation
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Hide the status bar.
+        val uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
+        requireActivity().window.decorView.systemUiVisibility = uiOptions
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.splash_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (preferences.getBoolean("goToLogin", false)) {
+            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+        }
+
+        animation = AnimationUtils.loadAnimation(requireContext(), R.anim.logo_animation)
+        animation.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationRepeat(p0: Animation?) {
+
+            }
+
+            override fun onAnimationEnd(p0: Animation?) {
+                runBlocking {
+                    launch {
+                        preferences.edit().apply {
+                            putBoolean("goToLogin", true)
+                            apply()
+                        }
+                        delay(1500L)
+                    }
+
+                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+                }
+            }
+
+            override fun onAnimationStart(p0: Animation?) {
+
+            }
+        })
+
+        logo.startAnimation(animation)
+    }
+}

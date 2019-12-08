@@ -1,43 +1,26 @@
 package ltd.royalgreen.pacenet
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import kotlinx.android.synthetic.main.splash_activity.*
-import kotlinx.coroutines.*
+import dagger.android.AndroidInjection
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import javax.inject.Inject
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : AppCompatActivity(), HasAndroidInjector {
 
-    private lateinit var animation: Animation
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
+
+    override fun androidInjector() = dispatchingAndroidInjector
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_activity)
+    }
 
-        animation = AnimationUtils.loadAnimation(this, R.anim.logo_animation)
-        animation.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationRepeat(p0: Animation?) {
-
-            }
-
-            override fun onAnimationEnd(p0: Animation?) {
-                runBlocking {
-                    launch {
-                        delay(1500L)
-                    }
-
-                    startActivity(Intent(this@SplashActivity, MainActivity::class.java))
-                    finish()
-                }
-            }
-
-            override fun onAnimationStart(p0: Animation?) {
-
-            }
-        })
-
-        logo.startAnimation(animation)
+    override fun onBackPressed() {
+        onBackPressedDispatcher.onBackPressed()
     }
 }

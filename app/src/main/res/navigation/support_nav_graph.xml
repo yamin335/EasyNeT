@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/support_nav_graph"
+    tools:ignore="UnusedNavigation"
+    app:startDestination="@id/supportFragment">
+    <fragment
+        android:id="@+id/supportFragment"
+        android:name="ltd.royalgreen.pacenet.support.SupportFragment"
+        android:label="Support"
+        tools:layout="@layout/support_fragment" />
+</navigation>
