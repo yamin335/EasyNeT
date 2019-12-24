@@ -5,6 +5,7 @@ import dagger.android.ContributesAndroidInjector
 import ltd.royalgreen.pacenet.*
 import ltd.royalgreen.pacenet.billing.BillingFragment
 import ltd.royalgreen.pacenet.dashboard.DashboardFragment
+import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 import ltd.royalgreen.pacenet.login.LoginFragment
 import ltd.royalgreen.pacenet.profile.ProfileFragment
 import ltd.royalgreen.pacenet.support.SupportFragment
@@ -43,9 +44,9 @@ abstract class FragmentBuildersModule {
     @ContributesAndroidInjector
     abstract fun contributeSupportFragment(): SupportFragment
 
-//    @ContributesAndroidInjector
-//    abstract fun contributeAboutFragment(): AboutFragment
-//
+    @ContributesAndroidInjector
+    abstract fun contributeForgotPasswordDialog(): ForgotPasswordDialog
+
 //    @ContributesAndroidInjector
 //    abstract fun contributePaymentFosterFragment(): PaymentFosterWebViewFragment
 }

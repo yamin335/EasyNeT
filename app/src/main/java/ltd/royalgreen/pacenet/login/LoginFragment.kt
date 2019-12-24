@@ -53,6 +53,17 @@ class LoginFragment : Fragment(), Injectable {
             val exitDialog = CustomAlertDialog(object :
                 CustomAlertDialog.YesCallback {
                 override fun onYes() {
+
+                    preferences.edit().apply {
+                        putString("LoggedUserPassword",null)
+                        apply()
+                    }
+
+                    preferences.edit().apply {
+                        putString("LoggedUser", null)
+                        apply()
+                    }
+
                     preferences.edit().apply {
                         putBoolean("goToLogin", false)
                         apply()
@@ -118,7 +129,9 @@ class LoginFragment : Fragment(), Injectable {
         }
 
         binding.forgotPassword.setOnClickListener {
-
+//            val forgotPasswordDialog = ForgotPasswordDialog()
+//            forgotPasswordDialog.isCancelable = true
+//            forgotPasswordDialog.show(parentFragmentManager, "#sign_up_dialog")
         }
 
         binding.signUp.setOnClickListener {
@@ -181,13 +194,19 @@ class LoginFragment : Fragment(), Injectable {
 //            }
         })
 
-        viewModel.apiResult.observe(this, Observer { loggedUser ->
-            if (loggedUser?.resdata?.loggeduser != null) {
+        viewModel.apiResult.observe(this, Observer { loginResponse->
+            if (loginResponse?.resdata?.loggeduser != null) {
                 val handler = CoroutineExceptionHandler { _, exception ->
                     exception.printStackTrace()
                 }
                 CoroutineScope(Dispatchers.IO).launch(handler) {
-                    val loggedUserSerialized = Gson().toJson(loggedUser)
+                    val loggedUserSerialized = Gson().toJson(loginResponse.resdata.loggeduser)
+
+                    preferences.edit().apply {
+                        putString("LoggedUserPassword", viewModel.password.value)
+                        apply()
+                    }
+
                     preferences.edit().apply {
                         putString("LoggedUser", loggedUserSerialized)
                         apply()

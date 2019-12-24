@@ -2,6 +2,8 @@ package ltd.royalgreen.pacenet.network
 
 import com.google.gson.JsonArray
 import ltd.royalgreen.pacenet.login.LoginResponse
+import ltd.royalgreen.pacenet.util.DefaultResponse
+import ltd.royalgreen.pacenet.util.UserDataResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -9,10 +11,20 @@ import retrofit2.http.*
  * REST API access points
  */
 interface ApiService {
-    //API FOR LOGIN
+    // API FOR LOGIN
     @Headers("Content-Type: application/json")
     @POST("/api/ispportal/loginportalusers")
     suspend fun loginportalusers(@Body jsonArray: JsonArray): Response<LoginResponse>
+
+    // API FOR CHANGE PASSWORD
+    @Headers("Content-Type: application/json")
+    @POST("/api/ispportal/changepassword")
+    suspend fun changepassword(@Body jsonArray: JsonArray): Response<DefaultResponse>
+
+    //API FOR USER BALANCE
+    @GET("/api/ispportal/getuserisp")
+    suspend fun getuserisp(@Query("param") param: String): Response<UserDataResponse>
+
 //
 //    //API FOR USER BALANCE
 //    @GET("/api/portal/billclouduserbalance")
