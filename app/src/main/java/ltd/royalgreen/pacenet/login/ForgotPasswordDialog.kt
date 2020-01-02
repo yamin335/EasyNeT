@@ -82,10 +82,13 @@ class ForgotPasswordDialog : DialogFragment(), Injectable {
         val oldPassword = preferences.getString("LoggedUserPassword", null)
 
         fun enableOrDisableSaveButton() {
+            val newPassword = viewModel.newPassword.value ?: ""
             binding.save.isEnabled = isOldPasswordValid == true &&
                     !viewModel.newPassword.value.isNullOrBlank() &&
                     !viewModel.confirmPassword.value.isNullOrBlank() &&
-                    viewModel.newPassword.value == viewModel.confirmPassword.value && viewModel.newPassword.value != viewModel.oldPassword.value
+                    viewModel.newPassword.value == viewModel.confirmPassword.value &&
+                    viewModel.newPassword.value != viewModel.oldPassword.value &&
+                    newPassword.length >= 5 && newPassword.length <= 24
         }
 
         viewModel.errorToast.observe(this, Observer {
@@ -100,16 +103,18 @@ class ForgotPasswordDialog : DialogFragment(), Injectable {
 
         viewModel.oldPassword.observe(this, Observer {
 
-            if (!it.isNullOrBlank() && !oldPassword.isNullOrBlank() && it == oldPassword) {
-                isOldPasswordValid = true
-                binding.oldPasswordLayout.isErrorEnabled = false
-            } else if (!it.isNullOrBlank() && !oldPassword.isNullOrBlank() && it != oldPassword) {
-                isOldPasswordValid = false
-                binding.oldPasswordLayout.isErrorEnabled = true
-                binding.oldPasswordLayout.error = "Incorrect Old Password!"
-            } else if (it.isNullOrBlank()) {
+            if (it.isNullOrBlank() || oldPassword.isNullOrBlank()) {
                 isOldPasswordValid = false
                 binding.oldPasswordLayout.isErrorEnabled = false
+            } else {
+                if (it == oldPassword) {
+                    isOldPasswordValid = true
+                    binding.oldPasswordLayout.isErrorEnabled = false
+                } else {
+                    isOldPasswordValid = false
+                    binding.oldPasswordLayout.isErrorEnabled = true
+                    binding.oldPasswordLayout.error = "Incorrect Old Password!"
+                }
             }
 
             enableOrDisableSaveButton()
@@ -118,43 +123,39 @@ class ForgotPasswordDialog : DialogFragment(), Injectable {
         viewModel.newPassword.observe(this, Observer {
             enableOrDisableSaveButton()
 
-            binding.passwordLayout.isEndIconVisible = !it.isNullOrBlank()
+            binding.passwordLayout.isErrorEnabled = !it.isNullOrBlank() && !viewModel.oldPassword.value.isNullOrBlank()
+                    && (it == viewModel.oldPassword.value || it.length < 5 || it.length > 24)
 
-            if (!it.isNullOrBlank() && !viewModel.oldPassword.value.isNullOrBlank() && it != viewModel.oldPassword.value) {
-                binding.passwordLayout.isErrorEnabled = false
-            } else if (!it.isNullOrBlank() && !viewModel.oldPassword.value.isNullOrBlank() && it == viewModel.oldPassword.value){
-                binding.passwordLayout.isErrorEnabled = true
-                binding.passwordLayout.error = "Same as old password"
-            } else if(it.isNullOrBlank() || viewModel.oldPassword.value.isNullOrBlank()) {
-                binding.passwordLayout.isErrorEnabled = false
+            if (!it.isNullOrBlank() && !viewModel.oldPassword.value.isNullOrBlank()) {
+                if (it == viewModel.oldPassword.value) {
+                    binding.passwordLayout.error = "Same as old password"
+                } else if (it.length < 5 || it.length > 24) {
+                    binding.passwordLayout.error = "Password length must range from 5 to 24"
+                }
             }
 
-            if (!it.isNullOrBlank() && !viewModel.confirmPassword.value.isNullOrBlank() && it == viewModel.confirmPassword.value) {
-                binding.confPasswordLayout.isErrorEnabled = false
-            } else if (!it.isNullOrBlank() && !viewModel.confirmPassword.value.isNullOrBlank() && it != viewModel.confirmPassword.value){
-                binding.confPasswordLayout.isErrorEnabled = true
+            binding.confPasswordLayout.isErrorEnabled = !it.isNullOrBlank() && !viewModel.confirmPassword.value.isNullOrBlank()
+                    && it != viewModel.confirmPassword.value
+
+            if (!it.isNullOrBlank() && !viewModel.confirmPassword.value.isNullOrBlank() && it != viewModel.confirmPassword.value) {
                 binding.confPasswordLayout.error = "Password doesn't match"
-            } else if(it.isNullOrBlank() || viewModel.confirmPassword.value.isNullOrBlank()) {
-                binding.confPasswordLayout.isErrorEnabled = false
             }
+
+            binding.passwordLayout.isEndIconVisible = !it.isNullOrEmpty()
+
         })
 
         viewModel.confirmPassword.observe(this, Observer {
             enableOrDisableSaveButton()
 
-            if (it.isNullOrBlank()) {
-                binding.confPasswordLayout.isEndIconVisible = false
-            } else {
-                binding.confPasswordLayout.isEndIconVisible = true
-                if (!it.isNullOrBlank() && !viewModel.newPassword.value.isNullOrBlank() && it == viewModel.newPassword.value) {
-                    binding.confPasswordLayout.isErrorEnabled = false
-                } else if (!it.isNullOrBlank() && !viewModel.newPassword.value.isNullOrBlank() && it != viewModel.newPassword.value){
-                    binding.confPasswordLayout.isErrorEnabled = true
-                    binding.confPasswordLayout.error = "Password doesn't match"
-                } else if(it.isNullOrBlank() || viewModel.newPassword.value.isNullOrBlank()) {
-                    binding.confPasswordLayout.isErrorEnabled = false
-                }
+            binding.confPasswordLayout.isErrorEnabled = !it.isNullOrBlank() &&
+                    !viewModel.newPassword.value.isNullOrBlank() && it != viewModel.newPassword.value
+
+            if (!it.isNullOrBlank() && !viewModel.newPassword.value.isNullOrBlank() && it != viewModel.newPassword.value){
+                binding.confPasswordLayout.error = "Password doesn't match"
             }
+
+            binding.confPasswordLayout.isEndIconVisible = !it.isNullOrBlank()
         })
 
         binding.save.setOnClickListener {
