@@ -144,49 +144,6 @@ class LoginViewModel @Inject constructor(app: Application) : ViewModel() {
         }
     }
 
-    fun processChangePassword() {
-        if (isNetworkAvailable(application)) {
-            val loggedUser = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
-
-            val jsonObject = JsonObject().apply {
-                addProperty("passowrd", newPassword.value)
-                addProperty("userName", loggedUser.userName)
-            }
-
-            val param = JsonArray().apply {
-                add(jsonObject)
-            }
-
-            val handler = CoroutineExceptionHandler { _, exception ->
-                exception.printStackTrace()
-                apiCallStatus.postValue(ApiCallStatus.ERROR)
-            }
-
-            CoroutineScope(Dispatchers.IO).launch(handler) {
-                apiCallStatus.postValue(ApiCallStatus.LOADING)
-                val response = apiService.changepassword(param)
-                when (val apiResponse = ApiResponse.create(response)) {
-                    is ApiSuccessResponse -> {
-                        apiCallStatus.postValue(ApiCallStatus.SUCCESS)
-                        if (apiResponse.body.resdata.resstate == true) {
-                            successToast.postValue(apiResponse.body.resdata.message)
-                        } else {
-                            errorToast.postValue(apiResponse.body.resdata.message)
-                        }
-                    }
-                    is ApiEmptyResponse -> {
-                        apiCallStatus.postValue(ApiCallStatus.EMPTY)
-                    }
-                    is ApiErrorResponse -> {
-                        apiCallStatus.postValue(ApiCallStatus.ERROR)
-                    }
-                }
-            }
-        } else {
-            showErrorToast(application, application.getString(R.string.net_error_msg))
-        }
-    }
-
     fun getIspUserData() {
         if (isNetworkAvailable(application)) {
             val jsonObject = JsonObject().apply {

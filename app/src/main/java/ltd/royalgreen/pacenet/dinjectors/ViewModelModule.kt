@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ltd.royalgreen.pacenet.util.PaceNetViewModelFactory
 import ltd.royalgreen.pacenet.MainActivityViewModel
+import ltd.royalgreen.pacenet.login.ForgotPassDialogViewModel
 import ltd.royalgreen.pacenet.login.LoginViewModel
 
 @Suppress("unused")
@@ -21,6 +22,12 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LoginViewModel::class)
     abstract fun bindLoginViewModel(loginViewModel: LoginViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ForgotPassDialogViewModel::class)
+    abstract fun bindForgotPassDialogViewModel(forgotPassDialogViewModel: ForgotPassDialogViewModel): ViewModel
+
 //
 //    @Binds
 //    @IntoMap

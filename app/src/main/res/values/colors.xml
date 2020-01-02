@@ -26,6 +26,7 @@
     <color name="customColor2">#F5F9FA</color>
     <color name="customColor3">#F9F9F9</color>
     <color name="customColor4">#FFcfcfcf</color>
+    <color name="customColor5">#F2F2F7</color>
 
     <!-- Colors for pie chart -->
     <color name="pieColor1">#FEBF00</color>

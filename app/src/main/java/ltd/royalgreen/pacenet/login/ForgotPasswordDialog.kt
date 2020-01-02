@@ -10,11 +10,16 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.ForgotPasswordDialogBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
 import ltd.royalgreen.pacenet.util.autoCleared
+import ltd.royalgreen.pacenet.util.hideKeyboard
 import ltd.royalgreen.pacenet.util.showErrorToast
 import ltd.royalgreen.pacenet.util.showSuccessToast
 import javax.inject.Inject
@@ -27,9 +32,9 @@ class ForgotPasswordDialog : DialogFragment(), Injectable {
     @Inject
     lateinit var preferences: SharedPreferences
 
-    private val viewModel: LoginViewModel by lazy {
+    private val viewModel: ForgotPassDialogViewModel by lazy {
         // Get the ViewModel.
-        ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
+        ViewModelProviders.of(this, viewModelFactory).get(ForgotPassDialogViewModel::class.java)
     }
 
     private var binding by autoCleared<ForgotPasswordDialogBinding>()
@@ -85,10 +90,12 @@ class ForgotPasswordDialog : DialogFragment(), Injectable {
 
         viewModel.errorToast.observe(this, Observer {
             showErrorToast(requireContext(), it)
+            dismiss()
         })
 
         viewModel.successToast.observe(this, Observer {
             showSuccessToast(requireContext(), it)
+            dismiss()
         })
 
         viewModel.oldPassword.observe(this, Observer {
@@ -151,8 +158,8 @@ class ForgotPasswordDialog : DialogFragment(), Injectable {
         })
 
         binding.save.setOnClickListener {
+            hideKeyboard()
             viewModel.processChangePassword()
-            dismiss()
         }
 
         binding.cancel.setOnClickListener {
