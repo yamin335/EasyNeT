@@ -60,7 +60,7 @@ class ForgotPassDialogViewModel @Inject constructor(app: Application) : ViewMode
             val loggedUser = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
 
             val jsonObject = JsonObject().apply {
-                addProperty("passowrd", newPassword.value)
+                addProperty("password", newPassword.value)
                 addProperty("userName", loggedUser.userName)
                 addProperty("oldPassword", oldPassword.value)
             }
