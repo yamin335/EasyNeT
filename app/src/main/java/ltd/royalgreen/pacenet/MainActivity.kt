@@ -4,11 +4,11 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.android.DispatchingAndroidInjector
@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel: MainActivityViewModel by lazy {
+    private val viewModel: MainViewModel by viewModels {
         // Get the ViewModel.
-        ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
+        viewModelFactory
     }
 
     @Inject
@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 //        })
 
         if (savedInstanceState == null) {
-//            viewModel.getUserBalance(user)
+            viewModel.getLoggedUserData()
             setupBottomNavigationBar()
         } // Else, need to wait for onRestoreInstanceState
 

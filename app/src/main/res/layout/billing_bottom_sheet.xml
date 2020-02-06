@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="viewModel" type="ltd.royalgreen.pacenet.billing.BillingViewModel"/>
+    </data>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bottomSheet"
+        app:cardElevation="8dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="From Date"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="To Date"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/fromDate"
+                app:layout_constraintTop_toTopOf="@+id/textView"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/fromDate"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="52dp"
+                android:layout_marginEnd="8dp"
+                android:onClick="@{(view) -> viewModel.pickDate(view)}"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="@{viewModel.fromDate}"
+                android:textAllCaps="false"
+                android:textColor="@color/colorGray"
+                app:cornerRadius="2dp"
+                app:iconGravity="start"
+                app:layout_constraintBottom_toBottomOf="@+id/toDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/textView"
+                app:layout_constraintTop_toTopOf="@+id/toDate"
+                app:layout_constraintVertical_bias="0.0"
+                app:strokeColor="#9F9F9F" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/toDate"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="52dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="8dp"
+                android:onClick="@{(view) -> viewModel.pickDate(view)}"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:text="@{viewModel.toDate}"
+                android:textAllCaps="false"
+                android:textColor="@color/colorGray"
+                app:cornerRadius="2dp"
+                app:iconGravity="start"
+                app:layout_constraintBottom_toBottomOf="@+id/searchInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="@+id/searchInputLayout"
+                app:strokeColor="#9F9F9F" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/searchInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:hint="Search"
+                android:padding="2dp"
+                android:textColorHint="@color/colorGrayVeryLight"
+                app:boxCornerRadiusBottomEnd="2dp"
+                app:boxCornerRadiusBottomStart="2dp"
+                app:boxCornerRadiusTopEnd="2dp"
+                app:boxCornerRadiusTopStart="2dp"
+                app:boxStrokeColor="#448AFF"
+                app:errorTextColor="@color/colorRed"
+                app:hintTextColor="@color/colorPrimaryLight"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/toDate"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/searchInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:text="@={viewModel.searchValue}"
+                    android:textColor="@color/colorPrimaryLight"
+                    android:textSize="13sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/applyFilter"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="46dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="24dp"
+                android:backgroundTint="@color/colorGreenTheme"
+                android:text="Apply"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                app:cornerRadius="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/reset"
+                app:layout_constraintTop_toBottomOf="@+id/searchInputLayout" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reset"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="46dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/colorRed"
+                android:text="Reset"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                app:cornerRadius="2dp"
+                app:layout_constraintBottom_toBottomOf="@+id/applyFilter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/applyFilter" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

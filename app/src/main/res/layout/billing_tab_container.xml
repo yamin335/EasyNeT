@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:tabBackground="@color/customColor6"
+            app:tabGravity="fill"
+            app:tabIndicatorGravity="stretch"
+            app:tabIndicatorColor="@color/colorWhite"
+            app:tabSelectedTextColor="@color/colorGreenTheme"
+            app:tabMode="fixed"/>
+
+<!--        <View-->
+<!--            android:id="@+id/divider"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:background="?android:attr/listDivider" />-->
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    </LinearLayout>
+</layout>

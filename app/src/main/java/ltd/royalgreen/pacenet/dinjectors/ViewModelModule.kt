@@ -6,17 +6,21 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import ltd.royalgreen.pacenet.util.PaceNetViewModelFactory
-import ltd.royalgreen.pacenet.MainActivityViewModel
+import ltd.royalgreen.pacenet.MainViewModel
+import ltd.royalgreen.pacenet.billing.BillPayHistViewModel
+import ltd.royalgreen.pacenet.billing.BillingViewModel
+import ltd.royalgreen.pacenet.dashboard.DashboardViewModel
 import ltd.royalgreen.pacenet.login.ForgotPassDialogViewModel
 import ltd.royalgreen.pacenet.login.LoginViewModel
+import ltd.royalgreen.pacenet.profile.ProfileViewModel
 
 @Suppress("unused")
 @Module
 abstract class ViewModelModule {
     @Binds
     @IntoMap
-    @ViewModelKey(MainActivityViewModel::class)
-    abstract fun bindMainActivityViewModel(mainActivityViewModel: MainActivityViewModel): ViewModel
+    @ViewModelKey(MainViewModel::class)
+    abstract fun bindMainActivityViewModel(mainViewModel: MainViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -28,26 +32,26 @@ abstract class ViewModelModule {
     @ViewModelKey(ForgotPassDialogViewModel::class)
     abstract fun bindForgotPassDialogViewModel(forgotPassDialogViewModel: ForgotPassDialogViewModel): ViewModel
 
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(FaqsFragmentViewModel::class)
-//    abstract fun bindFaqsFragmentViewModel(faqsFragmentViewModel: FaqsFragmentViewModel): ViewModel
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(PrivacyFragmentViewModel::class)
-//    abstract fun bindPrivacyFragmentViewModel(privacyFragmentViewModel: PrivacyFragmentViewModel): ViewModel
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(ContactFragmentViewModel::class)
-//    abstract fun bindContactFragmentViewModel(contactFragmentViewModel: ContactFragmentViewModel): ViewModel
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(LoginViewModel::class)
-//    abstract fun bindLoginViewModel(loginViewModel: LoginViewModel): ViewModel
+    @Binds
+    @IntoMap
+    @ViewModelKey(DashboardViewModel::class)
+    abstract fun bindDashboardViewModel(dashboardViewModel: DashboardViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ProfileViewModel::class)
+    abstract fun bindProfileViewModel(profileViewModel: ProfileViewModel): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BillingViewModel::class)
+    abstract fun bindBillingViewModel(billingViewModel: BillingViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BillPayHistViewModel::class)
+    abstract fun bindBillPayHistViewModel(billPayHistViewModel: BillPayHistViewModel): ViewModel
 //
 //    @Binds
 //    @IntoMap

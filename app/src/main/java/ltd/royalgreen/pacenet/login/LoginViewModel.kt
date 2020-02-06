@@ -3,30 +3,16 @@ package ltd.royalgreen.pacenet.login
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.google.gson.Gson
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ltd.royalgreen.pacenet.R
+import ltd.royalgreen.pacenet.BaseViewModel
 import ltd.royalgreen.pacenet.network.*
-import ltd.royalgreen.pacenet.util.isNetworkAvailable
-import ltd.royalgreen.pacenet.util.showErrorToast
-import ltd.royalgreen.pacenet.util.showSuccessToast
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(app: Application) : ViewModel() {
-
-    @Inject
-    lateinit var apiService: ApiService
+class LoginViewModel @Inject constructor(private val application: Application, private val repository: LoginRepository) : BaseViewModel() {
 
     @Inject
     lateinit var preferences: SharedPreferences
-
-    val application = app
 
     val errorToast: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -41,10 +27,6 @@ class LoginViewModel @Inject constructor(app: Application) : ViewModel() {
 
     val password: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
-    }
-
-    val apiCallStatus: MutableLiveData<ApiCallStatus> by lazy {
-        MutableLiveData<ApiCallStatus>()
     }
 
     val apiResult: MutableLiveData<LoginResponse> by lazy {
@@ -108,78 +90,61 @@ class LoginViewModel @Inject constructor(app: Application) : ViewModel() {
     }
 
     fun processSignIn() {
-        if (isNetworkAvailable(application)) {
-            val jsonObject = JsonObject().apply {
-                addProperty("userName", userName.value)
-                addProperty("userPass", password.value)
-            }
-
-            val param = JsonArray().apply {
-                add(jsonObject)
-            }
-
-            val handler = CoroutineExceptionHandler { _, exception ->
-                exception.printStackTrace()
-                apiCallStatus.postValue(ApiCallStatus.ERROR)
-            }
-
-            CoroutineScope(Dispatchers.IO).launch(handler) {
-                apiCallStatus.postValue(ApiCallStatus.LOADING)
-                val response = apiService.loginportalusers(param)
-                when (val apiResponse = ApiResponse.create(response)) {
+        if (checkNetworkStatus(application)) {
+            apiCallStatus.postValue("LOADING")
+            viewModelScope.launch {
+                when (val apiResponse = ApiResponse.create(repository.loginRepo(userName.value!!, password.value!!))) {
                     is ApiSuccessResponse -> {
-                        apiCallStatus.postValue(ApiCallStatus.SUCCESS)
                         apiResult.postValue(apiResponse.body)
+                        apiCallStatus.postValue("SUCCESS")
                     }
                     is ApiEmptyResponse -> {
-                        apiCallStatus.postValue(ApiCallStatus.EMPTY)
+                        apiCallStatus.postValue("EMPTY")
                     }
                     is ApiErrorResponse -> {
-                        apiCallStatus.postValue(ApiCallStatus.ERROR)
+                        apiCallStatus.postValue("ERROR")
                     }
                 }
             }
-        } else {
-            showErrorToast(application, application.getString(R.string.net_error_msg))
         }
     }
 
-    fun getIspUserData() {
-        if (isNetworkAvailable(application)) {
-            val jsonObject = JsonObject().apply {
-                addProperty("userName", userName.value)
-                addProperty("userName", password.value)
-            }
-
-            val param = JsonArray().apply {
-                add(jsonObject)
-            }
-
-            val handler = CoroutineExceptionHandler { _, exception ->
-                exception.printStackTrace()
-                apiCallStatus.postValue(ApiCallStatus.ERROR)
-            }
-
-            CoroutineScope(Dispatchers.IO).launch(handler) {
-                apiCallStatus.postValue(ApiCallStatus.LOADING)
-                val response = apiService.loginportalusers(param)
-                when (val apiResponse = ApiResponse.create(response)) {
-                    is ApiSuccessResponse -> {
-                        apiCallStatus.postValue(ApiCallStatus.SUCCESS)
-                        apiResult.postValue(apiResponse.body)
-                    }
-                    is ApiEmptyResponse -> {
-                        apiCallStatus.postValue(ApiCallStatus.EMPTY)
-                    }
-                    is ApiErrorResponse -> {
-                        apiCallStatus.postValue(ApiCallStatus.ERROR)
-                    }
-                }
-            }
-        } else {
-            showErrorToast(application, application.getString(R.string.net_error_msg))
-        }
-    }
+//    fun getIspUserData() {
+//        if (isNetworkAvailable(application)) {
+//            val jsonObject = JsonObject().apply {
+//                addProperty("userName", )
+//                addProperty("userPass", )
+//            }
+//
+//            val param = JsonArray().apply {
+//                add(jsonObject)
+//            }
+//
+//            val handler = CoroutineExceptionHandler { _, exception ->
+//                exception.printStackTrace()
+//                apiCallStatus.postValue(ApiCallStatus.ERROR)
+//            }
+//
+//            CoroutineScope(Dispatchers.IO).launch(handler) {
+//                apiCallStatus.postValue(ApiCallStatus.LOADING)
+//                val response = apiService.loginportalusers(param)
+//                when (val apiResponse = ApiResponse.create(response)) {
+//                    is ApiSuccessResponse -> {
+//                        apiCallStatus.postValue(ApiCallStatus.SUCCESS)
+//                        apiResult.postValue(apiResponse.body)
+//                    }
+//                    is ApiEmptyResponse -> {
+//                        apiCallStatus.postValue(ApiCallStatus.EMPTY)
+//                    }
+//                    is ApiErrorResponse -> {
+//                        apiCallStatus.postValue(ApiCallStatus.ERROR)
+//                    }
+//                }
+//            }
+//        } else {
+//            showErrorToast(application, application.getString(R.string.net_error_msg))
+//        }
+//    }
 
 //    fun processSignUp(jsonObject: JsonObject) {
 //        if (isNetworkAvailable(application)) {

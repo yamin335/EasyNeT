@@ -3,6 +3,7 @@ package ltd.royalgreen.pacenet.dinjectors
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import ltd.royalgreen.pacenet.*
+import ltd.royalgreen.pacenet.billing.BillPayHistFragment
 import ltd.royalgreen.pacenet.billing.BillingFragment
 import ltd.royalgreen.pacenet.dashboard.DashboardFragment
 import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
@@ -47,6 +48,6 @@ abstract class FragmentBuildersModule {
     @ContributesAndroidInjector
     abstract fun contributeForgotPasswordDialog(): ForgotPasswordDialog
 
-//    @ContributesAndroidInjector
-//    abstract fun contributePaymentFosterFragment(): PaymentFosterWebViewFragment
+    @ContributesAndroidInjector
+    abstract fun contributeBillPayHistFragment(): BillPayHistFragment
 }

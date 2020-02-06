@@ -7,10 +7,15 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.activity.addCallback
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.SplashActivity
 import ltd.royalgreen.pacenet.dinjectors.Injectable
+import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
+import ltd.royalgreen.pacenet.profile.ProfileViewModel
+import ltd.royalgreen.pacenet.util.showChangePasswordDialog
 import javax.inject.Inject
 
 /**
@@ -21,6 +26,14 @@ class SupportFragment : Fragment(), Injectable {
     @Inject
     lateinit var preferences: SharedPreferences
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: SupportViewModel by viewModels {
+        // Get the ViewModel.
+        viewModelFactory
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -29,21 +42,7 @@ class SupportFragment : Fragment(), Injectable {
             val exitDialog = CustomAlertDialog(object :
                 CustomAlertDialog.YesCallback {
                 override fun onYes() {
-
-                    preferences.edit().apply {
-                        putString("LoggedUserPassword",null)
-                        apply()
-                    }
-
-                    preferences.edit().apply {
-                        putString("LoggedUser", null)
-                        apply()
-                    }
-
-                    preferences.edit().apply {
-                        putBoolean("goToLogin", false)
-                        apply()
-                    }
+                    viewModel.onAppExit(preferences)
                     requireActivity().finish()
                 }
             }, "Do you want to exit?", "")
@@ -70,22 +69,16 @@ class SupportFragment : Fragment(), Injectable {
                 val exitDialog = CustomAlertDialog(object :
                     CustomAlertDialog.YesCallback {
                     override fun onYes() {
-
-                        preferences.edit().apply {
-                            putString("LoggedUserPassword",null)
-                            apply()
-                        }
-
-                        preferences.edit().apply {
-                            putString("LoggedUser", null)
-                            apply()
-                        }
-
+                        viewModel.onLogOut(preferences)
                         startActivity(Intent(requireActivity(), SplashActivity::class.java))
                         requireActivity().finish()
                     }
                 }, "Do you want to Sign Out?", "")
                 exitDialog.show(parentFragmentManager, "#sign_out_dialog")
+                true
+            }
+            R.id.change_password -> {
+                showChangePasswordDialog(parentFragmentManager)
                 true
             }
             else -> super.onOptionsItemSelected(item)

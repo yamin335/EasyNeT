@@ -1,9 +1,10 @@
 package ltd.royalgreen.pacenet.network
 
 import com.google.gson.JsonArray
+import ltd.royalgreen.pacenet.UserDataResponse
+import ltd.royalgreen.pacenet.billing.PaymentHistory
 import ltd.royalgreen.pacenet.login.LoginResponse
 import ltd.royalgreen.pacenet.util.DefaultResponse
-import ltd.royalgreen.pacenet.util.UserDataResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -24,6 +25,10 @@ interface ApiService {
     //API FOR USER BALANCE
     @GET("/api/ispportal/getuserisp")
     suspend fun getuserisp(@Query("param") param: String): Response<UserDataResponse>
+
+    //API FOR USER PAYMENT HISTORY
+    @GET("/api/ispportal/billhistory")
+    suspend fun billhistory(@Query("param") param: String): Response<PaymentHistory>
 
 //
 //    //API FOR USER BALANCE

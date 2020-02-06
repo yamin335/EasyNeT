@@ -11,9 +11,11 @@ import android.view.WindowManager
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -41,9 +43,9 @@ class LoginFragment : Fragment(), Injectable {
 
     private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
 
-    private val viewModel: LoginViewModel by lazy {
+    private val viewModel: LoginViewModel by viewModels {
         // Get the ViewModel.
-        ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
+        viewModelFactory
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,21 +55,7 @@ class LoginFragment : Fragment(), Injectable {
             val exitDialog = CustomAlertDialog(object :
                 CustomAlertDialog.YesCallback {
                 override fun onYes() {
-
-                    preferences.edit().apply {
-                        putString("LoggedUserPassword",null)
-                        apply()
-                    }
-
-                    preferences.edit().apply {
-                        putString("LoggedUser", null)
-                        apply()
-                    }
-
-                    preferences.edit().apply {
-                        putBoolean("goToLogin", false)
-                        apply()
-                    }
+                    viewModel.onAppExit(preferences)
                     requireActivity().finish()
                 }
             }, "Do you want to exit?", "")
@@ -163,19 +151,19 @@ class LoginFragment : Fragment(), Injectable {
 //            findNavController().navigate(R.id.action_loginFragment_to_contactFragment)
         }
 
-        viewModel.userName.observe(this, Observer {
+        viewModel.userName.observe(viewLifecycleOwner, Observer {
             viewModel.errorMessage.value = false
             binding.loginButton.isEnabled = !it.isNullOrEmpty() && !viewModel.password.value.isNullOrEmpty()
 
         })
 
-        viewModel.password.observe(this, Observer {
+        viewModel.password.observe(viewLifecycleOwner, Observer {
             viewModel.errorMessage.value = false
             binding.loginButton.isEnabled = !it.isNullOrEmpty() && !viewModel.userName.value.isNullOrEmpty()
             binding.passwordInputLayout.isEndIconVisible = !it.isNullOrEmpty()
         })
 
-        viewModel.signUpMsg.observe(this, Observer {
+        viewModel.signUpMsg.observe(viewLifecycleOwner, Observer {
 //            val parent: ViewGroup? = null
 //            if (it == "Save successfully.") {
 //                val toast = Toast.makeText(requireContext(), "", Toast.LENGTH_LONG)
@@ -194,12 +182,9 @@ class LoginFragment : Fragment(), Injectable {
 //            }
         })
 
-        viewModel.apiResult.observe(this, Observer { loginResponse->
+        viewModel.apiResult.observe(viewLifecycleOwner, Observer { loginResponse->
             if (loginResponse?.resdata?.loggeduser != null) {
-                val handler = CoroutineExceptionHandler { _, exception ->
-                    exception.printStackTrace()
-                }
-                CoroutineScope(Dispatchers.IO).launch(handler) {
+                lifecycleScope.launch {
                     val loggedUserSerialized = Gson().toJson(loginResponse.resdata.loggeduser)
 
                     preferences.edit().apply {
@@ -208,7 +193,7 @@ class LoginFragment : Fragment(), Injectable {
                     }
 
                     preferences.edit().apply {
-                        putString("LoggedUser", loggedUserSerialized)
+                        putString("LoggedUserID", loggedUserSerialized)
                         apply()
                     }
                 }

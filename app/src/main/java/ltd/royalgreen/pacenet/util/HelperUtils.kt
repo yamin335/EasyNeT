@@ -15,10 +15,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import kotlinx.android.synthetic.main.toast_custom_green.view.*
 import kotlinx.android.synthetic.main.toast_custom_red.view.*
 import ltd.royalgreen.pacenet.R
+import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 
 class ConnectivityLiveData @VisibleForTesting internal constructor(private val connectivityManager: ConnectivityManager)
     : LiveData<Boolean>() {
@@ -96,4 +98,10 @@ fun showSuccessToast(context: Context, message: String) {
     toastView.successMessage.text = message
     toast.view = toastView
     toast.show()
+}
+
+fun showChangePasswordDialog(fragmentManager: FragmentManager) {
+    val forgotPasswordDialog = ForgotPasswordDialog()
+    forgotPasswordDialog.isCancelable = true
+    forgotPasswordDialog.show(fragmentManager, "#sign_up_dialog")
 }

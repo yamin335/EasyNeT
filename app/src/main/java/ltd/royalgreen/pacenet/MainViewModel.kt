@@ -3,25 +3,18 @@ package ltd.royalgreen.pacenet
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
+import com.google.gson.JsonParser
+import kotlinx.coroutines.launch
+import ltd.royalgreen.pacenet.network.*
 import ltd.royalgreen.pacenet.util.ConnectivityLiveData
-import ltd.royalgreen.pacenet.network.ApiCallStatus
-import ltd.royalgreen.pacenet.network.ApiService
 import javax.inject.Inject
 
-class MainActivityViewModel @Inject constructor(app: Application) : ViewModel() {
-
-    val application = app
+class MainViewModel @Inject constructor(private val application: Application, private val repository: MainRepository) : BaseViewModel() {
 
     @Inject
     lateinit var preferences: SharedPreferences
-
-    @Inject
-    lateinit var apiService: ApiService
-
-    val apiCallStatus: MutableLiveData<ApiCallStatus> by lazy {
-        MutableLiveData<ApiCallStatus>()
-    }
 
 //    val userBalance: MutableLiveData<BalanceModel> by lazy {
 //        MutableLiveData<BalanceModel>()
@@ -29,6 +22,27 @@ class MainActivityViewModel @Inject constructor(app: Application) : ViewModel() 
 
     val internetStatus: ConnectivityLiveData by lazy {
         ConnectivityLiveData(application)
+    }
+
+    fun getLoggedUserData() {
+        if (checkNetworkStatus(application)) {
+            viewModelScope.launch {
+                when (val apiResponse = ApiResponse.create(repository.loggedUserRepo())) {
+                    is ApiSuccessResponse -> {
+                        val user = Gson().fromJson(JsonParser.parseString(apiResponse.body.resdata.userIsp).asJsonArray[0], LoggedUser::class.java)
+                        val loggedUserSerialized = Gson().toJson(user)
+                        preferences.edit().apply {
+                            putString("LoggedUser", loggedUserSerialized)
+                            apply()
+                        }
+                    }
+                    is ApiEmptyResponse -> {
+                    }
+                    is ApiErrorResponse -> {
+                    }
+                }
+            }
+        }
     }
 
 //    fun getUserBalance(user: LoggedUser?) {

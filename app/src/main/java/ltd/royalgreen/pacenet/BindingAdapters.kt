@@ -36,11 +36,11 @@ object BindingAdapters {
     }
 
     // Shows and hides progressbar
-//    @JvmStatic
-//    @BindingAdapter("isVisible")
-//    fun isVisible(view: View, apiCallStatus: ApiCallStatus?) {
-//        view.visibility = if (apiCallStatus?.equals(ApiCallStatus.LOADING) == true) View.VISIBLE else View.GONE
-//    }
+    @JvmStatic
+    @BindingAdapter("isVisible")
+    fun isVisible(view: View, apiCallStatus: String?) {
+        view.visibility = if (apiCallStatus?.equals("LOADING") == true) View.VISIBLE else View.GONE
+    }
 
     // Shows and hides progressbar
 //    @JvmStatic
