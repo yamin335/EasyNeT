@@ -12,7 +12,7 @@ import ltd.royalgreen.pacenet.R
 import java.util.*
 import javax.inject.Inject
 
-class BillPayHistViewModel @Inject constructor(val application: Application, private val repository: BillingRepository) : BaseViewModel() {
+class RechargeHistViewModel @Inject constructor(val application: Application, private val repository: BillingRepository) : BaseViewModel() {
 
     @Inject
     lateinit var preferences: SharedPreferences
@@ -29,7 +29,7 @@ class BillPayHistViewModel @Inject constructor(val application: Application, pri
         MutableLiveData<String>()
     }
 
-    lateinit var paymentHistoryList: LiveData<PagedList<PaymentTransaction>>
+    lateinit var rechargeHistoryList: LiveData<PagedList<RechargeTransaction>>
 
     init {
         fromDate.value = ""
@@ -40,7 +40,7 @@ class BillPayHistViewModel @Inject constructor(val application: Application, pri
 //        searchValue.value = ""
     }
 
-    suspend fun getPaymentHistory(pageNumber: Long, pageSize: Int, values: String, SDate: String, EDate: String) = repository.paymentHistoryRepo(pageNumber, pageSize, values, SDate, EDate)
+    suspend fun getRechargeHistory(pageNumber: Long, pageSize: Int, values: String, SDate: String, EDate: String) = repository.rechargeHistoryRepo(pageNumber, pageSize, values, SDate, EDate)
 
     fun pickDate(view: View){
         // calender class's instance and get current date , month and year from calender

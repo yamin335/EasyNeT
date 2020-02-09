@@ -6,29 +6,16 @@ import android.content.SharedPreferences
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
-import com.google.gson.Gson
-import com.google.gson.JsonParser
-import kotlinx.coroutines.launch
 import ltd.royalgreen.pacenet.BaseViewModel
-import ltd.royalgreen.pacenet.LoggedUser
 import ltd.royalgreen.pacenet.R
-import ltd.royalgreen.pacenet.network.ApiEmptyResponse
-import ltd.royalgreen.pacenet.network.ApiErrorResponse
-import ltd.royalgreen.pacenet.network.ApiResponse
-import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 import java.util.*
 import javax.inject.Inject
 
-class BillingViewModel @Inject constructor(val application: Application, private val repository: BillingRepository) : BaseViewModel() {
+class PayHistViewModel @Inject constructor(val application: Application, private val repository: BillingRepository) : BaseViewModel() {
 
     @Inject
     lateinit var preferences: SharedPreferences
-
-    val balance: MutableLiveData<String> by lazy {
-        MutableLiveData<String>()
-    }
 
     val toDate: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -45,9 +32,12 @@ class BillingViewModel @Inject constructor(val application: Application, private
     lateinit var paymentHistoryList: LiveData<PagedList<PaymentTransaction>>
 
     init {
-        fromDate.value = "dd/mm/yyyy"
-        toDate.value = "dd/mm/yyyy"
+        fromDate.value = ""
+        toDate.value = ""
         searchValue.value = ""
+//        fromDate.value = "dd/mm/yyyy"
+//        toDate.value = "dd/mm/yyyy"
+//        searchValue.value = ""
     }
 
     suspend fun getPaymentHistory(pageNumber: Long, pageSize: Int, values: String, SDate: String, EDate: String) = repository.paymentHistoryRepo(pageNumber, pageSize, values, SDate, EDate)
@@ -72,12 +62,5 @@ class BillingViewModel @Inject constructor(val application: Application, private
             }, mYear, mMonth, mDay
         )
         datePickerDialog.show()
-    }
-
-    fun prepareBalance() {
-        viewModelScope.launch {
-            val loggedUser = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
-            balance.postValue(loggedUser.balance.toString() + " (BDT)")
-        }
     }
 }

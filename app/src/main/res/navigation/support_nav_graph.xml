@@ -9,5 +9,14 @@
         android:id="@+id/supportFragment"
         android:name="ltd.royalgreen.pacenet.support.SupportFragment"
         android:label="Support"
-        tools:layout="@layout/support_fragment" />
+        tools:layout="@layout/support_fragment" >
+        <action
+            android:id="@+id/action_supportFragment_to_ticketEntryFragment"
+            app:destination="@id/ticketEntryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ticketEntryFragment"
+        android:name="ltd.royalgreen.pacenet.support.TicketEntryFragment"
+        android:label="support_ticket_entry"
+        tools:layout="@layout/support_ticket_entry" />
 </navigation>

@@ -7,12 +7,14 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ltd.royalgreen.pacenet.util.PaceNetViewModelFactory
 import ltd.royalgreen.pacenet.MainViewModel
-import ltd.royalgreen.pacenet.billing.BillPayHistViewModel
+import ltd.royalgreen.pacenet.billing.PayHistViewModel
 import ltd.royalgreen.pacenet.billing.BillingViewModel
+import ltd.royalgreen.pacenet.billing.RechargeHistViewModel
 import ltd.royalgreen.pacenet.dashboard.DashboardViewModel
 import ltd.royalgreen.pacenet.login.ForgotPassDialogViewModel
 import ltd.royalgreen.pacenet.login.LoginViewModel
 import ltd.royalgreen.pacenet.profile.ProfileViewModel
+import ltd.royalgreen.pacenet.support.TicketEntryViewModel
 
 @Suppress("unused")
 @Module
@@ -50,18 +52,18 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(BillPayHistViewModel::class)
-    abstract fun bindBillPayHistViewModel(billPayHistViewModel: BillPayHistViewModel): ViewModel
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(DashboardViewModel::class)
-//    abstract fun bindDashboardViewModel(dashboardViewModel: DashboardViewModel): ViewModel
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(ServiceFragmentViewModel::class)
-//    abstract fun bindServiceFragmentViewModel(serviceFragmentViewModel: ServiceFragmentViewModel): ViewModel
+    @ViewModelKey(PayHistViewModel::class)
+    abstract fun bindBillPayHistViewModel(payHistViewModel: PayHistViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RechargeHistViewModel::class)
+    abstract fun bindRechargeHistViewModel(rechargeHistViewModel: RechargeHistViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TicketEntryViewModel::class)
+    abstract fun bindTicketEntryViewModel(ticketEntryViewModel: TicketEntryViewModel): ViewModel
 //
 //    @Binds
 //    @IntoMap

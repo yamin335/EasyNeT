@@ -7,14 +7,21 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.activity.addCallback
+import androidx.databinding.DataBindingComponent
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.SplashActivity
+import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
+import ltd.royalgreen.pacenet.databinding.ProfileFragmentBinding
+import ltd.royalgreen.pacenet.databinding.SupportFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
 import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 import ltd.royalgreen.pacenet.profile.ProfileViewModel
+import ltd.royalgreen.pacenet.util.autoCleared
 import ltd.royalgreen.pacenet.util.showChangePasswordDialog
 import javax.inject.Inject
 
@@ -33,6 +40,10 @@ class SupportFragment : Fragment(), Injectable {
         // Get the ViewModel.
         viewModelFactory
     }
+
+    private var binding by autoCleared<SupportFragmentBinding>()
+
+    private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +66,26 @@ class SupportFragment : Fragment(), Injectable {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.support_fragment, container, false)
+        // Inflate the layout for this fragment
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.support_fragment,
+            container,
+            false,
+            dataBindingComponent
+        )
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        binding.newTicket.setOnClickListener {
+            val action = SupportFragmentDirections.actionSupportFragmentToTicketEntryFragment()
+            findNavController().navigate(action)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

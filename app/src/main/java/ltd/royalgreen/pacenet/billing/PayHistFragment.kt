@@ -1,10 +1,8 @@
 package ltd.royalgreen.pacenet.billing
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
@@ -16,22 +14,16 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.billing_payment_tab.*
 import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.R
-import ltd.royalgreen.pacenet.SplashActivity
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
-import ltd.royalgreen.pacenet.databinding.BillingFragmentBinding
 import ltd.royalgreen.pacenet.databinding.BillingPaymentTabBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
 import ltd.royalgreen.pacenet.util.RecyclerItemDivider
 import ltd.royalgreen.pacenet.util.autoCleared
-import ltd.royalgreen.pacenet.util.showChangePasswordDialog
 import javax.inject.Inject
 
-class BillPayHistFragment : Fragment(), Injectable {
+class PayHistFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var preferences: SharedPreferences
@@ -39,9 +31,9 @@ class BillPayHistFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    val viewModelReference by viewModels<BillPayHistViewModel>()
+    val viewModelReference by viewModels<PayHistViewModel>()
 
-    private val viewModel: BillPayHistViewModel by viewModels {
+    private val viewModel: PayHistViewModel by viewModels {
         // Get the ViewModel.
         viewModelFactory
     }

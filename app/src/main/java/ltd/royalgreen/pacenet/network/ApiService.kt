@@ -3,7 +3,9 @@ package ltd.royalgreen.pacenet.network
 import com.google.gson.JsonArray
 import ltd.royalgreen.pacenet.UserDataResponse
 import ltd.royalgreen.pacenet.billing.PaymentHistory
+import ltd.royalgreen.pacenet.billing.RechargeHistory
 import ltd.royalgreen.pacenet.login.LoginResponse
+import ltd.royalgreen.pacenet.support.TicketCategoryResponse
 import ltd.royalgreen.pacenet.util.DefaultResponse
 import retrofit2.Response
 import retrofit2.http.*
@@ -30,10 +32,14 @@ interface ApiService {
     @GET("/api/ispportal/billhistory")
     suspend fun billhistory(@Query("param") param: String): Response<PaymentHistory>
 
-//
-//    //API FOR USER BALANCE
-//    @GET("/api/portal/billclouduserbalance")
-//    suspend fun billclouduserbalance(@Query("param") param: String): Response<BalanceModel>
+    //API FOR USER RECHARGE HISTORY
+    @GET("/api/ispportal/rechargehistory")
+    suspend fun rechargehistory(@Query("param") param: String): Response<RechargeHistory>
+
+
+    //API FOR  SUPPORT TICKET CATEGORY
+    @GET("/api/dropdown/getispticketcategory")
+    suspend fun getispticketcategory(@Query("param") param: String): Response<TicketCategoryResponse>
 //
 //    //API FOR USER VM STATUS
 //    @GET("/api/portal/GetDashboardChartPortal")

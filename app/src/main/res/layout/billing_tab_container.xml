@@ -1,10 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="viewModel" type="ltd.royalgreen.pacenet.billing.BillingViewModel"/>
+    </data>
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Balance:"
+                android:textSize="16sp"
+                android:textColor="@color/colorPrimaryLight"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/balance"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:textSize="16sp"
+                android:ellipsize="end"
+                android:text="@{viewModel.balance}"
+                android:textColor="@color/colorPrimaryLight"
+                app:layout_constraintBottom_toBottomOf="@+id/textView7"
+                app:layout_constraintEnd_toStartOf="@+id/rechargeButton"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/textView7"
+                app:layout_constraintTop_toTopOf="@+id/textView7" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/rechargeButton"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="4dp"
+                android:backgroundTint="@color/colorGreenTheme"
+                android:text="Recharge Now"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                app:cornerRadius="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
@@ -12,18 +77,17 @@
             android:layout_height="wrap_content"
             android:background="@color/colorWhite"
             android:theme="@style/AppTheme.AppBarOverlay"
-            app:tabBackground="@color/customColor6"
+            app:tabBackground="@color/colorWhite"
             app:tabGravity="fill"
-            app:tabIndicatorGravity="stretch"
-            app:tabIndicatorColor="@color/colorWhite"
+            app:tabIndicatorGravity="bottom"
+            app:tabIndicatorColor="@color/colorGreenTheme"
             app:tabSelectedTextColor="@color/colorGreenTheme"
             app:tabMode="fixed"/>
 
-<!--        <View-->
-<!--            android:id="@+id/divider"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:background="?android:attr/listDivider" />-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"

@@ -29,6 +29,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
+        android:textStyle="bold"
         android:textColor="@color/textColor1"
         android:ellipsize="end"
         android:maxLines="1"

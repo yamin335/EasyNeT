@@ -3,13 +3,15 @@ package ltd.royalgreen.pacenet.dinjectors
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import ltd.royalgreen.pacenet.*
-import ltd.royalgreen.pacenet.billing.BillPayHistFragment
+import ltd.royalgreen.pacenet.billing.PayHistFragment
 import ltd.royalgreen.pacenet.billing.BillingFragment
+import ltd.royalgreen.pacenet.billing.RechargeHistFragment
 import ltd.royalgreen.pacenet.dashboard.DashboardFragment
 import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 import ltd.royalgreen.pacenet.login.LoginFragment
 import ltd.royalgreen.pacenet.profile.ProfileFragment
 import ltd.royalgreen.pacenet.support.SupportFragment
+import ltd.royalgreen.pacenet.support.TicketEntryFragment
 
 @Suppress("unused")
 @Module
@@ -26,9 +28,6 @@ abstract class FragmentBuildersModule {
 //
 //    @ContributesAndroidInjector
 //    abstract fun contributePrivacyFragment(): PrivacyFragment
-//
-//    @ContributesAndroidInjector
-//    abstract fun contributeContactFragment(): ContactFragment
 //
 //    @ContributesAndroidInjector
 //    abstract fun contributeSignUpDialogFragment(): SignUpDialog
@@ -49,5 +48,11 @@ abstract class FragmentBuildersModule {
     abstract fun contributeForgotPasswordDialog(): ForgotPasswordDialog
 
     @ContributesAndroidInjector
-    abstract fun contributeBillPayHistFragment(): BillPayHistFragment
+    abstract fun contributePayHistFragment(): PayHistFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeRechargeHistFragment(): RechargeHistFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeTicketEntryFragment(): TicketEntryFragment
 }

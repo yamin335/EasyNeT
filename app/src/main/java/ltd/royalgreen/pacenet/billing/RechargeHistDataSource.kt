@@ -10,21 +10,21 @@ import ltd.royalgreen.pacenet.network.ApiErrorResponse
 import ltd.royalgreen.pacenet.network.ApiResponse
 import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 
-class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSource<Long, PaymentTransaction>() {
+class RechargeHistDataSource(rechargeHistViewModel: RechargeHistViewModel) : PageKeyedDataSource<Long, RechargeTransaction>() {
 
-    val viewModel = payHistViewModel
+    val viewModel = rechargeHistViewModel
 
-    override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, PaymentTransaction>) {
+    override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, RechargeTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
             viewModel.viewModelScope.launch {
-                when (val apiResponse = ApiResponse.create(viewModel.getPaymentHistory(0, 30,
+                when (val apiResponse = ApiResponse.create(viewModel.getRechargeHistory(0, 30,
                     viewModel.searchValue.value!!, viewModel.fromDate.value!!, viewModel.toDate.value!!))) {
                     is ApiSuccessResponse -> {
-                        if (!apiResponse.body.resdata?.listPayment.isNullOrBlank()) {
-                            val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listPayment).asJsonArray
-                            val tempTransactionList: ArrayList<PaymentTransaction> = ArrayList()
+                        if (!apiResponse.body.resdata?.listRecharge.isNullOrBlank()) {
+                            val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listRecharge).asJsonArray
+                            val tempTransactionList: ArrayList<RechargeTransaction> = ArrayList()
                             for (transaction in transactionList) {
-                                tempTransactionList.add(Gson().fromJson(transaction, PaymentTransaction::class.java))
+                                tempTransactionList.add(Gson().fromJson(transaction, RechargeTransaction::class.java))
                             }
                             callback.onResult(tempTransactionList, null, 1)
                         }
@@ -38,17 +38,17 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
         }
     }
 
-    override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, PaymentTransaction>) {
+    override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, RechargeTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
             viewModel.viewModelScope.launch {
-                when (val apiResponse = ApiResponse.create(viewModel.getPaymentHistory(params.key, 30,
+                when (val apiResponse = ApiResponse.create(viewModel.getRechargeHistory(params.key, 30,
                     viewModel.searchValue.value!!, viewModel.fromDate.value!!, viewModel.toDate.value!!))) {
                     is ApiSuccessResponse -> {
-                        if (!apiResponse.body.resdata?.listPayment.isNullOrBlank()) {
-                            val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listPayment).asJsonArray
-                            val tempTransactionList: ArrayList<PaymentTransaction> = ArrayList()
+                        if (!apiResponse.body.resdata?.listRecharge.isNullOrBlank()) {
+                            val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listRecharge).asJsonArray
+                            val tempTransactionList: ArrayList<RechargeTransaction> = ArrayList()
                             for (transaction in transactionList) {
-                                tempTransactionList.add(Gson().fromJson(transaction, PaymentTransaction::class.java))
+                                tempTransactionList.add(Gson().fromJson(transaction, RechargeTransaction::class.java))
                             }
                             callback.onResult(tempTransactionList, params.key + 1)
                         }
@@ -62,7 +62,7 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
         }
     }
 
-    override fun loadBefore(params: LoadParams<Long>, callback: LoadCallback<Long, PaymentTransaction>) {
+    override fun loadBefore(params: LoadParams<Long>, callback: LoadCallback<Long, RechargeTransaction>) {
 
     }
 }

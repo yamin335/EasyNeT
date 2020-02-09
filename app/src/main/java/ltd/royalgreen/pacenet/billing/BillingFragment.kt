@@ -10,22 +10,15 @@ import androidx.activity.addCallback
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.paging.DataSource
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.android.synthetic.main.billing_payment_tab.*
 import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.SplashActivity
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.BillingFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
-import ltd.royalgreen.pacenet.util.RecyclerItemDivider
 import ltd.royalgreen.pacenet.util.autoCleared
 import ltd.royalgreen.pacenet.util.showChangePasswordDialog
 import javax.inject.Inject
@@ -53,7 +46,7 @@ class BillingFragment : Fragment(), Injectable {
     private var binding by autoCleared<BillingFragmentBinding>()
     private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
 
-    private val viewPagerFragments = arrayOf(BillPayHistFragment(), BillRechargeHistFragment())
+    private val viewPagerFragments: Array<Fragment> = arrayOf(PayHistFragment(), RechargeHistFragment())
     private val viewPagerPageTitles = arrayOf("Payments", "Recharges")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,6 +86,10 @@ class BillingFragment : Fragment(), Injectable {
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.includedBottomSheet.viewModel = viewModel
+
+        binding.includedContentMain.viewModel = viewModel
+
+        viewModel.prepareBalance()
 
         binding.includedContentMain.viewPager.adapter = BillingViewPagerAdapter(viewPagerFragments, childFragmentManager, viewLifecycleOwner.lifecycle)
 
