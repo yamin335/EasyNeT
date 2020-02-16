@@ -79,7 +79,9 @@ class TicketEntryFragment : Fragment(), Injectable {
             }
 
             titleTicketCategoryList = temp
-            ticketCategoryAdapter.notifyDataSetInvalidated()
+            ticketCategoryAdapter = ArrayAdapter(requireContext(), R.layout.spinner_item, titleTicketCategoryList)
+            ticketCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.spinnerticketCategory.adapter = ticketCategoryAdapter
         })
     }
 }

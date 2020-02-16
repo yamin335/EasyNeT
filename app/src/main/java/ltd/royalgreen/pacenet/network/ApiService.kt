@@ -4,6 +4,7 @@ import com.google.gson.JsonArray
 import ltd.royalgreen.pacenet.UserDataResponse
 import ltd.royalgreen.pacenet.billing.PaymentHistory
 import ltd.royalgreen.pacenet.billing.RechargeHistory
+import ltd.royalgreen.pacenet.dashboard.DashboardChart
 import ltd.royalgreen.pacenet.login.LoginResponse
 import ltd.royalgreen.pacenet.support.TicketCategoryResponse
 import ltd.royalgreen.pacenet.util.DefaultResponse
@@ -40,6 +41,10 @@ interface ApiService {
     //API FOR  SUPPORT TICKET CATEGORY
     @GET("/api/dropdown/getispticketcategory")
     suspend fun getispticketcategory(@Query("param") param: String): Response<TicketCategoryResponse>
+
+    //API FOR  DASHBOARD CHART
+    @GET("/api/ispportal/getdashboardchartportal")
+    suspend fun getdashboardchartportal(@Query("param") param: String): Response<DashboardChart>
 //
 //    //API FOR USER VM STATUS
 //    @GET("/api/portal/GetDashboardChartPortal")

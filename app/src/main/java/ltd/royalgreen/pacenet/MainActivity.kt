@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.main_activity.*
+import ltd.royalgreen.pacenet.dashboard.DashboardFragment
 import ltd.royalgreen.pacenet.databinding.MainActivityBinding
 import ltd.royalgreen.pacenet.network.ApiService
 import ltd.royalgreen.pacenet.network.NetworkStatusDialog
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 const val SHARED_PREFS_KEY = "%*APP_DEFAULT_KEY*%"
 
-class MainActivity : AppCompatActivity(), HasAndroidInjector {
+class MainActivity : AppCompatActivity(), HasAndroidInjector, DashboardFragment.DashItemInteractionListener {
 
     @Inject
     lateinit var apiService: ApiService
@@ -240,6 +241,27 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector {
 
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()
+    }
+
+    override fun onDashItemClicked(navigation: String) {
+
+        when {
+            navigation.equals("PROFILE", true) -> {
+                bottom_nav.selectedItemId = R.id.profile_nav_graph
+            }
+            navigation.equals("PAY_NOW", true) -> {
+                bottom_nav.selectedItemId = R.id.billing_nav_graph
+            }
+            navigation.equals("PAY_HISTORY", true) -> {
+                bottom_nav.selectedItemId = R.id.billing_nav_graph
+            }
+            navigation.equals("OPEN_TICKET", true) -> {
+                bottom_nav.selectedItemId = R.id.support_nav_graph
+            }
+            navigation.equals("TICKET_HISTORY", true) -> {
+                bottom_nav.selectedItemId = R.id.support_nav_graph
+            }
+        }
     }
 
 }
