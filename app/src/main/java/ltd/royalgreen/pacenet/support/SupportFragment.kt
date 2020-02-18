@@ -10,19 +10,29 @@ import androidx.activity.addCallback
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.paging.DataSource
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import androidx.recyclerview.widget.LinearLayoutManager
 import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.SplashActivity
+import ltd.royalgreen.pacenet.billing.PayHistDataSource
+import ltd.royalgreen.pacenet.billing.PaymentListAdapter
+import ltd.royalgreen.pacenet.billing.PaymentTransaction
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.ProfileFragmentBinding
 import ltd.royalgreen.pacenet.databinding.SupportFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
 import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 import ltd.royalgreen.pacenet.profile.ProfileViewModel
+import ltd.royalgreen.pacenet.util.RecyclerItemDivider
 import ltd.royalgreen.pacenet.util.autoCleared
 import ltd.royalgreen.pacenet.util.showChangePasswordDialog
+import ltd.royalgreen.pacenet.util.showSuccessToast
 import javax.inject.Inject
 
 /**
@@ -36,6 +46,8 @@ class SupportFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    val viewModelReference by viewModels<SupportViewModel>()
+
     private val viewModel: SupportViewModel by viewModels {
         // Get the ViewModel.
         viewModelFactory
@@ -44,6 +56,9 @@ class SupportFragment : Fragment(), Injectable {
     private var binding by autoCleared<SupportFragmentBinding>()
 
     private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
+
+    //For Support Ticket History
+    private lateinit var adapter: SupportTicketListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,6 +101,41 @@ class SupportFragment : Fragment(), Injectable {
             val action = SupportFragmentDirections.actionSupportFragmentToTicketEntryFragment()
             findNavController().navigate(action)
         }
+
+        adapter = SupportTicketListAdapter(object :SupportTicketListAdapter.OnItemClickListenerCallback {
+            override fun onItemClicked(supportTicket: SupportTicket) {
+                val action = SupportFragmentDirections.actionSupportFragmentToSupportTicketConversation(supportTicket.ispTicketId ?: 0L)
+                findNavController().navigate(action)
+            }
+        })
+
+        binding.ticketRecycler.layoutManager = LinearLayoutManager(activity)
+        binding.ticketRecycler.addItemDecoration(RecyclerItemDivider(activity!!.applicationContext, LinearLayoutManager.VERTICAL, 8))
+        binding.ticketRecycler.adapter = adapter
+
+        //1
+        val config = PagedList.Config.Builder()
+            .setPageSize(30)
+            .setEnablePlaceholders(false)
+            .build()
+
+        //2
+        viewModel.supportTicketHistList = initializedPagedListBuilder(config).build()
+
+        //3
+        viewModel.supportTicketHistList.observe(viewLifecycleOwner, Observer<PagedList<SupportTicket>> { pagedList ->
+            adapter.submitList(pagedList)
+        })
+    }
+
+    private fun initializedPagedListBuilder(config: PagedList.Config):
+            LivePagedListBuilder<Long, SupportTicket> {
+        val dataSourceFactory = object : DataSource.Factory<Long, SupportTicket>() {
+            override fun create(): DataSource<Long, SupportTicket> {
+                return SupportTicketHistDataSource(viewModelReference)
+            }
+        }
+        return LivePagedListBuilder<Long, SupportTicket>(dataSourceFactory, config)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -6,8 +6,12 @@ import ltd.royalgreen.pacenet.billing.PaymentHistory
 import ltd.royalgreen.pacenet.billing.RechargeHistory
 import ltd.royalgreen.pacenet.dashboard.DashboardChart
 import ltd.royalgreen.pacenet.login.LoginResponse
+import ltd.royalgreen.pacenet.support.SupportTicketResponse
 import ltd.royalgreen.pacenet.support.TicketCategoryResponse
+import ltd.royalgreen.pacenet.support.TicketCommentResponse
 import ltd.royalgreen.pacenet.util.DefaultResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -45,14 +49,44 @@ interface ApiService {
     //API FOR  DASHBOARD CHART
     @GET("/api/ispportal/getdashboardchartportal")
     suspend fun getdashboardchartportal(@Query("param") param: String): Response<DashboardChart>
-//
-//    //API FOR USER VM STATUS
-//    @GET("/api/portal/GetDashboardChartPortal")
-//    suspend fun getDashboardChartPortal(@Query("param") param: String): Response<DashOsStatus>
-//
-//    //API FOR USER VM SUMMERY
-//    @GET("/api/portal/GetDashboardChartPortal")
-//    suspend fun getDashboardChartPortalSummery(@Query("param") param: String): Response<DashOsSummary>
+
+    //API FOR TICKET HISTORY
+    @GET("/api/ispportal/getbypageispticket")
+    suspend fun getbypageispticket(@Query("param") param: String): Response<SupportTicketResponse>
+
+    @FormUrlEncoded
+    @Headers("Content-Type: multipart/form-data")
+    @POST("/api/ispportal/saveupdateispticket")
+    suspend fun saveupdateispticket(@FieldMap formData: HashMap<String, String>): Response<DefaultResponse>
+
+    //API FOR TICKET CONVERSATION
+    @GET("/api/ispportal/getbyidispticket")
+    suspend fun getbyidispticket(@Query("param") param: String): Response<TicketCommentResponse>
+
+//    @Multipart
+//    @Headers("Content-Type: multipart/form-data")
+//    @POST("/api/ispportal/saveupdateispticket")
+//    suspend fun saveupdateispticket(@Part ispTicketCategoryId: MultipartBody.Part,
+//                                    @Part ispUserId: MultipartBody.Part,
+//                                    @Part ticketDescription: MultipartBody.Part,
+//                                    @Part ticketSummary: MultipartBody.Part): Response<DefaultResponse>
+
+//    @Multipart
+//    @Headers("Content-Type: multipart/form-data")
+//    @POST("/api/ispportal/saveupdateispticket")
+//    suspend fun saveupdateispticket(@PartMap formData: HashMap<String, String>): Response<DefaultResponse>
+
+//    @Headers("Content-Type: multipart/form-data")
+//    @POST("/api/ispportal/saveupdateispticket")
+//    suspend fun saveupdateispticket(@Body requestBody: MultipartBody): Response<DefaultResponse>
+
+//    @Multipart
+//    @Headers("Content-Type: multipart/form-data")
+//    @POST("/api/ispportal/saveupdateispticket")
+//    suspend fun saveupdateispticket(@Part("ispTicketCategoryId") ispTicketCategoryId: String,
+//                                    @Part("ispUserId") ispUserId: String,
+//                                    @Part("ticketDescription") ticketDescription: String,
+//                                    @Part("ticketSummary") ticketSummary: String): Response<DefaultResponse>
 //
 //    //API FOR USER ACTIVITY LOG
 //    @GET("/api/portal/cloudactivitylog")

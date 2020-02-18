@@ -14,6 +14,8 @@ import ltd.royalgreen.pacenet.dashboard.DashboardViewModel
 import ltd.royalgreen.pacenet.login.ForgotPassDialogViewModel
 import ltd.royalgreen.pacenet.login.LoginViewModel
 import ltd.royalgreen.pacenet.profile.ProfileViewModel
+import ltd.royalgreen.pacenet.support.ConversationDetailViewModel
+import ltd.royalgreen.pacenet.support.SupportViewModel
 import ltd.royalgreen.pacenet.support.TicketEntryViewModel
 
 @Suppress("unused")
@@ -64,21 +66,21 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TicketEntryViewModel::class)
     abstract fun bindTicketEntryViewModel(ticketEntryViewModel: TicketEntryViewModel): ViewModel
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(PaymentFragmentViewModel::class)
-//    abstract fun bindPaymentFragmentViewModel(paymentFragmentViewModel: PaymentFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ConversationDetailViewModel::class)
+    abstract fun bindConversationDetailViewModel(conversationDetailViewModel: ConversationDetailViewModel): ViewModel
 //
 //    @Binds
 //    @IntoMap
 //    @ViewModelKey(SupportFragmentViewModel::class)
 //    abstract fun bindSupportFragmentViewModel(supportFragmentViewModel: SupportFragmentViewModel): ViewModel
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(AboutFragmentViewModel::class)
-//    abstract fun bindAboutFragmentViewModel(aboutFragmentViewModel: AboutFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SupportViewModel::class)
+    abstract fun bindSupportViewModel(supportViewModel: SupportViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: PaceNetViewModelFactory): ViewModelProvider.Factory

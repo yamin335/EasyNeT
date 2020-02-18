@@ -11,6 +11,7 @@ import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 import ltd.royalgreen.pacenet.login.LoginFragment
 import ltd.royalgreen.pacenet.profile.ProfileFragment
 import ltd.royalgreen.pacenet.support.SupportFragment
+import ltd.royalgreen.pacenet.support.SupportTicketConversation
 import ltd.royalgreen.pacenet.support.TicketEntryFragment
 
 @Suppress("unused")
@@ -23,9 +24,9 @@ abstract class FragmentBuildersModule {
     @ContributesAndroidInjector
     abstract fun contributeLoginFragment(): LoginFragment
 
-//    @ContributesAndroidInjector
-//    abstract fun contributeFaqsFragment(): FaqsFragment
-//
+    @ContributesAndroidInjector
+    abstract fun contributeSupportTicketConversation(): SupportTicketConversation
+
 //    @ContributesAndroidInjector
 //    abstract fun contributePrivacyFragment(): PrivacyFragment
 //

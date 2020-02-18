@@ -2,59 +2,205 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <data>
+        <variable
+            name="viewModel"
+            type="ltd.royalgreen.pacenet.support.TicketEntryViewModel"/>
+    </data>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".support.TicketEntryFragment">
-
-        <Spinner
-            android:id="@+id/spinnerticketCategory"
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:id="@+id/loader"
+            android:layout_alignParentTop="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/spinner_background"
-            android:minHeight="30dp"
-            android:spinnerMode="dropdown"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView8"
-            app:layout_constraintVertical_bias="0.0" />
+            android:layout_marginTop="-6dp"
+            android:layout_height="15dp"
+            android:indeterminate="true"
+            app:showLoader="@{viewModel.apiCallStatus}"/>
 
-        <TextView
-            android:id="@+id/textView8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:textColor="@color/colorPrimaryLight"
-            android:textSize="16sp"
-            android:text="Category"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginBottom="4dp"
-            android:text="*"
-            android:textColor="@color/colorRed"
-            android:textSize="18sp"
-            android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="@+id/textView8"
-            app:layout_constraintStart_toEndOf="@+id/textView8"
-            app:layout_constraintTop_toTopOf="@+id/textView8" />
+            <Spinner
+                android:id="@+id/spinnerticketCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/spinner_background"
+                android:minHeight="30dp"
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8"
+                app:layout_constraintVertical_bias="0.0" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:textColor="@color/colorPrimaryLight"
+                android:textSize="16sp"
+                android:text="Category"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginBottom="4dp"
+                android:text="*"
+                android:textColor="@color/colorRed"
+                android:textSize="18sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="@+id/textView8"
+                app:layout_constraintStart_toEndOf="@+id/textView8"
+                app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/subjectInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:boxCornerRadiusBottomEnd="2dp"
+                app:boxCornerRadiusBottomStart="2dp"
+                app:boxCornerRadiusTopEnd="2dp"
+                app:boxCornerRadiusTopStart="2dp"
+                app:helperText="Required"
+                app:helperTextTextColor="@color/colorRed"
+                app:boxStrokeColor="@color/edittext_box_stroke_color"
+                app:errorTextColor="@color/colorRed"
+                app:hintTextColor="@color/colorGreenTheme"
+                app:endIconMode="clear_text"
+                app:endIconTint="@color/colorDarkGray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/spinnerticketCategory"
+                app:layout_constraintStart_toStartOf="@+id/spinnerticketCategory"
+                app:layout_constraintTop_toBottomOf="@+id/spinnerticketCategory"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/subject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Subject"
+                    android:gravity="top|start"
+                    android:imeOptions="actionNext"
+                    android:inputType="textMultiLine"
+                    android:lines="4"
+                    android:text="@={viewModel.ticketSubject}"
+                    android:maxLines="8"
+                    android:minLines="1"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/colorDarkGray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/descInputLayout"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:boxCornerRadiusBottomEnd="2dp"
+                app:boxCornerRadiusBottomStart="2dp"
+                app:boxCornerRadiusTopEnd="2dp"
+                app:boxCornerRadiusTopStart="2dp"
+                app:boxStrokeColor="@color/edittext_box_stroke_color"
+                app:errorTextColor="@color/colorRed"
+                app:hintTextColor="@color/colorGreenTheme"
+                app:helperText="Required"
+                app:helperTextTextColor="@color/colorRed"
+                app:endIconMode="clear_text"
+                app:endIconTint="@color/colorDarkGray"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/subjectInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/subjectInputLayout"
+                app:layout_constraintTop_toBottomOf="@+id/subjectInputLayout"
+                app:layout_constraintVertical_bias="0.0">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="top|start"
+                    android:hint="Description"
+                    android:text="@={viewModel.ticketDescription}"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:lines="6"
+                    android:maxLines="16"
+                    android:minLines="4"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="@color/colorDarkGray" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/reset"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:backgroundTint="@color/customColor8"
+                app:iconPadding="6dp"
+                app:icon="@drawable/ic_sync_24dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="14dp"
+                android:text="Reset"
+                android:textSize="15sp"
+                app:cornerRadius="2dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@+id/submit"
+                app:layout_constraintTop_toTopOf="@+id/submit"
+                app:layout_constraintBottom_toBottomOf="@+id/submit" android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="1.0"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/submit"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:backgroundTint="@color/colorGreenTheme"
+                android:textSize="15sp"
+                app:iconPadding="6dp"
+                android:enabled="false"
+                app:icon="@drawable/ic_check_circle_24dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="14dp"
+                android:text="Submit"
+                android:textAllCaps="false"
+                app:cornerRadius="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/descInputLayout"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/descInputLayout"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
 </layout>

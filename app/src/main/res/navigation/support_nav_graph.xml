@@ -3,20 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/support_nav_graph"
-    tools:ignore="UnusedNavigation"
-    app:startDestination="@id/supportFragment">
+    android:label="Conversation Details"
+    app:startDestination="@id/supportFragment"
+    tools:ignore="UnusedNavigation">
     <fragment
         android:id="@+id/supportFragment"
         android:name="ltd.royalgreen.pacenet.support.SupportFragment"
         android:label="Support"
-        tools:layout="@layout/support_fragment" >
+        tools:layout="@layout/support_fragment">
         <action
             android:id="@+id/action_supportFragment_to_ticketEntryFragment"
             app:destination="@id/ticketEntryFragment" />
+        <action
+            android:id="@+id/action_supportFragment_to_supportTicketConversation"
+            app:destination="@id/supportTicketConversation" />
     </fragment>
     <fragment
         android:id="@+id/ticketEntryFragment"
         android:name="ltd.royalgreen.pacenet.support.TicketEntryFragment"
-        android:label="support_ticket_entry"
+        android:label="New Ticket Entry"
         tools:layout="@layout/support_ticket_entry" />
+    <fragment
+        android:id="@+id/supportTicketConversation"
+        android:name="ltd.royalgreen.pacenet.support.SupportTicketConversation"
+        android:label="Conversation Details"
+        tools:layout="@layout/support_ticket_conversation_fragment" >
+        <argument
+            android:name="ispTicketId"
+            app:argType="long" />
+    </fragment>
 </navigation>
