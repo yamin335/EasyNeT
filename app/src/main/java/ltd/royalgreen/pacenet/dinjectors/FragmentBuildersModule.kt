@@ -6,12 +6,14 @@ import ltd.royalgreen.pacenet.*
 import ltd.royalgreen.pacenet.billing.PayHistFragment
 import ltd.royalgreen.pacenet.billing.BillingFragment
 import ltd.royalgreen.pacenet.billing.RechargeHistFragment
+import ltd.royalgreen.pacenet.billing.bkash.BKashPaymentWebDialog
+import ltd.royalgreen.pacenet.billing.foster.FosterPaymentWebDialog
 import ltd.royalgreen.pacenet.dashboard.DashboardFragment
 import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 import ltd.royalgreen.pacenet.login.LoginFragment
 import ltd.royalgreen.pacenet.profile.ProfileFragment
 import ltd.royalgreen.pacenet.support.SupportFragment
-import ltd.royalgreen.pacenet.support.SupportTicketConversation
+import ltd.royalgreen.pacenet.support.SupportTicketConversationFragment
 import ltd.royalgreen.pacenet.support.TicketEntryFragment
 
 @Suppress("unused")
@@ -25,13 +27,13 @@ abstract class FragmentBuildersModule {
     abstract fun contributeLoginFragment(): LoginFragment
 
     @ContributesAndroidInjector
-    abstract fun contributeSupportTicketConversation(): SupportTicketConversation
+    abstract fun contributeSupportTicketConversation(): SupportTicketConversationFragment
 
-//    @ContributesAndroidInjector
-//    abstract fun contributePrivacyFragment(): PrivacyFragment
-//
-//    @ContributesAndroidInjector
-//    abstract fun contributeSignUpDialogFragment(): SignUpDialog
+    @ContributesAndroidInjector
+    abstract fun contributeFosterPaymentWebDialog(): FosterPaymentWebDialog
+
+    @ContributesAndroidInjector
+    abstract fun contributeBKashPaymentWebDialog(): BKashPaymentWebDialog
 
     @ContributesAndroidInjector
     abstract fun contributeDashboardFragment(): DashboardFragment

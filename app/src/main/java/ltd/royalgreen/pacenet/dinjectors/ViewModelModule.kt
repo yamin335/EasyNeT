@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import ltd.royalgreen.pacenet.billing.bkash.BKashPaymentViewModel
+import ltd.royalgreen.pacenet.billing.foster.FosterPaymentViewModel
 import ltd.royalgreen.pacenet.util.PaceNetViewModelFactory
 import ltd.royalgreen.pacenet.MainViewModel
 import ltd.royalgreen.pacenet.billing.PayHistViewModel
@@ -71,11 +73,16 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ConversationDetailViewModel::class)
     abstract fun bindConversationDetailViewModel(conversationDetailViewModel: ConversationDetailViewModel): ViewModel
-//
-//    @Binds
-//    @IntoMap
-//    @ViewModelKey(SupportFragmentViewModel::class)
-//    abstract fun bindSupportFragmentViewModel(supportFragmentViewModel: SupportFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BKashPaymentViewModel::class)
+    abstract fun bindBKashPaymentViewModel(bKashPaymentViewModel: BKashPaymentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FosterPaymentViewModel::class)
+    abstract fun bindFosterPaymentViewModel(fosterPaymentViewModel: FosterPaymentViewModel): ViewModel
 
     @Binds
     @IntoMap

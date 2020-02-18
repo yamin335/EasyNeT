@@ -2,8 +2,7 @@ package ltd.royalgreen.pacenet.network
 
 import com.google.gson.JsonArray
 import ltd.royalgreen.pacenet.UserDataResponse
-import ltd.royalgreen.pacenet.billing.PaymentHistory
-import ltd.royalgreen.pacenet.billing.RechargeHistory
+import ltd.royalgreen.pacenet.billing.*
 import ltd.royalgreen.pacenet.dashboard.DashboardChart
 import ltd.royalgreen.pacenet.login.LoginResponse
 import ltd.royalgreen.pacenet.support.SupportTicketResponse
@@ -62,6 +61,40 @@ interface ApiService {
     //API FOR TICKET CONVERSATION
     @GET("/api/ispportal/getbyidispticket")
     suspend fun getbyidispticket(@Query("param") param: String): Response<TicketCommentResponse>
+
+    //API FOR RECHARGE
+    @Headers("Content-Type: application/json")
+    @POST("/api/billclouduserclient/cloudrecharge")
+    suspend fun cloudrecharge(@Body jsonArray: JsonArray): Response<RechargeResponse>
+
+    //API FOR RECHARGE STATUS CHECK
+    @Headers("Content-Type: application/json")
+    @POST("/api/billclouduserclient/cloudrechargesave")
+    suspend fun cloudrechargesave(@Body jsonArray: JsonArray): Response<RechargeStatusFosterCheckModel>
+
+    //API FOR RECHARGE SAVE
+    @Headers("Content-Type: application/json")
+    @POST("/api/portal/newrechargesave")
+    suspend fun newrechargesave(@Body jsonArray: JsonArray): Response<DefaultResponse>
+
+    //API FOR GENERATE TOKEN FOR BKASH PAYMENT
+    @GET("/api/portal/generatebkashtoken")
+    suspend fun generatebkashtoken(@Query("param") param: String): Response<BKashTokenResponse>
+
+    //API FOR RECHARGE SAVE
+    @Headers("Content-Type: application/json")
+    @POST("/api/portal/createbkashpayment")
+    suspend fun createbkashpayment(@Body jsonArray: JsonArray): Response<BKashCreatePaymentResponse>
+
+    //API FOR RECHARGE SAVE
+    @Headers("Content-Type: application/json")
+    @POST("/api/portal/executebkashpayment")
+    suspend fun executebkashpayment(@Body jsonArray: JsonArray): Response<BKashExecutePaymentResponse>
+
+    //API FOR RECHARGE SAVE
+    @Headers("Content-Type: application/json")
+    @POST("/api/portal/newrechargebkashpayment")
+    suspend fun newrechargebkashpayment(@Body jsonArray: JsonArray): Response<DefaultResponse>
 
 //    @Multipart
 //    @Headers("Content-Type: multipart/form-data")

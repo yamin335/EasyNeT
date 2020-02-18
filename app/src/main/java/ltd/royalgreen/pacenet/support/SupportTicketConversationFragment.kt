@@ -24,7 +24,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class SupportTicketConversation : Fragment(), Injectable {
+class SupportTicketConversationFragment : Fragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -38,7 +38,7 @@ class SupportTicketConversation : Fragment(), Injectable {
 
     private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
 
-    private val args: SupportTicketConversationArgs by navArgs()
+    private val args: SupportTicketConversationFragmentArgs by navArgs()
 
     private val messageList = ArrayList<TicketConversation>()
 
@@ -65,7 +65,9 @@ class SupportTicketConversation : Fragment(), Injectable {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        binding.messageRecycler.layoutManager = LinearLayoutManager(requireContext())
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.stackFromEnd = true
+        binding.messageRecycler.layoutManager = layoutManager
         binding.messageRecycler.adapter = messageAdapter
         viewModel.getTicketConversation(args.ispTicketId).observe(viewLifecycleOwner, Observer {
             messageList.clear()

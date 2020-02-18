@@ -25,7 +25,7 @@
         tools:layout="@layout/support_ticket_entry" />
     <fragment
         android:id="@+id/supportTicketConversation"
-        android:name="ltd.royalgreen.pacenet.support.SupportTicketConversation"
+        android:name="ltd.royalgreen.pacenet.support.SupportTicketConversationFragment"
         android:label="Conversation Details"
         tools:layout="@layout/support_ticket_conversation_fragment" >
         <argument

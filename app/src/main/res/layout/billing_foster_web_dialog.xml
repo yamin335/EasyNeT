@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+                name="viewModel"
+                type="ltd.royalgreen.pacenet.billing.foster.FosterPaymentViewModel"/>
+    </data>
+    <androidx.cardview.widget.CardView
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            app:cardCornerRadius="0dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardBackgroundColor="@color/customColor6">
+        <RelativeLayout
+                android:background="@color/customColor6"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:id="@+id/loader"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="-8dp"
+                    android:layout_marginBottom="-8dp"
+                    android:layout_height="20dp"
+                    android:indeterminate="true"
+                    android:background="@color/colorWhite"
+                    app:showLoader="@{viewModel.apiCallStatus}"/>
+            <RelativeLayout
+                    android:layout_below="@id/loader"
+                    android:background="@color/customColor6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/header"
+                        android:background="@color/colorWhite"
+                        android:layout_alignParentTop="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="Foster Payment"
+                            android:textColor="@color/colorPrimaryLight"
+                            android:textSize="22sp"
+                            android:textStyle="normal"
+                            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toEndOf="@+id/imageView7"
+                            app:layout_constraintTop_toTopOf="@+id/imageView7" />
+
+                    <ImageView
+                            android:id="@+id/imageView7"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:tint="@color/colorPrimaryLight"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toEndOf="@id/goBack"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0"
+                            app:srcCompat="@drawable/image_recharge" />
+
+                    <ImageView
+                            android:id="@+id/goBack"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="16dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:tint="@color/colorPrimaryLight"
+                            android:background="@drawable/back_button_background"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_keyboard_backspace_black_24dp" />
+
+                    <LinearLayout
+                            android:id="@+id/divider"
+                            android:layout_width="0dp"
+                            android:layout_height="1px"
+                            android:background="@color/colorPrimaryLight"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/imageView7"
+                            app:layout_constraintVertical_bias="1.0" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <WebView
+                        android:id="@+id/mWebView"
+                        android:background="@color/customColor6"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/header" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
