@@ -53,24 +53,24 @@
                     app:srcCompat="@drawable/cardpay_logo" />
 
             <ImageView
-                    android:id="@+id/bKashRecharge"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    android:layout_marginBottom="12dp"
-                    android:adjustViewBounds="true"
-                    android:padding="4dp"
+                android:id="@+id/bKashRecharge"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                android:adjustViewBounds="true"
                 android:background="@drawable/spinner_background"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/processToRecharge"
-                    app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@drawable/bkash_payment_logo" />
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/processToRecharge"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/bkash_payment_logo" />
 
             <TextView
                     android:id="@+id/rechargeQuestion"
