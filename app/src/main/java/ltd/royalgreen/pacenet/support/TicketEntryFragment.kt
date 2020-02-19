@@ -117,15 +117,12 @@ class TicketEntryFragment : Fragment(), Injectable {
 
         binding.submit.setOnClickListener {
             viewModel.entryNewTicket().observe(viewLifecycleOwner, Observer {
-
-                val response = it
-                val rr = response
-//                if (it != null && it.resdata.resstate == true) {
-//                    showSuccessToast(requireContext(), it.resdata.message)
-//                    findNavController().popBackStack()
-//                } else {
-//                    showErrorToast(requireContext(), it.resdata.message)
-//                }
+                if (it != null && it.resdata.resstate == true) {
+                    showSuccessToast(requireContext(), it.resdata.message)
+                    findNavController().popBackStack()
+                } else {
+                    showErrorToast(requireContext(), it.resdata.message)
+                }
             })
         }
 

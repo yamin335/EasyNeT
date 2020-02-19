@@ -96,13 +96,7 @@ class BillingFragment : Fragment(), Injectable, BillingRechargeDialog.RechargeCa
 
         binding.includedContentMain.viewModel = viewModel
 
-        viewModel.bKashToken.observe(viewLifecycleOwner, Observer { bkashDataModel ->
-            if (bkashDataModel != null) {
-                val bkashPaymentDialog = BKashPaymentWebDialog(this, bkashDataModel.createBkashModel, bkashDataModel.paymentRequest)
-                bkashPaymentDialog.isCancelable = false
-                bkashPaymentDialog.show(parentFragmentManager, "#bkash_payment_dialog")
-            }
-        })
+        observeBKashToken()
 
         viewModel.fosterUrl.observe(viewLifecycleOwner, Observer { (paymentProcessUrl, paymentStatusUrl) ->
             if (paymentProcessUrl != null && paymentStatusUrl != null) {
@@ -158,6 +152,16 @@ class BillingFragment : Fragment(), Injectable, BillingRechargeDialog.RechargeCa
         TabLayoutMediator(binding.includedContentMain.tabs, binding.includedContentMain.viewPager) { tab, position ->
             tab.text = viewPagerPageTitles[position]
         }.attach()
+    }
+
+    private fun observeBKashToken() {
+        viewModel.bKashToken.observe(viewLifecycleOwner, Observer { bkashDataModel ->
+            if (bkashDataModel != null) {
+                val bkashPaymentDialog = BKashPaymentWebDialog(this, bkashDataModel.createBkashModel, bkashDataModel.paymentRequest)
+                bkashPaymentDialog.isCancelable = false
+                bkashPaymentDialog.show(parentFragmentManager, "#bkash_payment_dialog")
+            }
+        })
     }
 
 
@@ -236,6 +240,12 @@ class BillingFragment : Fragment(), Injectable, BillingRechargeDialog.RechargeCa
 
     override fun onPaymentCancelled() {
         //viewModel.hasBkashToken = false
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.bKashToken.postValue(null)
+        viewModel.hasBkashToken = false
     }
 
     override fun onFosterPaymentSuccess() {

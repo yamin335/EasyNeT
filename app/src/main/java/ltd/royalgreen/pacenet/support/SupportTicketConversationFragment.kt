@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -44,6 +45,21 @@ class SupportTicketConversationFragment : Fragment(), Injectable {
 
     private val messageAdapter = ConversationDetailsAdapter(messageList)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        activity?.window?.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        activity?.window?.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,16 +80,31 @@ class SupportTicketConversationFragment : Fragment(), Injectable {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         binding.messageRecycler.layoutManager = layoutManager
         binding.messageRecycler.adapter = messageAdapter
-        viewModel.getTicketConversation(args.ispTicketId).observe(viewLifecycleOwner, Observer {
+
+        viewModel.getTicketConversation(args.ispTicketId)
+
+        viewModel.messageList.observe(viewLifecycleOwner, Observer {
+            viewModel.newMessage.postValue("")
             messageList.clear()
             messageList.addAll(it)
             messageAdapter.notifyDataSetChanged()
         })
+
+        viewModel.newMessage.observe(viewLifecycleOwner, Observer {
+            binding.submit.isEnabled = !it.isNullOrBlank()
+        })
+
+        binding.submit.setOnClickListener {
+            viewModel.entryNewComment(args.ispTicketId.toString()).observe(viewLifecycleOwner, Observer {
+                viewModel.getTicketConversation(args.ispTicketId)
+            })
+        }
     }
 }
 

@@ -14,17 +14,42 @@ import javax.inject.Inject
 
 class ConversationDetailViewModel @Inject constructor(private val application: Application, private val repository: SupportRepository) : BaseViewModel() {
 
-    val selectedTicketCategory: MutableLiveData<TicketCategory> by lazy {
-        MutableLiveData<TicketCategory>()
+    val newMessage: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
     }
 
-    fun getTicketConversation(id: Long): MutableLiveData<ArrayList<TicketConversation>> {
-        val ticketConversation = MutableLiveData<ArrayList<TicketConversation>>()
+    val messageList: MutableLiveData<ArrayList<TicketConversation>> by lazy {
+        MutableLiveData<ArrayList<TicketConversation>>()
+    }
+
+    fun entryNewComment(ispTicketId: String): MutableLiveData<DefaultResponse> {
+        val result = MutableLiveData<DefaultResponse>()
+        if (checkNetworkStatus(application)) {
+            apiCallStatus.postValue("LOADING")
+            viewModelScope.launch {
+                when (val apiResponse = ApiResponse.create(repository.ticketCommentEntryRepo(ispTicketId, newMessage.value!!))) {
+                    is ApiSuccessResponse -> {
+                        result.postValue(apiResponse.body)
+                        apiCallStatus.postValue("SUCCESS")
+                    }
+                    is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
+                    }
+                    is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
+                    }
+                }
+            }
+        }
+        return result
+    }
+
+    fun getTicketConversation(id: Long) {
         if (checkNetworkStatus(application)) {
             viewModelScope.launch {
                 when (val apiResponse = ApiResponse.create(repository.ticketConversationRepo(id))) {
                     is ApiSuccessResponse -> {
-                        ticketConversation.postValue(apiResponse.body.resdata?.objCrmIspTicket?.listIspTicketConversation)
+                        messageList.postValue(apiResponse.body.resdata?.objCrmIspTicket?.listIspTicketConversation)
                     }
                     is ApiEmptyResponse -> {
                     }
@@ -33,6 +58,5 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
                 }
             }
         }
-        return ticketConversation
     }
 }

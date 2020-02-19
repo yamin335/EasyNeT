@@ -1,12 +1,14 @@
 package ltd.royalgreen.pacenet.profile
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import ltd.royalgreen.pacenet.BaseViewModel
 import ltd.royalgreen.pacenet.LoggedUser
+import java.util.*
 import javax.inject.Inject
 
 class ProfileViewModel @Inject constructor(private val preferences: SharedPreferences) : BaseViewModel() {
@@ -36,6 +38,10 @@ class ProfileViewModel @Inject constructor(private val preferences: SharedPrefer
 
     val phone: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
+    }
+
+    init {
+        Log.d("P-VIEWMODEL--> ", "${Random().nextInt(8)+1}")
     }
 
     fun prepareProfile() {
