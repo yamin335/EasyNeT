@@ -3,6 +3,7 @@ package ltd.royalgreen.pacenet.billing
 import android.app.Application
 import android.app.DatePickerDialog
 import android.content.SharedPreferences
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -61,6 +62,7 @@ class BillingViewModel @Inject constructor(val application: Application, private
         fromDate.value = "dd/mm/yyyy"
         toDate.value = "dd/mm/yyyy"
         searchValue.value = ""
+        Log.d("B-VIEWMODEL--> ", "${Random().nextInt(8)+1}")
     }
 
     fun getFosterPaymentUrl(amount: String, note: String) {

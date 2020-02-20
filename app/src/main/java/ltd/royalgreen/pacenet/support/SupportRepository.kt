@@ -95,14 +95,29 @@ class SupportRepository @Inject constructor(private val apiService: ApiService, 
 //            .addFormDataPart()
 //            .build()
 
-        val formData = HashMap<String, String>()
-        formData["ispTicketCategoryId"] = ispTicketCategoryId
-        formData["ispUserId"] = ispTicketCategoryId
-        formData["ticketDescription"] = ispTicketCategoryId
-        formData["ticketSummary"] = ispTicketCategoryId
+//        val formData = HashMap<String, String>()
+//        formData["ispTicketCategoryId"] = ispTicketCategoryId
+//        formData["ispUserId"] = ispTicketCategoryId
+//        formData["ticketDescription"] = ispTicketCategoryId
+//        formData["ticketSummary"] = ispTicketCategoryId
 
         return withContext(Dispatchers.IO) {
-            apiService.saveupdateispticket(formData)
+            apiService.saveupdateispticket(ticketSummary.toRequestBody("text/plain".toMediaTypeOrNull()),
+                ticketDescription.toRequestBody("text/plain".toMediaTypeOrNull()),
+                ispTicketCategoryId.toRequestBody("text/plain".toMediaTypeOrNull()),
+                ispUserId.toRequestBody("text/plain".toMediaTypeOrNull()))
+        }
+    }
+
+    suspend fun ticketCommentEntryRepo(ispTicketId: String, ticketComment: String): Response<DefaultResponse> {
+        val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+        val ispUserId = user.userID.toString()
+
+        return withContext(Dispatchers.IO) {
+            apiService.saveispticketconversation(ispTicketId.toRequestBody("text/plain".toMediaTypeOrNull()),
+                ispUserId.toRequestBody("text/plain".toMediaTypeOrNull()),
+                ticketComment.toRequestBody("text/plain".toMediaTypeOrNull()),
+                null)
         }
     }
 }

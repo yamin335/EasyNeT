@@ -53,10 +53,19 @@ interface ApiService {
     @GET("/api/ispportal/getbypageispticket")
     suspend fun getbypageispticket(@Query("param") param: String): Response<SupportTicketResponse>
 
-    @FormUrlEncoded
-    @Headers("Content-Type: multipart/form-data")
+    @Multipart
     @POST("/api/ispportal/saveupdateispticket")
-    suspend fun saveupdateispticket(@FieldMap formData: HashMap<String, String>): Response<DefaultResponse>
+    suspend fun saveupdateispticket(@Part("ticketSummary") ticketSummary: RequestBody,
+                                    @Part("ticketDescription") ticketDescription: RequestBody,
+                                    @Part("ispTicketCategoryId") ispTicketCategoryId: RequestBody,
+                                    @Part("ispUserId") ispUserId: RequestBody): Response<DefaultResponse>
+
+    @Multipart
+    @POST("/api/ispportal/saveispticketconversation")
+    suspend fun saveispticketconversation(@Part("ispTicketId") ispTicketId: RequestBody,
+                                    @Part("ispUserId") ispUserId: RequestBody,
+                                    @Part("ticketComment") ticketComment: RequestBody,
+                                    @Part("attachedFileComment") attachedFileComment: RequestBody?): Response<DefaultResponse>
 
     //API FOR TICKET CONVERSATION
     @GET("/api/ispportal/getbyidispticket")
