@@ -27,4 +27,5 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="deletes_file_ontap">Deletes file onTap</string>
 </resources>

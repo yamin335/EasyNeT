@@ -1,6 +1,7 @@
 package ltd.royalgreen.pacenet.support
 
 import android.app.Application
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -25,6 +26,12 @@ class TicketEntryViewModel @Inject constructor(private val application: Applicat
     val ticketDescription: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+
+    val fileUriList: MutableLiveData<ArrayList<Uri>> by lazy {
+        MutableLiveData<ArrayList<Uri>>()
+    }
+
+    lateinit var backupFileUri: Uri
 
     fun entryNewTicket(): MutableLiveData<DefaultResponse> {
         val result = MutableLiveData<DefaultResponse>()

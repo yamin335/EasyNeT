@@ -1,12 +1,11 @@
 package ltd.royalgreen.pacenet.util
 
+import android.Manifest
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.net.ConnectivityManager
-import android.net.Network
-import android.net.NetworkInfo
-import android.net.NetworkRequest
+import android.content.pm.PackageManager
+import android.net.*
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +13,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresPermission
 import androidx.annotation.VisibleForTesting
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import kotlinx.android.synthetic.main.toast_custom_green.view.*
 import kotlinx.android.synthetic.main.toast_custom_red.view.*
+import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 
@@ -56,6 +57,35 @@ class ConnectivityLiveData @VisibleForTesting internal constructor(private val c
     override fun onInactive() {
         super.onInactive()
         connectivityManager.unregisterNetworkCallback(networkCallback)
+    }
+}
+
+class PermissionUtils {
+    companion object {
+        fun checkExternalStoragePermission(context: Context): Boolean {
+            return PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        fun requestExternalStoragePermission(context: Context, activity: Activity, fragmentManager: FragmentManager, permissionRequestCode: Int) {
+            val shouldProvidePermissionRationale = ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+
+            // Provide an additional rationale to the user. This would happen if the user denied the
+            // request previously, but didn't check the "Don't ask again" checkbox.
+            if (shouldProvidePermissionRationale) {
+                val rationaleDialog = CustomAlertDialog(object :
+                    CustomAlertDialog.YesCallback {
+                    override fun onYes() {
+                        ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), permissionRequestCode)
+                    }
+                }, "Requires Storage Permission", "You must have to allow this permission for further process")
+                rationaleDialog.show(fragmentManager, "#PERMISSION_REQUEST_DIALOG")
+            } else {
+                // Request permission. It's possible this can be auto answered if device policy
+                // sets the permission in a given state or the user denied the permission
+                // previously and checked "Never ask again".
+                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), permissionRequestCode)
+            }
+        }
     }
 }
 

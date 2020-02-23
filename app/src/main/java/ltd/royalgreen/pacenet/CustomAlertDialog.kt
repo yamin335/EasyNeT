@@ -10,10 +10,12 @@ class CustomAlertDialog internal constructor(private val callBack: YesCallback, 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val exitDialog: MaterialAlertDialogBuilder = MaterialAlertDialogBuilder(requireActivity())
             .setTitle(title)
+            .setMessage(subTitle)
             .setIcon(R.mipmap.ic_launcher)
             .setCancelable(false)
             .setPositiveButton("Yes") { _, _ ->
                 callBack.onYes()
+                dismiss()
             }
             .setNegativeButton("No") { dialog, _ ->
                 dialog.cancel()
