@@ -28,4 +28,5 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="deletes_file_ontap">Deletes file onTap</string>
+    <string name="attach_file_desc">Attach any type of file</string>
 </resources>

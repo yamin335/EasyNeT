@@ -12,7 +12,7 @@ class FileChooser {
          */
         fun createGetContentIntent(): Intent {
             // Implicitly allow the user to select a particular kind of data
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
+            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             // The MIME data type filter
             intent.type = "*/*"
             // Only return URIs that can be opened with ContentResolver

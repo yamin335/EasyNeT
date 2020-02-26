@@ -1,26 +1,20 @@
 package ltd.royalgreen.pacenet.support
 
-import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.file_layout.view.*
-import kotlinx.android.synthetic.main.support_chat_client_row.view.*
-import kotlinx.android.synthetic.main.support_chat_host_row.view.*
+import kotlinx.android.synthetic.main.file_layout_conversation.view.*
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.util.FileUtils
 
-class FileUriAdapter internal constructor(private val fileUriList: ArrayList<Uri>, private val listener: FileDeleteCallback) : RecyclerView.Adapter<FileUriAdapter.MyViewHolder>() {
+class ConversationFileUriAdapter internal constructor(private val fileUriList: ArrayList<Uri>, private val listener: FileDeleteCallback) : RecyclerView.Adapter<ConversationFileUriAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.file_layout, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.file_layout_conversation, parent, false)
         return MyViewHolder(itemView)
     }
 

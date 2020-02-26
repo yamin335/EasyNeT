@@ -58,7 +58,8 @@ interface ApiService {
     suspend fun saveupdateispticket(@Part("ticketSummary") ticketSummary: RequestBody,
                                     @Part("ticketDescription") ticketDescription: RequestBody,
                                     @Part("ispTicketCategoryId") ispTicketCategoryId: RequestBody,
-                                    @Part("ispUserId") ispUserId: RequestBody): Response<DefaultResponse>
+                                    @Part("ispUserId") ispUserId: RequestBody,
+                                    @Part attachedFiles: List<MultipartBody.Part>): Response<DefaultResponse>
 
     @Multipart
     @POST("/api/ispportal/saveispticketconversation")

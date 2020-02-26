@@ -11,7 +11,14 @@ import ltd.royalgreen.pacenet.network.ApiErrorResponse
 import ltd.royalgreen.pacenet.network.ApiResponse
 import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 import ltd.royalgreen.pacenet.util.DefaultResponse
+import ltd.royalgreen.pacenet.util.asFile
+import ltd.royalgreen.pacenet.util.asFilePart
+import okhttp3.MultipartBody
+import java.io.File
 import javax.inject.Inject
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 
 class TicketEntryViewModel @Inject constructor(private val application: Application, private val repository: SupportRepository) : BaseViewModel() {
 
@@ -27,18 +34,24 @@ class TicketEntryViewModel @Inject constructor(private val application: Applicat
         MutableLiveData<String>()
     }
 
-    val fileUriList: MutableLiveData<ArrayList<Uri>> by lazy {
-        MutableLiveData<ArrayList<Uri>>()
-    }
+    var fileUriList: ArrayList<Uri> = ArrayList()
 
-    lateinit var backupFileUri: Uri
+    var backupFileUri: Uri? = null
 
     fun entryNewTicket(): MutableLiveData<DefaultResponse> {
         val result = MutableLiveData<DefaultResponse>()
         if (checkNetworkStatus(application)) {
             apiCallStatus.postValue("LOADING")
             viewModelScope.launch {
-                when (val apiResponse = ApiResponse.create(repository.ticketEntryRepo(ticketSubject.value!!, ticketDescription.value!!, selectedTicketCategory.value?.ispTicketCategoryId.toString()))) {
+                val attachedFileList = ArrayList<MultipartBody.Part>()
+                for (uri in fileUriList) {
+                    val file = uri.asFile(application)?.asFilePart()
+                    file?.let {
+                        attachedFileList.add(it)
+                    }
+                }
+                when (val apiResponse = ApiResponse.create(repository.ticketEntryRepo(ticketSubject.value!!,
+                    ticketDescription.value!!, selectedTicketCategory.value?.ispTicketCategoryId.toString(), attachedFileList))) {
                     is ApiSuccessResponse -> {
                         result.postValue(apiResponse.body)
                         apiCallStatus.postValue("SUCCESS")

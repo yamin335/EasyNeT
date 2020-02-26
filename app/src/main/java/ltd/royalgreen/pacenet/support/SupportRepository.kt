@@ -1,6 +1,7 @@
 package ltd.royalgreen.pacenet.support
 
 import android.content.SharedPreferences
+import android.net.Uri
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -69,7 +70,7 @@ class SupportRepository @Inject constructor(private val apiService: ApiService, 
         }
     }
 
-    suspend fun ticketEntryRepo(ticketSummary: String, ticketDescription: String, ispTicketCategoryId: String): Response<DefaultResponse> {
+    suspend fun ticketEntryRepo(ticketSummary: String, ticketDescription: String, ispTicketCategoryId: String, attachedFileList: ArrayList<MultipartBody.Part>): Response<DefaultResponse> {
         val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
         val ispUserId = user.userID.toString()
 //        val attachedFile = File("").asRequestBody("image/jpeg".toMediaTypeOrNull())
@@ -105,7 +106,7 @@ class SupportRepository @Inject constructor(private val apiService: ApiService, 
             apiService.saveupdateispticket(ticketSummary.toRequestBody("text/plain".toMediaTypeOrNull()),
                 ticketDescription.toRequestBody("text/plain".toMediaTypeOrNull()),
                 ispTicketCategoryId.toRequestBody("text/plain".toMediaTypeOrNull()),
-                ispUserId.toRequestBody("text/plain".toMediaTypeOrNull()))
+                ispUserId.toRequestBody("text/plain".toMediaTypeOrNull()), attachedFileList)
         }
     }
 

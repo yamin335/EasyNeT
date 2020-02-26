@@ -22,7 +22,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
@@ -85,22 +87,33 @@ class TicketEntryFragment : Fragment(), Injectable {
 
         fileAdapter = FileUriAdapter(fileUriList, object : FileUriAdapter.FileDeleteCallback {
             override fun onFileDeleted(position: Int) {
-                viewModel.backupFileUri = viewModel.fileUriList.value?.get(position)!!
-                viewModel.fileUriList.value?.removeAt(position)
+                viewModel.backupFileUri = fileUriList[position]
+                fileUriList.removeAt(position)
                 fileAdapter.notifyItemRemoved(position)
+                viewModel.fileUriList = fileUriList
 
                 val snackBar = Snackbar.make(binding.mainLayout, "Undo deleted file?", Snackbar.LENGTH_LONG)
                 snackBar.setAction("UNDO") {
                     // undo is selected, restore the deleted item
-                    viewModel.fileUriList.value?.add(position, viewModel.backupFileUri)
-                    fileAdapter.notifyItemInserted(position)
+                    viewModel.backupFileUri?.let {
+                        val backup = it
+                        viewModel.backupFileUri = null
+                        fileUriList.add(position, backup)
+                        fileAdapter.notifyItemInserted(position)
+                        viewModel.fileUriList = fileUriList
+                    }
                 }
                 snackBar.setActionTextColor(Color.YELLOW)
                 snackBar.show()
             }
         })
 
-        binding.attachedFileRecycler.layoutManager = GridLayoutManager(requireContext(), 3)
+        fileUriList.clear()
+        fileUriList.addAll(viewModel.fileUriList)
+        fileAdapter.notifyDataSetChanged()
+
+        binding.attachedFileRecycler.layoutManager = LinearLayoutManager(requireActivity())
+        binding.attachedFileRecycler.addItemDecoration(VerticalSpaceItemDivider(10))
         binding.attachedFileRecycler.itemAnimator = DefaultItemAnimator()
         binding.attachedFileRecycler.adapter = fileAdapter
 
@@ -175,14 +188,6 @@ class TicketEntryFragment : Fragment(), Injectable {
             }
         }
 
-        viewModel.fileUriList.observe(viewLifecycleOwner, Observer {
-            if (!it.isNullOrEmpty()) {
-                fileUriList.clear()
-                fileUriList.addAll(it)
-                fileAdapter.notifyDataSetChanged()
-            }
-        })
-
         loadTicketCategoryList()
     }
 
@@ -223,7 +228,9 @@ class TicketEntryFragment : Fragment(), Injectable {
                         // Get the URI of the selected file
                         val fileUri: Uri? = it.data
                         fileUri?.let { uri ->
-                            viewModel.fileUriList.value?.add(uri)
+                            fileUriList.add(uri)
+                            fileAdapter.notifyDataSetChanged()
+                            viewModel.fileUriList = fileUriList
                         }
                     }
                 }
