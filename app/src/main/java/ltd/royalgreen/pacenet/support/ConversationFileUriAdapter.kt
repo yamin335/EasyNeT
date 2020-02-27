@@ -22,7 +22,7 @@ class ConversationFileUriAdapter internal constructor(private val fileUriList: A
         val itemPosition = holder.adapterPosition
         val item = fileUriList[itemPosition]
         holder.itemView.fileName.text = FileUtils.getFileName(holder.itemView.context, item)
-        holder.itemView.fileSize.text = "Size: ${FileUtils.getFileSize(holder.itemView.context, item)}"
+        holder.itemView.fileSize.text = FileUtils.getFileSize(holder.itemView.context, item)
         holder.itemView.deleteIcon.setOnClickListener {
             listener.onFileDeleted(itemPosition)
         }

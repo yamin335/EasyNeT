@@ -52,7 +52,7 @@ class TicketEntryFragment : Fragment(), Injectable {
 
     private val storagePermissionCode = 1207
 
-    private val fileChooserCode = 1207
+    private val fileChooserCode = 1208
 
     private var binding by autoCleared<SupportTicketEntryBinding>()
 

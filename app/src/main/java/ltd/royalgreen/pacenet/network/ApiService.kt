@@ -64,9 +64,9 @@ interface ApiService {
     @Multipart
     @POST("/api/ispportal/saveispticketconversation")
     suspend fun saveispticketconversation(@Part("ispTicketId") ispTicketId: RequestBody,
-                                    @Part("ispUserId") ispUserId: RequestBody,
-                                    @Part("ticketComment") ticketComment: RequestBody,
-                                    @Part("attachedFileComment") attachedFileComment: RequestBody?): Response<DefaultResponse>
+                                          @Part("ispUserId") ispUserId: RequestBody,
+                                          @Part("ticketComment") ticketComment: RequestBody,
+                                          @Part attachedFiles: MultipartBody.Part?): Response<DefaultResponse>
 
     //API FOR TICKET CONVERSATION
     @GET("/api/ispportal/getbyidispticket")

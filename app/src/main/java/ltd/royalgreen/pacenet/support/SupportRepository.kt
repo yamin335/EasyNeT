@@ -5,8 +5,7 @@ import android.net.Uri
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import ltd.royalgreen.pacenet.login.LoggedUserID
 import ltd.royalgreen.pacenet.network.ApiService
 import ltd.royalgreen.pacenet.util.DefaultResponse
@@ -22,6 +21,7 @@ import retrofit2.http.Multipart
 import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.coroutineContext
 
 @Singleton
 class SupportRepository @Inject constructor(private val apiService: ApiService, private val preferences: SharedPreferences) {
@@ -110,15 +110,21 @@ class SupportRepository @Inject constructor(private val apiService: ApiService, 
         }
     }
 
-    suspend fun ticketCommentEntryRepo(ispTicketId: String, ticketComment: String): Response<DefaultResponse> {
+    suspend fun ticketCommentEntryRepo(ispTicketId: String, ticketComment: String, attachedFileList: ArrayList<MultipartBody.Part>): Response<DefaultResponse> {
         val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
         val ispUserId = user.userID.toString()
+
+        var attachedFile: MultipartBody.Part? = null
+
+        if (attachedFileList.size > 0) {
+            attachedFile = attachedFileList[0]
+        }
 
         return withContext(Dispatchers.IO) {
             apiService.saveispticketconversation(ispTicketId.toRequestBody("text/plain".toMediaTypeOrNull()),
                 ispUserId.toRequestBody("text/plain".toMediaTypeOrNull()),
                 ticketComment.toRequestBody("text/plain".toMediaTypeOrNull()),
-                null)
+                attachedFile)
         }
     }
 }

@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import ltd.royalgreen.pacenet.BaseViewModel
 import ltd.royalgreen.pacenet.network.*
@@ -91,8 +92,13 @@ class LoginViewModel @Inject constructor(private val application: Application, p
 
     fun processSignIn() {
         if (checkNetworkStatus(application)) {
+
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+            }
+
             apiCallStatus.postValue("LOADING")
-            viewModelScope.launch {
+            viewModelScope.launch(handler) {
                 when (val apiResponse = ApiResponse.create(repository.loginRepo(userName.value!!, password.value!!))) {
                     is ApiSuccessResponse -> {
                         apiResult.postValue(apiResponse.body)

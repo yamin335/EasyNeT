@@ -32,7 +32,7 @@ fun <T> MutableLiveData<MutableList<T>>.removeItemAt(index: Int) {
 
 fun File.asFilePart(): MultipartBody.Part {
     val attachedFile = this.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-    return MultipartBody.Part.createFormData("attachedFile", this.name, attachedFile)
+    return MultipartBody.Part.createFormData("attachedFileComment", this.name, attachedFile)
 }
 
 fun Uri.asFile(context: Application) = FileUtils.getFileFromUri(context, this)
