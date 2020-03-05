@@ -14,11 +14,17 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
 
     val viewModel = payHistViewModel
 
+    val handler = CoroutineExceptionHandler { _, exception ->
+        exception.printStackTrace()
+    }
+
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, PaymentTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch {
-                when (val apiResponse = ApiResponse.create(viewModel.getPaymentHistory(0, 30,
-                    viewModel.searchValue.value!!, viewModel.fromDate.value!!, viewModel.toDate.value!!))) {
+            viewModel.viewModelScope.launch(handler) {
+                val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
+                val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
+                when (val apiResponse = ApiResponse.create(viewModel.getPaymentHistory(1, 30,
+                    viewModel.searchValue.value!!, startDate, endDate))) {
                     is ApiSuccessResponse -> {
                         if (!apiResponse.body.resdata?.listPayment.isNullOrBlank()) {
                             val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listPayment).asJsonArray
@@ -26,7 +32,7 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
                             for (transaction in transactionList) {
                                 tempTransactionList.add(Gson().fromJson(transaction, PaymentTransaction::class.java))
                             }
-                            callback.onResult(tempTransactionList, null, 1)
+                            callback.onResult(tempTransactionList, null, 2)
                         }
                     }
                     is ApiEmptyResponse -> {
@@ -40,9 +46,11 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, PaymentTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch {
+            viewModel.viewModelScope.launch(handler) {
+                val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
+                val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
                 when (val apiResponse = ApiResponse.create(viewModel.getPaymentHistory(params.key, 30,
-                    viewModel.searchValue.value!!, viewModel.fromDate.value!!, viewModel.toDate.value!!))) {
+                    viewModel.searchValue.value!!, startDate, endDate))) {
                     is ApiSuccessResponse -> {
                         if (!apiResponse.body.resdata?.listPayment.isNullOrBlank()) {
                             val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listPayment).asJsonArray

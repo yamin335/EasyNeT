@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="viewModel" type="ltd.royalgreen.pacenet.billing.PayHistViewModel"/>
+        <variable name="viewModel" type="ltd.royalgreen.pacenet.billing.RechargeHistViewModel"/>
     </data>
-    <RelativeLayout
-        android:id="@+id/rootView"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/bottomSheet"
+        app:cardElevation="8dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/searchContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:visibility="gone">
+            android:layout_height="match_parent">
 
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="From Date"
@@ -134,6 +136,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="24dp"
                 android:backgroundTint="@color/colorGreenTheme"
                 android:text="Apply"
                 android:textAllCaps="false"
@@ -164,25 +167,5 @@
                 app:layout_constraintTop_toTopOf="@+id/applyFilter" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/searchFab"
-            app:srcCompat="@drawable/ic_search_black_24dp"
-            android:backgroundTint="@color/colorGreenTheme"
-            app:tint="#ffffff"
-            app:elevation="8dp"
-            app:maxImageSize="32dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/paymentRecycler"
-            android:layout_below="@id/searchContainer"
-            android:clipToPadding="false"
-            android:paddingBottom="80dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

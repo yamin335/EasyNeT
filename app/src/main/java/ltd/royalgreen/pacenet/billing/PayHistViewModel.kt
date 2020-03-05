@@ -7,6 +7,7 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
+import kotlinx.coroutines.CoroutineExceptionHandler
 import ltd.royalgreen.pacenet.BaseViewModel
 import ltd.royalgreen.pacenet.R
 import java.util.*
@@ -31,13 +32,14 @@ class PayHistViewModel @Inject constructor(val application: Application, private
 
     lateinit var paymentHistoryList: LiveData<PagedList<PaymentTransaction>>
 
+    val handler = CoroutineExceptionHandler { _, exception ->
+        exception.printStackTrace()
+    }
+
     init {
-        fromDate.value = ""
-        toDate.value = ""
+        fromDate.value = "dd/mm/yyyy"
+        toDate.value = "dd/mm/yyyy"
         searchValue.value = ""
-//        fromDate.value = "dd/mm/yyyy"
-//        toDate.value = "dd/mm/yyyy"
-//        searchValue.value = ""
     }
 
     suspend fun getPaymentHistory(pageNumber: Long, pageSize: Int, values: String, SDate: String, EDate: String) = repository.paymentHistoryRepo(pageNumber, pageSize, values, SDate, EDate)

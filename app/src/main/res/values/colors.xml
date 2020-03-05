@@ -31,6 +31,7 @@
     <color name="customColor7">#FD6C5C</color>
     <color name="customColor8">#E5525D</color>
     <color name="customColor9">#6E96FF</color>
+    <color name="customColor10">#494848</color>
 
     <!-- Colors for pie chart -->
     <color name="pieColor1">#FEBF00</color>

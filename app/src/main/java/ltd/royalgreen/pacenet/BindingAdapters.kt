@@ -6,7 +6,9 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
+import kotlinx.android.synthetic.main.support_ticket_row.view.*
 import ltd.royalgreen.pacenet.network.ApiCallStatus
 
 /**
@@ -40,6 +42,25 @@ object BindingAdapters {
     @BindingAdapter("isVisible")
     fun isVisible(view: View, apiCallStatus: String?) {
         view.visibility = if (apiCallStatus?.equals("LOADING") == true) View.VISIBLE else View.GONE
+    }
+
+    @JvmStatic
+    @BindingAdapter("backgroundColor")
+    fun backgroundColor(view: TextView, status: String?) {
+        when {
+            status.equals("Pending", true) -> {
+                view.background = ContextCompat.getDrawable(view.context, R.drawable.rounded_bg_red)
+            }
+            status.equals("Processing", true) -> {
+                view.background = ContextCompat.getDrawable(view.context, R.drawable.rounded_bg_yellow)
+            }
+            status.equals("Resolved", true) -> {
+                view.background = ContextCompat.getDrawable(view.context, R.drawable.rounded_bg_green)
+            }
+            else -> {
+                view.background = ContextCompat.getDrawable(view.context, R.drawable.rounded_bg_light_grey)
+            }
+        }
     }
 
     // Shows and hides progressbar

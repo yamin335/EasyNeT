@@ -3,28 +3,11 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
         <include
             android:id="@+id/includedContentMain"
-            layout="@layout/billing_tab_container" />
-        <include
-            android:id="@+id/includedBottomSheet"
-            layout="@layout/billing_bottom_sheet" />
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/searchFab"
-            app:srcCompat="@drawable/ic_search_black_24dp"
-            android:backgroundTint="@color/colorGreenTheme"
-            app:tint="#ffffff"
-            app:elevation="8dp"
-            app:maxImageSize="32dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            app:layout_anchor="@+id/includedBottomSheet"
-            app:layout_anchorGravity="top|end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            layout="@layout/billing_tab_container"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

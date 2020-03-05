@@ -128,8 +128,7 @@ class SupportFragment : Fragment(), Injectable {
         })
     }
 
-    private fun initializedPagedListBuilder(config: PagedList.Config):
-            LivePagedListBuilder<Long, SupportTicket> {
+    private fun initializedPagedListBuilder(config: PagedList.Config): LivePagedListBuilder<Long, SupportTicket> {
         val dataSourceFactory = object : DataSource.Factory<Long, SupportTicket>() {
             override fun create(): DataSource<Long, SupportTicket> {
                 return SupportTicketHistDataSource(viewModelReference)

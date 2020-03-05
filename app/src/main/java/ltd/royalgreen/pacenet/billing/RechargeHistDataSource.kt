@@ -14,11 +14,17 @@ class RechargeHistDataSource(rechargeHistViewModel: RechargeHistViewModel) : Pag
 
     val viewModel = rechargeHistViewModel
 
+    val handler = CoroutineExceptionHandler { _, exception ->
+        exception.printStackTrace()
+    }
+
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, RechargeTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch {
-                when (val apiResponse = ApiResponse.create(viewModel.getRechargeHistory(0, 30,
-                    viewModel.searchValue.value!!, viewModel.fromDate.value!!, viewModel.toDate.value!!))) {
+            viewModel.viewModelScope.launch(handler) {
+                val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
+                val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
+                when (val apiResponse = ApiResponse.create(viewModel.getRechargeHistory(1, 30,
+                    viewModel.searchValue.value!!, startDate, endDate))) {
                     is ApiSuccessResponse -> {
                         if (!apiResponse.body.resdata?.listRecharge.isNullOrBlank()) {
                             val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listRecharge).asJsonArray
@@ -26,7 +32,7 @@ class RechargeHistDataSource(rechargeHistViewModel: RechargeHistViewModel) : Pag
                             for (transaction in transactionList) {
                                 tempTransactionList.add(Gson().fromJson(transaction, RechargeTransaction::class.java))
                             }
-                            callback.onResult(tempTransactionList, null, 1)
+                            callback.onResult(tempTransactionList, null, 2)
                         }
                     }
                     is ApiEmptyResponse -> {
@@ -40,9 +46,11 @@ class RechargeHistDataSource(rechargeHistViewModel: RechargeHistViewModel) : Pag
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, RechargeTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch {
+            viewModel.viewModelScope.launch(handler) {
+                val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
+                val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
                 when (val apiResponse = ApiResponse.create(viewModel.getRechargeHistory(params.key, 30,
-                    viewModel.searchValue.value!!, viewModel.fromDate.value!!, viewModel.toDate.value!!))) {
+                    viewModel.searchValue.value!!, startDate, endDate))) {
                     is ApiSuccessResponse -> {
                         if (!apiResponse.body.resdata?.listRecharge.isNullOrBlank()) {
                             val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listRecharge).asJsonArray

@@ -1,6 +1,5 @@
 package ltd.royalgreen.pacenet.support
 
-
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent

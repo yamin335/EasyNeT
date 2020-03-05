@@ -68,7 +68,7 @@ object AppModule {
 
         return Retrofit.Builder()
             .client(client)
-            .baseUrl("https://api.pacecloud.com")
+            .baseUrl("https://api.pacenet.net")
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(LiveDataCallAdapterFactory())
@@ -124,7 +124,7 @@ object AppModule {
         var sslContext: SSLContext? = null
         var trustManager: X509TrustManager? = null
         try {
-            val pair = createCertificate(context.resources.openRawResource(R.raw.api_ssl_certificate))
+            val pair = createCertificate(context.resources.openRawResource(R.raw.pacenet_ssl_certificate))
             sslContext = pair.first
             trustManager = pair.second
         } catch (e: CertificateException) {

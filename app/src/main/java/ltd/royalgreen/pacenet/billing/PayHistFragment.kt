@@ -2,6 +2,9 @@ package ltd.royalgreen.pacenet.billing
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.transition.Transition
+import android.transition.TransitionInflater
+import android.transition.TransitionManager
 import android.view.*
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingComponent
@@ -44,8 +47,14 @@ class PayHistFragment : Fragment(), Injectable {
     //For Payment History
     private lateinit var adapter: PaymentListAdapter
 
+    private var expanded = false
+
+    private lateinit var toggle: Transition
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        toggle = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_bar_toogle)
         // This callback will only be called when MyFragment is at least Started.
         requireActivity().onBackPressedDispatcher.addCallback(this, true) {
             val exitDialog = CustomAlertDialog(object :
@@ -79,12 +88,25 @@ class PayHistFragment : Fragment(), Injectable {
         super.onViewCreated(view, savedInstanceState)
 
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
         adapter = PaymentListAdapter()
 
-        binding.paymentRecycler.layoutManager = LinearLayoutManager(activity)
-        binding.paymentRecycler.addItemDecoration(RecyclerItemDivider(activity!!.applicationContext, LinearLayoutManager.VERTICAL, 8))
+        binding.paymentRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.paymentRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 8))
         binding.paymentRecycler.adapter = adapter
+
+        binding.searchFab.setOnClickListener{
+            toggleExpanded()
+        }
+
+        binding.applyFilter.setOnClickListener {
+            applyFilter()
+        }
+
+        binding.reset.setOnClickListener {
+            resetSearch()
+        }
 
         //1
         val config = PagedList.Config.Builder()
@@ -101,6 +123,27 @@ class PayHistFragment : Fragment(), Injectable {
         })
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (expanded) toggleExpanded()
+    }
+
+    fun toggleExpanded() {
+        expanded = !expanded
+        toggle.duration = if (expanded) 200L else 150L
+        TransitionManager.beginDelayedTransition(binding.rootView as ViewGroup, toggle)
+        binding.searchContainer.visibility = if (expanded) View.VISIBLE else View.GONE
+        if (expanded) {
+            binding.searchFab.setImageDrawable(resources.getDrawable(R.drawable.ic_clear_black_24dp, activity!!.theme))
+        } else {
+            viewModel.fromDate.value = "dd/mm/yyyy"
+            viewModel.toDate.value = "dd/mm/yyyy"
+            viewModel.searchValue.value = ""
+            viewModel.paymentHistoryList.value?.dataSource?.invalidate()
+            binding.searchFab.setImageDrawable(resources.getDrawable(R.drawable.ic_search_black_24dp, activity!!.theme))
+        }
+    }
+
     private fun initializedPagedListBuilder(config: PagedList.Config):
             LivePagedListBuilder<Long, PaymentTransaction> {
         val dataSourceFactory = object : DataSource.Factory<Long, PaymentTransaction>() {
@@ -109,5 +152,17 @@ class PayHistFragment : Fragment(), Injectable {
             }
         }
         return LivePagedListBuilder<Long, PaymentTransaction>(dataSourceFactory, config)
+    }
+
+    private fun applyFilter() {
+        viewModel.paymentHistoryList.value?.dataSource?.invalidate()
+    }
+
+    private fun resetSearch() {
+        viewModel.fromDate.value = "dd/mm/yyyy"
+        viewModel.toDate.value = "dd/mm/yyyy"
+        viewModel.searchValue.value = ""
+        viewModel.paymentHistoryList.value?.dataSource?.invalidate()
+        toggleExpanded()
     }
 }

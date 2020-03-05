@@ -19,11 +19,11 @@ class SupportTicketListAdapter(private val listener: OnItemClickListenerCallback
     }
 
     override fun onBindViewHolder(holder: SupportTicketListViewHolder, position: Int) {
-        val item = getItem(position)
+        val item = getItem(position)!!
         val context = holder.itemView.context
-        holder.itemView.ticketNo.text = item?.ispTicketNo
-        holder.itemView.subject.text = item?.ticketSummary
-        val status = item?.status ?: "Unknown"
+        holder.itemView.ticketNo.text = "Ticket No: ${item.ispTicketNo}"
+        holder.itemView.subject.text = item.ticketSummary
+        val status = item.status ?: "Unknown"
         holder.itemView.status.text = status
         when {
             status.equals("Pending", true) -> {
@@ -41,12 +41,16 @@ class SupportTicketListAdapter(private val listener: OnItemClickListenerCallback
         }
 
         holder.itemView.setOnClickListener {
-            listener.onItemClicked(item!!)
+            listener.onItemClicked(item)
         }
     }
 
     interface OnItemClickListenerCallback {
         fun onItemClicked(supportTicket: SupportTicket) {
+
+        }
+
+        fun onAttachmentClicked(supportTicket: SupportTicket) {
 
         }
     }
