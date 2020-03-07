@@ -18,6 +18,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import ltd.royalgreen.pacenet.CustomAlertDialog
+import ltd.royalgreen.pacenet.MainNavigationFragment
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.SplashActivity
 import ltd.royalgreen.pacenet.billing.PayHistDataSource
@@ -38,7 +39,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class SupportFragment : Fragment(), Injectable {
+class SupportFragment : MainNavigationFragment(), Injectable {
 
     @Inject
     lateinit var preferences: SharedPreferences

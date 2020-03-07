@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.*
 import androidx.activity.addCallback
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
@@ -22,7 +23,9 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
+import com.google.android.material.appbar.MaterialToolbar
 import ltd.royalgreen.pacenet.CustomAlertDialog
+import ltd.royalgreen.pacenet.MainNavigationFragment
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.SplashActivity
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
@@ -36,7 +39,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class DashboardFragment : Fragment(), Injectable {
+class DashboardFragment : MainNavigationFragment(), Injectable {
 
     @Inject
     lateinit var preferences: SharedPreferences
@@ -58,6 +61,7 @@ class DashboardFragment : Fragment(), Injectable {
 
     interface DashItemInteractionListener {
         fun onDashItemClicked(navigation: String)
+        fun setupToolbar(toolbar: MaterialToolbar)
     }
 
     override fun onAttach(context: Context) {
@@ -108,6 +112,8 @@ class DashboardFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.lifecycleOwner = viewLifecycleOwner
+
+        listener?.setupToolbar(binding.toolbar)
 
         val formatter: ValueFormatter =
             object : ValueFormatter() {

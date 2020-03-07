@@ -5,12 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import kotlinx.android.synthetic.main.main_activity.*
@@ -23,7 +25,7 @@ import javax.inject.Inject
 
 const val SHARED_PREFS_KEY = "%*APP_DEFAULT_KEY*%"
 
-class MainActivity : AppCompatActivity(), HasAndroidInjector, DashboardFragment.DashItemInteractionListener {
+class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, DashboardFragment.DashItemInteractionListener {
 
     @Inject
     lateinit var apiService: ApiService
@@ -190,8 +192,8 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector, DashboardFragment.
 //                drawerLayout = drawer_layout
 //            )
             // Set up ActionBar
-            setSupportActionBar(toolbar)
-            setupActionBarWithNavController(navController)
+//            setSupportActionBar(toolbar)
+//            setupActionBarWithNavController(navController)
 
             navController.addOnDestinationChangedListener { _, destination, _ ->
                 when(destination.id) {
@@ -261,6 +263,20 @@ class MainActivity : AppCompatActivity(), HasAndroidInjector, DashboardFragment.
             navigation.equals("TICKET_HISTORY", true) -> {
                 bottom_nav.selectedItemId = R.id.support_nav_graph
             }
+        }
+    }
+
+    override fun setupToolbar(toolbar: MaterialToolbar) {
+        setSupportActionBar(toolbar)
+        currentNavController?.value?.let {
+            setupActionBarWithNavController(it)
+        }
+    }
+
+    override fun registerToolbarWithNavigation(toolbar: Toolbar) {
+        setSupportActionBar(toolbar)
+        currentNavController?.value?.let {
+            setupActionBarWithNavController(it)
         }
     }
 

@@ -15,10 +15,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
-import ltd.royalgreen.pacenet.CustomAlertDialog
-import ltd.royalgreen.pacenet.LoggedUser
-import ltd.royalgreen.pacenet.R
-import ltd.royalgreen.pacenet.SplashActivity
+import ltd.royalgreen.pacenet.*
 import ltd.royalgreen.pacenet.billing.bkash.BKashPaymentWebDialog
 import ltd.royalgreen.pacenet.billing.foster.FosterPaymentWebDialog
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
@@ -32,7 +29,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class BillingFragment : Fragment(), Injectable {
+class BillingFragment : MainNavigationFragment(), Injectable {
 
     @Inject
     lateinit var preferences: SharedPreferences
@@ -102,17 +99,17 @@ class BillingFragment : Fragment(), Injectable {
 
         viewPagerFragments = arrayOf(payHistFragment, rechargeHistFragment)
 
-        pagerAdapter = BillingViewPagerAdapter(viewPagerFragments, childFragmentManager, lifecycle)
+        pagerAdapter = BillingViewPagerAdapter(viewPagerFragments, childFragmentManager, viewLifecycleOwner.lifecycle)
 
-        binding.includedContentMain.viewPager.adapter = pagerAdapter
+        binding.viewPager.adapter = pagerAdapter
 
         viewPager2PageChangeCallback = ViewPager2PageChangeCallback {
             setCurrentPageItemPosition(it)
         }
 
-        binding.includedContentMain.viewPager.registerOnPageChangeCallback(viewPager2PageChangeCallback)
+        binding.viewPager.registerOnPageChangeCallback(viewPager2PageChangeCallback)
 
-        TabLayoutMediator(binding.includedContentMain.tabs, binding.includedContentMain.viewPager) { tab, position ->
+        TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             tab.text = viewPagerPageTitles[position]
         }.attach()
     }

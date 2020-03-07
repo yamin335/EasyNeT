@@ -15,22 +15,6 @@
         android:id="@+id/coordinator_layout"
         tools:context="ltd.royalgreen.pacecloud.mainactivitymodule.MainActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="@color/colorPrimaryLight"
-                android:background="@color/colorWhite"
-                android:theme="@style/AppTheme.AppBarOverlay"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </com.google.android.material.appbar.AppBarLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

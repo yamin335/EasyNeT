@@ -107,7 +107,8 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
         }
     }
 
-    fun formatDateTime(value: String?): String {
+    private fun formatDateTime(value: String?): String {
+        val months = arrayOf("Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec")
         var formattedDateTime = ""
         if (value != null && value.contains("T")) {
             val tempStringArray = value.split("T")
@@ -119,16 +120,26 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
                         val hour = tempString1.split(":")[0].toInt()
                         val minute = tempString1.split(":")[1].toInt()
                         val seconds = tempString1.split(":")[2].toInt()
-                        "${hour-12}:$minute:$seconds PM"
+                        "${hour-12}:$minute PM"
                     }
                     tempString1.split(":")[0].toInt() == 0 -> {
                         val hour = tempString1.split(":")[0].toInt()
                         val minute = tempString1.split(":")[1].toInt()
                         val seconds = tempString1.split(":")[2].toInt()
-                        "${hour+12}:$minute:$seconds AM"
+                        "${hour+12}:$minute AM"
                     }
-                    tempString1.split(":")[0].toInt()==12 -> "$tempString1 PM"
-                    else -> "$tempString1 AM"
+                    tempString1.split(":")[0].toInt()==12 -> {
+                        val hour = tempString1.split(":")[0].toInt()
+                        val minute = tempString1.split(":")[1].toInt()
+                        val seconds = tempString1.split(":")[2].toInt()
+                        "$hour:$minute PM"
+                    }
+                    else -> {
+                        val hour = tempString1.split(":")[0].toInt()
+                        val minute = tempString1.split(":")[1].toInt()
+                        val seconds = tempString1.split(":")[2].toInt()
+                        "$hour:$minute AM"
+                    }
                 }
             } else {
                 tempString1 = when {
@@ -136,22 +147,32 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
                         val hour = tempString1.split(":")[0].toInt()
                         val minute = tempString1.split(":")[1].toInt()
                         val seconds = tempString1.split(":")[2].toInt()
-                        "${hour-12}:$minute:$seconds PM"
+                        "${hour-12}:$minute PM"
                     }
                     tempString1.split(":")[0].toInt() == 0 -> {
                         val hour = tempString1.split(":")[0].toInt()
                         val minute = tempString1.split(":")[1].toInt()
                         val seconds = tempString1.split(":")[2].toInt()
-                        "${hour+12}:$minute:$seconds AM"
+                        "${hour+12}:$minute AM"
                     }
-                    tempString1.split(":")[0].toInt()==12 -> "$tempString1 PM"
-                    else -> "$tempString1 AM"
+                    tempString1.split(":")[0].toInt()==12 -> {
+                        val hour = tempString1.split(":")[0].toInt()
+                        val minute = tempString1.split(":")[1].toInt()
+                        val seconds = tempString1.split(":")[2].toInt()
+                        "$hour:$minute PM"
+                    }
+                    else -> {
+                        val hour = tempString1.split(":")[0].toInt()
+                        val minute = tempString1.split(":")[1].toInt()
+                        val seconds = tempString1.split(":")[2].toInt()
+                        "$hour:$minute AM"
+                    }
                 }
             }
             val year = tempStringArray[0].split("-")[0]
             val month = tempStringArray[0].split("-")[1]
             val day = tempStringArray[0].split("-")[2]
-            formattedDateTime = "$day-$month-$year  $tempString1"
+            formattedDateTime = "$tempString1  $day ${months[month.toInt() - 1]} $year"
         } else {
             formattedDateTime = value ?: ""
         }

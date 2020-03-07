@@ -21,6 +21,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import ltd.royalgreen.pacenet.MainNavigationFragment
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.SupportTicketConversationFragmentBinding
@@ -31,7 +32,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class SupportTicketConversationFragment : Fragment(), Injectable {
+class SupportTicketConversationFragment : MainNavigationFragment(), Injectable {
 
     private val storagePermissionCode = 1207
 
@@ -131,7 +132,7 @@ class SupportTicketConversationFragment : Fragment(), Injectable {
         val layoutManager = LinearLayoutManager(requireContext())
         layoutManager.stackFromEnd = true
         binding.messageRecycler.layoutManager = layoutManager
-        binding.messageRecycler.addItemDecoration(VerticalSpaceItemDivider(16))
+        binding.messageRecycler.addItemDecoration(VerticalSpaceItemDivider(20))
         binding.messageRecycler.adapter = messageAdapter
 
         viewModel.getTicketConversation(args.ispTicketId)

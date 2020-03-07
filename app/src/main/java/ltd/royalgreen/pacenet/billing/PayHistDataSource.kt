@@ -14,13 +14,12 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
 
     val viewModel = payHistViewModel
 
-    val handler = CoroutineExceptionHandler { _, exception ->
-        exception.printStackTrace()
-    }
-
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, PaymentTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch(handler) {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+            }
+            CoroutineScope(Dispatchers.Main).launch(handler) {
                 val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
                 val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
                 when (val apiResponse = ApiResponse.create(viewModel.getPaymentHistory(1, 30,
@@ -46,7 +45,10 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, PaymentTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch(handler) {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+            }
+            CoroutineScope(Dispatchers.Main).launch(handler) {
                 val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
                 val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
                 when (val apiResponse = ApiResponse.create(viewModel.getPaymentHistory(params.key, 30,

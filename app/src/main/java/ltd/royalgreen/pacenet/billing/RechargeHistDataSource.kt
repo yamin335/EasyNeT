@@ -14,13 +14,12 @@ class RechargeHistDataSource(rechargeHistViewModel: RechargeHistViewModel) : Pag
 
     val viewModel = rechargeHistViewModel
 
-    val handler = CoroutineExceptionHandler { _, exception ->
-        exception.printStackTrace()
-    }
-
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, RechargeTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch(handler) {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+            }
+            CoroutineScope(Dispatchers.Main).launch(handler) {
                 val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
                 val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
                 when (val apiResponse = ApiResponse.create(viewModel.getRechargeHistory(1, 30,
@@ -46,7 +45,10 @@ class RechargeHistDataSource(rechargeHistViewModel: RechargeHistViewModel) : Pag
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, RechargeTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch(handler) {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+            }
+            CoroutineScope(Dispatchers.Main).launch(handler) {
                 val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
                 val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
                 when (val apiResponse = ApiResponse.create(viewModel.getRechargeHistory(params.key, 30,

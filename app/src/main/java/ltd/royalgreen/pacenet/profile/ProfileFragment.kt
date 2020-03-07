@@ -12,6 +12,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import ltd.royalgreen.pacenet.CustomAlertDialog
+import ltd.royalgreen.pacenet.MainNavigationFragment
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.SplashActivity
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
@@ -25,7 +26,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class ProfileFragment : Fragment(), Injectable {
+class ProfileFragment : MainNavigationFragment(), Injectable {
 
     @Inject
     lateinit var preferences: SharedPreferences

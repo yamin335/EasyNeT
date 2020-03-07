@@ -96,10 +96,6 @@ class PayHistFragment : Fragment(), Injectable {
         binding.paymentRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 8))
         binding.paymentRecycler.adapter = adapter
 
-        binding.searchFab.setOnClickListener{
-            toggleExpanded()
-        }
-
         binding.applyFilter.setOnClickListener {
             applyFilter()
         }
@@ -133,14 +129,11 @@ class PayHistFragment : Fragment(), Injectable {
         toggle.duration = if (expanded) 200L else 150L
         TransitionManager.beginDelayedTransition(binding.rootView as ViewGroup, toggle)
         binding.searchContainer.visibility = if (expanded) View.VISIBLE else View.GONE
-        if (expanded) {
-            binding.searchFab.setImageDrawable(resources.getDrawable(R.drawable.ic_clear_black_24dp, activity!!.theme))
-        } else {
+        if (!expanded) {
             viewModel.fromDate.value = "dd/mm/yyyy"
             viewModel.toDate.value = "dd/mm/yyyy"
             viewModel.searchValue.value = ""
             viewModel.paymentHistoryList.value?.dataSource?.invalidate()
-            binding.searchFab.setImageDrawable(resources.getDrawable(R.drawable.ic_search_black_24dp, activity!!.theme))
         }
     }
 

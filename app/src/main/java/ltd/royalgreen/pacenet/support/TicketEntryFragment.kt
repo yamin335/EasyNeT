@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import ltd.royalgreen.pacenet.MainNavigationFragment
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.SupportTicketEntryBinding
@@ -36,7 +37,7 @@ import javax.inject.Inject
 /**
  * A simple [Fragment] subclass.
  */
-class TicketEntryFragment : Fragment(), Injectable {
+class TicketEntryFragment : MainNavigationFragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory

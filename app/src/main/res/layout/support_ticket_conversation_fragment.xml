@@ -7,321 +7,344 @@
             name="viewModel"
             type="ltd.royalgreen.pacenet.support.ConversationDetailViewModel" />
     </data>
-    <ScrollView
-        android:id="@+id/mainLayout"
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbarThumbVertical="@null">
-        <RelativeLayout
+        android:layout_height="match_parent">
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context="onair.onmessanger.MessageListActivity">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/header"
-                android:orientation="vertical"
-                android:layout_alignParentTop="true"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="?attr/actionBarSize"
+                app:titleTextColor="@color/colorPrimaryLight"
+                android:background="@color/colorWhite"
+                android:theme="@style/AppTheme.AppBarOverlay"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@{viewModel.ticketDate}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-                <TextView
-                    android:id="@+id/status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@drawable/rounded_bg_green"
-                    android:paddingStart="6dp"
-                    android:paddingTop="2dp"
-                    android:paddingEnd="6dp"
-                    android:paddingBottom="4dp"
-                    android:text="@{viewModel.ticketStatus}"
-                    android:textColor="@color/colorWhite"
-                    android:textStyle="bold"
-                    app:backgroundColor="@{viewModel.ticketStatus}"
-                    app:layout_constraintBottom_toBottomOf="@+id/date"
-                    app:layout_constraintEnd_toStartOf="@+id/attachment"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/date"
-                    app:layout_constraintTop_toTopOf="@+id/date" />
-
-                <TextView
-                    android:id="@+id/tokenNo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@{viewModel.ticketNo}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/date"
-                    app:layout_constraintTop_toBottomOf="@+id/date"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/title1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:drawableStart="@drawable/ic_extension_black_24dp"
-                    android:drawablePadding="4dp"
-                    android:text="Category :"
-                    android:textColor="@color/customColor10"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/title2"
-                    app:layout_constraintTop_toBottomOf="@+id/title2"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/category"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:textColor="@color/customColor10"
-                    android:text="@{viewModel.ticketCategory}"
-                    app:layout_constraintBottom_toBottomOf="@+id/title1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/title1"
-                    app:layout_constraintTop_toTopOf="@+id/title1" />
-
-                <TextView
-                    android:id="@+id/title2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:drawableStart="@drawable/ic_receipt_black_24dp"
-                    android:drawablePadding="4dp"
-                    android:text="Subject :"
-                    android:textColor="@color/customColor10"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/tokenNo"
-                    app:layout_constraintTop_toBottomOf="@+id/tokenNo"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <TextView
-                    android:id="@+id/subject"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@{viewModel.ticketSubject}"
-                    android:textColor="@color/customColor10"
-                    app:layout_constraintBottom_toBottomOf="@+id/title2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/title2"
-                    app:layout_constraintTop_toTopOf="@+id/title2" />
-
-                <TextView
-                    android:id="@+id/attachment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:padding="2dp"
-                    android:text="Show Attachment"
-                    android:textColor="@color/customColor9"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
-
-                <View
-                    android:id="@+id/view1"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#dfdfdf"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/category"
-                    app:layout_constraintVertical_bias="0.0" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/messageRecycler"
-                android:clipToPadding="false"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp"
-                android:layout_below="@id/header"
-                android:layout_above="@id/footer"
+        <ScrollView
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbarThumbVertical="@null">
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:id="@+id/loader"
-                android:layout_width="match_parent"
-                android:layout_marginBottom="-7dp"
-                android:layout_height="15dp"
-                android:indeterminate="true"
-                android:layout_above="@id/footer"
-                app:showLoader="@{viewModel.apiCallStatus}"/>
-
-            <LinearLayout
-                android:id="@+id/footer"
-                android:layout_alignParentBottom="true"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <!-- A horizontal line between the chatbox and RecyclerView -->
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#dfdfdf" />
-
+                android:layout_height="wrap_content"
+                tools:context="onair.onmessanger.MessageListActivity">
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_chatbox"
+                    android:id="@+id/header"
+                    android:orientation="vertical"
+                    android:layout_alignParentTop="true"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#ffffff"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent">
+                    android:layout_height="wrap_content">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/attachedFileRecycler"
-                        android:layout_width="0dp"
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="4dp"
-                        app:layout_constraintBottom_toTopOf="@+id/usernametInputLayout"
+                        android:layout_marginBottom="8dp"
+                        android:text="@{viewModel.ticketDate}"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintVertical_bias="0.0" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/usernametInputLayout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                    <TextView
+                        android:id="@+id/status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/rounded_bg_green"
+                        android:paddingStart="6dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="6dp"
+                        android:paddingBottom="4dp"
+                        android:textSize="12sp"
+                        android:text="@{viewModel.ticketStatus}"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        app:backgroundColor="@{viewModel.ticketStatus}"
+                        app:layout_constraintBottom_toBottomOf="@+id/date"
+                        app:layout_constraintEnd_toStartOf="@+id/attachment"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/date"
+                        app:layout_constraintTop_toTopOf="@+id/date" />
+
+                    <TextView
+                        android:id="@+id/tokenNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="@{viewModel.ticketNo}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/date"
+                        app:layout_constraintTop_toBottomOf="@+id/date"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/title1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:drawableStart="@drawable/ic_extension_black_24dp"
+                        android:drawablePadding="4dp"
+                        android:text="Category :"
+                        android:textColor="@color/customColor10"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/title2"
+                        app:layout_constraintTop_toBottomOf="@+id/title2"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/category"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_weight="1"
-                        android:windowSoftInputMode="adjustResize"
-                        app:boxCornerRadiusBottomEnd="5dp"
-                        app:boxCornerRadiusBottomStart="5dp"
-                        app:boxCornerRadiusTopEnd="5dp"
-                        app:boxCornerRadiusTopStart="5dp"
-                        app:boxStrokeColor="@color/edittext_box_stroke_color"
-                        app:boxStrokeWidth="1px"
-                        app:boxStrokeWidthFocused="2px"
-                        app:hintEnabled="false"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/attachFile"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0">
+                        android:textColor="@color/customColor10"
+                        android:text="@{viewModel.ticketCategory}"
+                        app:layout_constraintBottom_toBottomOf="@+id/title1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/title1"
+                        app:layout_constraintTop_toTopOf="@+id/title1" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/server_ip"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="top|start"
-                            android:hint="Enter message"
-                            android:imeOptions="actionDone"
-                            android:inputType="textMultiLine"
-                            android:lines="4"
-                            android:maxLines="16"
-                            android:minLines="1"
-                            android:text="@={viewModel.newMessage}"
-                            android:textColor="@color/colorPrimaryLight"
-                            android:textColorHint="@color/colorGrayVeryLight" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <ImageView
-                        android:id="@+id/attachFile"
+                    <TextView
+                        android:id="@+id/title2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:contentDescription="@string/attach_file_desc"
-                        android:focusable="true"
-                        android:tint="@color/customColor9"
-                        android:paddingTop="10dp"
-                        android:paddingBottom="10dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/send"
-                        app:layout_constraintEnd_toStartOf="@+id/send"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/usernametInputLayout"
-                        app:layout_constraintTop_toTopOf="@+id/send"
-                        app:srcCompat="@drawable/ic_attach_file_24dp" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/send"
-                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="fill_vertical"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="4dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
-                        android:backgroundTint="@color/colorGreenTheme"
-                        android:enabled="false"
-                        android:paddingStart="10dp"
-                        android:paddingEnd="10dp"
-                        android:text="Send"
-                        android:textAllCaps="false"
-                        android:textSize="15sp"
-                        app:cornerRadius="2dp"
-                        app:icon="@drawable/ic_send_24dp"
-                        app:iconPadding="6dp"
+                        android:drawableStart="@drawable/ic_receipt_black_24dp"
+                        android:drawablePadding="4dp"
+                        android:text="Subject :"
+                        android:textColor="@color/customColor10"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/attachFile"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="1.0" />
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="@+id/tokenNo"
+                        app:layout_constraintTop_toBottomOf="@+id/tokenNo"
+                        app:layout_constraintVertical_bias="0.0" />
 
+                    <TextView
+                        android:id="@+id/subject"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@{viewModel.ticketSubject}"
+                        android:textColor="@color/customColor10"
+                        app:layout_constraintBottom_toBottomOf="@+id/title2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toEndOf="@+id/title2"
+                        app:layout_constraintTop_toTopOf="@+id/title2" />
+
+                    <TextView
+                        android:id="@+id/attachment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:padding="2dp"
+                        android:text="Show Attachment"
+                        android:textColor="@color/customColor9"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#dfdfdf"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/category"
+                        app:layout_constraintVertical_bias="0.0" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </LinearLayout>
-        </RelativeLayout>
-    </ScrollView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/messageRecycler"
+                    android:clipToPadding="false"
+                    android:paddingBottom="8dp"
+                    android:paddingTop="8dp"
+                    android:layout_below="@id/header"
+                    android:layout_above="@id/footer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:id="@+id/loader"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="-7dp"
+                    android:layout_height="15dp"
+                    android:indeterminate="true"
+                    android:layout_above="@id/footer"
+                    app:showLoader="@{viewModel.apiCallStatus}"/>
+
+                <LinearLayout
+                    android:id="@+id/footer"
+                    android:layout_alignParentBottom="true"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <!-- A horizontal line between the chatbox and RecyclerView -->
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#dfdfdf" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_chatbox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ffffff"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/attachedFileRecycler"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="4dp"
+                            app:layout_constraintBottom_toTopOf="@+id/usernametInputLayout"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/usernametInputLayout"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:layout_weight="1"
+                            android:windowSoftInputMode="adjustResize"
+                            app:boxCornerRadiusBottomEnd="5dp"
+                            app:boxCornerRadiusBottomStart="5dp"
+                            app:boxCornerRadiusTopEnd="5dp"
+                            app:boxCornerRadiusTopStart="5dp"
+                            app:boxStrokeColor="@color/edittext_box_stroke_color"
+                            app:boxStrokeWidth="1px"
+                            app:boxStrokeWidthFocused="2px"
+                            app:hintEnabled="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/attachFile"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="1.0">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/server_ip"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="top|start"
+                                android:hint="Enter message"
+                                android:imeOptions="actionDone"
+                                android:inputType="textMultiLine"
+                                android:lines="4"
+                                android:maxLines="16"
+                                android:minLines="1"
+                                android:text="@={viewModel.newMessage}"
+                                android:textColor="@color/colorPrimaryLight"
+                                android:textColorHint="@color/colorGrayVeryLight" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <ImageView
+                            android:id="@+id/attachFile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:contentDescription="@string/attach_file_desc"
+                            android:focusable="true"
+                            android:tint="@color/customColor9"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            app:layout_constraintBottom_toBottomOf="@+id/send"
+                            app:layout_constraintEnd_toStartOf="@+id/send"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/usernametInputLayout"
+                            app:layout_constraintTop_toTopOf="@+id/send"
+                            app:srcCompat="@drawable/ic_attach_file_24dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/send"
+                            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="fill_vertical"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:backgroundTint="@color/colorGreenTheme"
+                            android:enabled="false"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:text="Send"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            app:cornerRadius="2dp"
+                            app:icon="@drawable/ic_send_24dp"
+                            app:iconPadding="6dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/attachFile"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="1.0" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
 </layout>

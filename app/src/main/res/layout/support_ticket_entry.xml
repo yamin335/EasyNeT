@@ -9,239 +9,267 @@
             type="ltd.royalgreen.pacenet.support.TicketEntryViewModel"/>
     </data>
 
-    <ScrollView
-        android:id="@+id/mainLayout"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:context=".support.TicketEntryFragment">
-            <ProgressBar
-                style="?android:attr/progressBarStyleHorizontal"
-                android:id="@+id/loader"
-                android:layout_alignParentTop="true"
-                android:layout_width="match_parent"
-                android:layout_marginTop="-6dp"
-                android:layout_height="15dp"
-                android:indeterminate="true"
-                app:showLoader="@{viewModel.apiCallStatus}"/>
+            android:theme="@style/AppTheme.AppBarOverlay"
+            app:layout_constraintBottom_toTopOf="@+id/constraint1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorWhite"
+                android:theme="@style/AppTheme.AppBarOverlay"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:titleTextColor="@color/colorPrimaryLight" />
 
-                <Spinner
-                    android:id="@+id/spinnerticketCategory"
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <ScrollView
+            android:id="@+id/mainLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:context=".support.TicketEntryFragment">
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:id="@+id/loader"
+                    android:layout_alignParentTop="true"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="@drawable/spinner_background"
-                    android:minHeight="30dp"
-                    android:spinnerMode="dropdown"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView8"
-                    app:layout_constraintVertical_bias="0.0" />
+                    android:layout_marginTop="-6dp"
+                    android:layout_height="15dp"
+                    android:indeterminate="true"
+                    app:showLoader="@{viewModel.apiCallStatus}"/>
 
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="Category"
-                    android:textColor="@color/colorPrimaryLight"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="2dp"
-                    android:layout_marginBottom="4dp"
-                    android:text="*"
-                    android:textColor="@color/colorRed"
-                    android:textSize="18sp"
-                    android:textStyle="italic"
-                    app:layout_constraintBottom_toBottomOf="@+id/textView8"
-                    app:layout_constraintStart_toEndOf="@+id/textView8"
-                    app:layout_constraintTop_toTopOf="@+id/textView8" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/subjectInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:boxCornerRadiusBottomEnd="2dp"
-                    app:boxCornerRadiusBottomStart="2dp"
-                    app:boxCornerRadiusTopEnd="2dp"
-                    app:boxCornerRadiusTopStart="2dp"
-                    app:boxStrokeColor="@color/edittext_box_stroke_color"
-                    app:endIconMode="clear_text"
-                    app:endIconTint="@color/colorDarkGray"
-                    app:errorTextColor="@color/colorRed"
-                    app:helperText="Required"
-                    app:helperTextTextColor="@color/colorRed"
-                    app:hintTextColor="@color/colorGreenTheme"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/spinnerticketCategory"
-                    app:layout_constraintStart_toStartOf="@+id/spinnerticketCategory"
-                    app:layout_constraintTop_toBottomOf="@+id/spinnerticketCategory"
-                    app:layout_constraintVertical_bias="0.0">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/subject"
+                    <Spinner
+                        android:id="@+id/spinnerticketCategory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="top|start"
-                        android:hint="Subject"
-                        android:imeOptions="actionNext"
-                        android:inputType="textMultiLine"
-                        android:lines="4"
-                        android:maxLines="8"
-                        android:minLines="1"
-                        android:text="@={viewModel.ticketSubject}"
-                        app:endIconMode="clear_text"
-                        app:endIconTint="@color/colorDarkGray" />
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/spinner_background"
+                        android:minHeight="30dp"
+                        android:spinnerMode="dropdown"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView8"
+                        app:layout_constraintVertical_bias="0.0" />
 
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/descInputLayout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:boxCornerRadiusBottomEnd="2dp"
-                    app:boxCornerRadiusBottomStart="2dp"
-                    app:boxCornerRadiusTopEnd="2dp"
-                    app:boxCornerRadiusTopStart="2dp"
-                    app:boxStrokeColor="@color/edittext_box_stroke_color"
-                    app:endIconMode="clear_text"
-                    app:endIconTint="@color/colorDarkGray"
-                    app:errorTextColor="@color/colorRed"
-                    app:helperText="Required"
-                    app:helperTextTextColor="@color/colorRed"
-                    app:hintTextColor="@color/colorGreenTheme"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/subjectInputLayout"
-                    app:layout_constraintStart_toStartOf="@+id/subjectInputLayout"
-                    app:layout_constraintTop_toBottomOf="@+id/subjectInputLayout"
-                    app:layout_constraintVertical_bias="0.0">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/description"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="top|start"
-                        android:hint="Description"
-                        android:imeOptions="actionDone"
-                        android:inputType="textMultiLine"
-                        android:lines="6"
-                        android:maxLines="16"
-                        android:minLines="4"
-                        android:text="@={viewModel.ticketDescription}"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="Category"
+                        android:textColor="@color/colorPrimaryLight"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginBottom="4dp"
+                        android:text="*"
+                        android:textColor="@color/colorRed"
+                        android:textSize="18sp"
+                        android:textStyle="italic"
+                        app:layout_constraintBottom_toBottomOf="@+id/textView8"
+                        app:layout_constraintStart_toEndOf="@+id/textView8"
+                        app:layout_constraintTop_toTopOf="@+id/textView8" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/subjectInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:boxCornerRadiusBottomEnd="2dp"
+                        app:boxCornerRadiusBottomStart="2dp"
+                        app:boxCornerRadiusTopEnd="2dp"
+                        app:boxCornerRadiusTopStart="2dp"
+                        app:boxStrokeColor="@color/edittext_box_stroke_color"
                         app:endIconMode="clear_text"
-                        app:endIconTint="@color/colorDarkGray" />
+                        app:endIconTint="@color/colorDarkGray"
+                        app:errorTextColor="@color/colorRed"
+                        app:helperText="Required"
+                        app:helperTextTextColor="@color/colorRed"
+                        app:hintTextColor="@color/colorGreenTheme"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/spinnerticketCategory"
+                        app:layout_constraintStart_toStartOf="@+id/spinnerticketCategory"
+                        app:layout_constraintTop_toBottomOf="@+id/spinnerticketCategory"
+                        app:layout_constraintVertical_bias="0.0">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/subject"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top|start"
+                            android:hint="Subject"
+                            android:imeOptions="actionNext"
+                            android:inputType="textMultiLine"
+                            android:lines="4"
+                            android:maxLines="8"
+                            android:minLines="1"
+                            android:text="@={viewModel.ticketSubject}"
+                            app:endIconMode="clear_text"
+                            app:endIconTint="@color/colorDarkGray" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/attachedFileRecycler"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/descInputLayout"
-                    app:layout_constraintStart_toStartOf="@+id/descInputLayout"
-                    app:layout_constraintTop_toBottomOf="@+id/descInputLayout"
-                    app:layout_constraintVertical_bias="0.0" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/addFile"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="14dp"
-                    android:text="Add File"
-                    android:textAllCaps="false"
-                    android:textColor="@color/textColor2"
-                    android:textSize="15sp"
-                    app:cornerRadius="2dp"
-                    app:icon="@drawable/ic_add_file"
-                    app:iconPadding="6dp"
-                    app:iconSize="24dp"
-                    app:iconTint="@color/colorGray"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/descInputLayout"
-                    app:layout_constraintTop_toBottomOf="@+id/attachedFileRecycler"
-                    app:layout_constraintVertical_bias="0.0" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/descInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        app:boxCornerRadiusBottomEnd="2dp"
+                        app:boxCornerRadiusBottomStart="2dp"
+                        app:boxCornerRadiusTopEnd="2dp"
+                        app:boxCornerRadiusTopStart="2dp"
+                        app:boxStrokeColor="@color/edittext_box_stroke_color"
+                        app:endIconMode="clear_text"
+                        app:endIconTint="@color/colorDarkGray"
+                        app:errorTextColor="@color/colorRed"
+                        app:helperText="Required"
+                        app:helperTextTextColor="@color/colorRed"
+                        app:hintTextColor="@color/colorGreenTheme"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/subjectInputLayout"
+                        app:layout_constraintStart_toStartOf="@+id/subjectInputLayout"
+                        app:layout_constraintTop_toBottomOf="@+id/subjectInputLayout"
+                        app:layout_constraintVertical_bias="0.0">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/reset"
-                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/customColor8"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="14dp"
-                    android:text="Reset"
-                    android:textAllCaps="false"
-                    android:textColor="@color/colorWhite"
-                    android:textSize="15sp"
-                    app:cornerRadius="2dp"
-                    app:icon="@drawable/ic_sync_24dp"
-                    app:iconPadding="6dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/submit"
-                    app:layout_constraintEnd_toStartOf="@+id/submit"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/submit" />
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="top|start"
+                            android:hint="Description"
+                            android:imeOptions="actionDone"
+                            android:inputType="textMultiLine"
+                            android:lines="6"
+                            android:maxLines="16"
+                            android:minLines="4"
+                            android:text="@={viewModel.ticketDescription}"
+                            app:endIconMode="clear_text"
+                            app:endIconTint="@color/colorDarkGray" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/submit"
-                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:backgroundTint="@color/colorGreenTheme"
-                    android:enabled="false"
-                    android:paddingStart="10dp"
-                    android:paddingEnd="14dp"
-                    android:text="Submit"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    app:cornerRadius="2dp"
-                    app:icon="@drawable/ic_check_circle_24dp"
-                    app:iconPadding="6dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/descInputLayout"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/addFile"
-                    app:layout_constraintVertical_bias="0.0" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </RelativeLayout>
-    </ScrollView>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/attachedFileRecycler"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/descInputLayout"
+                        app:layout_constraintStart_toStartOf="@+id/descInputLayout"
+                        app:layout_constraintTop_toBottomOf="@+id/descInputLayout"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/addFile"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="14dp"
+                        android:text="Add File"
+                        android:textAllCaps="false"
+                        android:textColor="@color/textColor2"
+                        android:textSize="15sp"
+                        app:cornerRadius="2dp"
+                        app:icon="@drawable/ic_add_file"
+                        app:iconPadding="6dp"
+                        app:iconSize="24dp"
+                        app:iconTint="@color/colorGray"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="@+id/descInputLayout"
+                        app:layout_constraintTop_toBottomOf="@+id/attachedFileRecycler"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/reset"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:backgroundTint="@color/customColor8"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="14dp"
+                        android:text="Reset"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorWhite"
+                        android:textSize="15sp"
+                        app:cornerRadius="2dp"
+                        app:icon="@drawable/ic_sync_24dp"
+                        app:iconPadding="6dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/submit"
+                        app:layout_constraintEnd_toStartOf="@+id/submit"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/submit" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/submit"
+                        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:backgroundTint="@color/colorGreenTheme"
+                        android:enabled="false"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="14dp"
+                        android:text="Submit"
+                        android:textAllCaps="false"
+                        android:textSize="15sp"
+                        app:cornerRadius="2dp"
+                        app:icon="@drawable/ic_check_circle_24dp"
+                        app:iconPadding="6dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/descInputLayout"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/addFile"
+                        app:layout_constraintVertical_bias="0.0" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
+        </ScrollView>
+    </LinearLayout>
 </layout>
