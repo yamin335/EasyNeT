@@ -74,36 +74,36 @@ interface ApiService {
 
     //API FOR RECHARGE
     @Headers("Content-Type: application/json")
-    @POST("/api/billclouduserclient/cloudrecharge")
+    @POST("/api/ispportal/isprecharge")
     suspend fun cloudrecharge(@Body jsonArray: JsonArray): Response<RechargeResponse>
 
     //API FOR RECHARGE STATUS CHECK
     @Headers("Content-Type: application/json")
-    @POST("/api/billclouduserclient/cloudrechargesave")
+    @POST("/api/ispportal/isprechargesave")
     suspend fun cloudrechargesave(@Body jsonArray: JsonArray): Response<RechargeStatusFosterCheckModel>
 
     //API FOR RECHARGE SAVE
     @Headers("Content-Type: application/json")
-    @POST("/api/portal/newrechargesave")
+    @POST("/api/ispportal/newrechargesave")
     suspend fun newrechargesave(@Body jsonArray: JsonArray): Response<DefaultResponse>
 
     //API FOR GENERATE TOKEN FOR BKASH PAYMENT
-    @GET("/api/portal/generatebkashtoken")
+    @GET("/api/ispportal/generatebkashtoken")
     suspend fun generatebkashtoken(@Query("param") param: String): Response<BKashTokenResponse>
 
     //API FOR RECHARGE SAVE
     @Headers("Content-Type: application/json")
-    @POST("/api/portal/createbkashpayment")
+    @POST("/api/ispportal/createbkashpayment")
     suspend fun createbkashpayment(@Body jsonArray: JsonArray): Response<BKashCreatePaymentResponse>
 
     //API FOR RECHARGE SAVE
     @Headers("Content-Type: application/json")
-    @POST("/api/portal/executebkashpayment")
+    @POST("/api/ispportal/executebkashpayment")
     suspend fun executebkashpayment(@Body jsonArray: JsonArray): Response<BKashExecutePaymentResponse>
 
     //API FOR RECHARGE SAVE
     @Headers("Content-Type: application/json")
-    @POST("/api/portal/newrechargebkashpayment")
+    @POST("/api/ispportal/newrechargebkashpayment")
     suspend fun newrechargebkashpayment(@Body jsonArray: JsonArray): Response<DefaultResponse>
 
 //    @Multipart

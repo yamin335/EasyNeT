@@ -7,8 +7,8 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ltd.royalgreen.pacecloud.paymentmodule.bkash.CreateBkashModel
-import ltd.royalgreen.pacecloud.paymentmodule.bkash.PaymentRequest
+import ltd.royalgreen.pacenet.billing.bkash.CreateBkashModel
+import ltd.royalgreen.pacenet.billing.bkash.PaymentRequest
 import ltd.royalgreen.pacenet.LoggedUser
 import ltd.royalgreen.pacenet.login.LoggedUserID
 import ltd.royalgreen.pacenet.network.ApiService
@@ -66,8 +66,7 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
         val jsonObject = JsonObject()
         user?.let {
-//            jsonObject.addProperty("UserID", user.resdata?.loggeduser?.userID)
-            jsonObject.addProperty("UserID", 928)
+            jsonObject.addProperty("UserID", user.userID)
             jsonObject.addProperty("rechargeAmount", amount)
             jsonObject.addProperty("Particulars", note)
             jsonObject.addProperty("IsActive", true)
@@ -96,37 +95,39 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         }
     }
 
-//    suspend fun fosterRechargeSaveRepo(fosterString: String): Response<DefaultResponse> {
-//
-//        val fosterJsonObject = JsonParser.parseString(fosterString).asJsonArray[0].asJsonObject
-//        val fosterModel = Gson().fromJson(fosterJsonObject, FosterModel::class.java)
-//        val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
-//        //Current Date
-//        val todayInMilSec = Calendar.getInstance().time
-//        val df = SimpleDateFormat("yyyy-MM-dd")
-//        val today = df.format(todayInMilSec)
-//        val jsonObject = JsonObject().apply {
-//            addProperty("CloudUserID", user?.resdata?.loggeduser?.userID)
-//            addProperty("UserTypeId", user?.resdata?.loggeduser?.userType)
-//            addProperty("TransactionNo", fosterModel.MerchantTxnNo)
-//            addProperty("InvoiceId", 0)
-//            addProperty("UserName", user?.resdata?.loggeduser?.displayName)
-//            addProperty("TransactionDate", today)
-//            addProperty("RechargeType", "foster")
-//            addProperty("BalanceAmount", fosterModel.TxnAmount)
-//            addProperty("Particulars", "")
-//            addProperty("IsActive", true)
-//        }
-//
-//        val param = JsonArray().apply {
-//            add(jsonObject)
-//            add(fosterJsonObject)
-//        }
-//
-//        return withContext(Dispatchers.IO) {
-//            apiService.newrechargesave(param)
-//        }
-//    }
+    suspend fun fosterRechargeSaveRepo(fosterString: String): Response<DefaultResponse> {
+
+        val fosterJsonObject = JsonParser.parseString(fosterString).asJsonArray[0].asJsonObject
+        val fosterModel = Gson().fromJson(fosterJsonObject, FosterModel::class.java)
+        val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
+        val userLoggedData = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+        //Current Date
+        val todayInMilSec = Calendar.getInstance().time
+        val df = SimpleDateFormat("yyyy-MM-dd")
+        val today = df.format(todayInMilSec)
+        val jsonObject = JsonObject().apply {
+            addProperty("ISPUserID", user?.userID)
+            addProperty("ProfileId", user?.profileID)
+            addProperty("UserTypeId", userLoggedData?.userTypeId)
+            addProperty("TransactionNo", fosterModel.MerchantTxnNo)
+            addProperty("InvoiceId", 0)
+            addProperty("UserName", user?.displayName)
+            addProperty("TransactionDate", today)
+            addProperty("RechargeType", "foster")
+            addProperty("BalanceAmount", fosterModel.TxnAmount)
+            addProperty("Particulars", "")
+            addProperty("IsActive", true)
+        }
+
+        val param = JsonArray().apply {
+            add(jsonObject)
+            add(fosterJsonObject)
+        }
+
+        return withContext(Dispatchers.IO) {
+            apiService.newrechargesave(param)
+        }
+    }
 
     suspend fun bkashTokenRepo(amount: String): Response<BKashTokenResponse> {
 
@@ -178,33 +179,35 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         }
     }
 
-//    suspend fun bkashPaymentSaveRepo(bkashPaymentResponse: String): Response<DefaultResponse> {
-//        val bkashJsonObject = JsonParser.parseString(bkashPaymentResponse).asJsonObject
-//        val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
-//        //Current Date
-//        val todayInMilSec = Calendar.getInstance().time
-//        val df = SimpleDateFormat("yyyy-MM-dd")
-//        val today = df.format(todayInMilSec)
-//        val jsonObject = JsonObject().apply {
-//            addProperty("CloudUserID", user?.resdata?.loggeduser?.userID)
-//            addProperty("UserTypeId", user?.resdata?.loggeduser?.userType)
-//            addProperty("TransactionNo", bkashJsonObject.get("trxID").asString)
-//            addProperty("InvoiceId", 0)
-//            addProperty("UserName", user?.resdata?.loggeduser?.displayName)
-//            addProperty("TransactionDate", today)
-//            addProperty("RechargeType", "bKash")
-//            addProperty("BalanceAmount", bkashJsonObject.get("amount").asString)
-//            addProperty("Particulars", "")
-//            addProperty("IsActive", true)
-//        }
-//
-//        val param = JsonArray().apply {
-//            add(jsonObject)
-//            add(bkashJsonObject)
-//        }
-//
-//        return withContext(Dispatchers.IO) {
-//            apiService.newrechargebkashpayment(param)
-//        }
-//    }
+    suspend fun bkashPaymentSaveRepo(bkashPaymentResponse: String): Response<DefaultResponse> {
+        val bkashJsonObject = JsonParser.parseString(bkashPaymentResponse).asJsonObject
+        val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
+        val userLoggedData = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+        //Current Date
+        val todayInMilSec = Calendar.getInstance().time
+        val df = SimpleDateFormat("yyyy-MM-dd")
+        val today = df.format(todayInMilSec)
+        val jsonObject = JsonObject().apply {
+            addProperty("ISPUserID", user?.userID)
+            addProperty("ProfileId", user?.profileID)
+            addProperty("UserTypeId", userLoggedData?.userTypeId)
+            addProperty("TransactionNo", bkashJsonObject.get("trxID").asString)
+            addProperty("InvoiceId", 0)
+            addProperty("UserName", user?.displayName)
+            addProperty("TransactionDate", today)
+            addProperty("RechargeType", "bKash")
+            addProperty("BalanceAmount", bkashJsonObject.get("amount").asString)
+            addProperty("Particulars", "")
+            addProperty("IsActive", true)
+        }
+
+        val param = JsonArray().apply {
+            add(jsonObject)
+            add(bkashJsonObject)
+        }
+
+        return withContext(Dispatchers.IO) {
+            apiService.newrechargebkashpayment(param)
+        }
+    }
 }

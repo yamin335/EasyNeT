@@ -14,10 +14,9 @@ import ltd.royalgreen.pacenet.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BillingRechargeDialog internal constructor(private val callBack: RechargeCallback, private val userFullName: String?) : DialogFragment(), View.OnClickListener {
+class BillingRechargeDialog internal constructor(private val callBack: RechargeCallback, private val userFullName: String?, private val rechargeAmount: String?) : DialogFragment(), View.OnClickListener {
 
     var selectedDate = ""
-    var rechargeAmount = ""
     var rechargeNote = ""
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -37,6 +36,10 @@ class BillingRechargeDialog internal constructor(private val callBack: RechargeC
             clientName.text = it
         }
 
+        rechargeAmount?.let {
+            amount.setText(isValidAmount(it))
+        }
+
         val amountWatcher = object : TextWatcher {
             override fun beforeTextChanged(value: CharSequence, start: Int, count: Int, after: Int) {
 
@@ -53,7 +56,7 @@ class BillingRechargeDialog internal constructor(private val callBack: RechargeC
                     "^(?=\\d)(?=.*[1-9])(\\d*)\\.?\\d+".toRegex().matches(value) -> {
                         save.isEnabled = true
                         amountInputLayout.isErrorEnabled = false
-                        rechargeAmount = value.toString()
+                        //rechargeAmount = value.toString()
                         amountInputLayout.helperText = ""
                     }
 
@@ -85,7 +88,7 @@ class BillingRechargeDialog internal constructor(private val callBack: RechargeC
         when (v.id) {
             R.id.save -> {
                 rechargeNote = note.text.toString()
-                callBack.onSavePressed(selectedDate, rechargeAmount, rechargeNote)
+                callBack.onSavePressed(selectedDate, rechargeAmount ?: "0", rechargeNote)
                 dismiss()
             }
             R.id.cancel -> dismiss()
@@ -94,5 +97,19 @@ class BillingRechargeDialog internal constructor(private val callBack: RechargeC
 
     interface RechargeCallback{
         fun onSavePressed(date: String, amount: String, note: String)
+    }
+
+    private fun isValidAmount(amount: String?): String {
+        return if (!amount.isNullOrBlank() && "^(?=\\d)(?=.*[1-9])(\\d*)\\.?\\d+".toRegex().matches(amount)) {
+            save.isEnabled = true
+            amountInputLayout.isErrorEnabled = false
+            amountInputLayout.helperText = ""
+            amount
+        } else {
+            save.isEnabled = false
+            amountInputLayout.isErrorEnabled = true
+            amountInputLayout.error = "Invalid Amount!"
+            ""
+        }
     }
 }

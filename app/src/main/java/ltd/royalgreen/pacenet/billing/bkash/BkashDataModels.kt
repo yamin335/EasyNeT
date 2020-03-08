@@ -1,4 +1,4 @@
-package ltd.royalgreen.pacecloud.paymentmodule.bkash
+package ltd.royalgreen.pacenet.billing.bkash
 
 import java.io.Serializable
 

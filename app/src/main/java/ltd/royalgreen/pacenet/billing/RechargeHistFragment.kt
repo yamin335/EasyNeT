@@ -58,6 +58,10 @@ class RechargeHistFragment : Fragment(), Injectable, BillingRechargeDialog.Recha
 
     private lateinit var toggle: Transition
 
+    private lateinit var bkashPaymentDialog: BKashPaymentWebDialog
+
+    private lateinit var fosterPaymentDialog: FosterPaymentWebDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -136,8 +140,8 @@ class RechargeHistFragment : Fragment(), Injectable, BillingRechargeDialog.Recha
 
         viewModel.fosterUrl.observe(viewLifecycleOwner, Observer { (paymentProcessUrl, paymentStatusUrl) ->
             if (paymentProcessUrl != null && paymentStatusUrl != null) {
-                val fosterPaymentDialog =
-                    FosterPaymentWebDialog(
+                fosterPaymentDialog =
+                    FosterPaymentWebDialog (
                         this,
                         paymentProcessUrl,
                         paymentStatusUrl
@@ -201,16 +205,13 @@ class RechargeHistFragment : Fragment(), Injectable, BillingRechargeDialog.Recha
     private fun showRechargeDialog() {
         val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
         user?.let {
-            val rechargeDialog = BillingRechargeDialog(this, it.fullName)
+            val rechargeDialog = BillingRechargeDialog(this, it.fullName, it.unitPrice.toString())
             rechargeDialog.isCancelable = false
             rechargeDialog.show(parentFragmentManager, "#recharge_dialog")
         }
     }
 
     private fun showRechargeConfirmDialog(amount: String, note: String) {
-//        val rechargeConfirmDialog = RechargeConfirmDialog(this, rechargeResponse?.resdata?.amount, note, rechargeResponse?.resdata?.paymentProcessUrl)
-//        rechargeConfirmDialog.isCancelable = false
-//        rechargeConfirmDialog.show(parentFragmentManager, "#recharge_confirm_dialog")
 
         val rechargeConfirmDialog = RechargeConfirmDialog(this, amount, note)
         rechargeConfirmDialog.isCancelable = false
@@ -222,12 +223,12 @@ class RechargeHistFragment : Fragment(), Injectable, BillingRechargeDialog.Recha
     }
 
     override fun onFosterClicked(amount: String, note: String) {
-        viewModel.getFosterPaymentUrl(amount, note)
+        viewModel.getFosterPaymentUrl("5.5", note)
     }
 
     override fun onBKashClicked(amount: String) {
         if (viewModel.hasBkashToken) {
-            val bkashPaymentDialog = BKashPaymentWebDialog(this, viewModel.bKashToken.value?.createBkashModel!!, viewModel.bKashToken.value?.paymentRequest!!)
+            bkashPaymentDialog = BKashPaymentWebDialog(this, viewModel.bKashToken.value?.createBkashModel!!, viewModel.bKashToken.value?.paymentRequest!!)
             bkashPaymentDialog.isCancelable = false
             bkashPaymentDialog.show(parentFragmentManager, "#bkash_payment_dialog")
         } else {
@@ -236,16 +237,17 @@ class RechargeHistFragment : Fragment(), Injectable, BillingRechargeDialog.Recha
     }
 
     override fun onPaymentSuccess() {
+        bkashPaymentDialog.dismiss()
         viewModel.hasBkashToken = false
-        //refreshUI()
+        refreshUI()
     }
 
     override fun onPaymentError() {
-        //viewModel.hasBkashToken = false
+        viewModel.hasBkashToken = false
     }
 
     override fun onPaymentCancelled() {
-        //viewModel.hasBkashToken = false
+        viewModel.hasBkashToken = false
     }
 
     override fun onDestroyView() {
@@ -256,25 +258,35 @@ class RechargeHistFragment : Fragment(), Injectable, BillingRechargeDialog.Recha
     }
 
     override fun onFosterPaymentSuccess() {
+        fosterPaymentDialog.dismiss()
         viewModel.fosterUrl.postValue(Pair(null, null))
-        //refreshUI()
+        refreshUI()
     }
 
     override fun onFosterPaymentError() {
+        fosterPaymentDialog.dismiss()
         viewModel.fosterUrl.postValue(Pair(null, null))
     }
 
     override fun onFosterPaymentCancelled() {
+        fosterPaymentDialog.dismiss()
         viewModel.fosterUrl.postValue(Pair(null, null))
     }
 
     private fun observeBKashToken() {
         viewModel.bKashToken.observe(viewLifecycleOwner, Observer { bkashDataModel ->
             if (bkashDataModel != null) {
-                val bkashPaymentDialog = BKashPaymentWebDialog(this, bkashDataModel.createBkashModel, bkashDataModel.paymentRequest)
+                bkashPaymentDialog = BKashPaymentWebDialog(this, bkashDataModel.createBkashModel, bkashDataModel.paymentRequest)
                 bkashPaymentDialog.isCancelable = false
                 bkashPaymentDialog.show(parentFragmentManager, "#bkash_payment_dialog")
             }
         })
+    }
+
+    private fun refreshUI() {
+        viewModel.fromDate.value = "dd/mm/yyyy"
+        viewModel.toDate.value = "dd/mm/yyyy"
+        viewModel.searchValue.value = ""
+        viewModel.rechargeHistoryList.value?.dataSource?.invalidate()
     }
 }

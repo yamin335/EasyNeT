@@ -71,11 +71,9 @@ class FosterPaymentWebDialog internal constructor(private val callBack: FosterPa
             if (status) {
                 showSuccessToast(requireContext(), "Payment Successful")
                 callBack.onFosterPaymentSuccess()
-                dismiss()
             } else {
-                callBack.onFosterPaymentError()
                 showErrorToast(requireContext(), "Payment not successful !")
-                dismiss()
+                callBack.onFosterPaymentError()
             }
         })
 
@@ -104,7 +102,7 @@ class FosterPaymentWebDialog internal constructor(private val callBack: FosterPa
             override fun shouldInterceptRequest(view: WebView?, request: WebResourceRequest?): WebResourceResponse? {
                 val url = request?.url
                 val status = url?.fragment?.split("?")
-                val host = "pacecloud.com"
+                val host = "pacenet.net"
                 status?.let {
                     if (host == url.host) {
                         val paymentStatus = it[1].split("=")
@@ -119,14 +117,22 @@ class FosterPaymentWebDialog internal constructor(private val callBack: FosterPa
             }
 
             override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
-                if (binding.loader != null) {
-                    binding.loader.visibility = View.VISIBLE
+                try {
+                    if (binding.loader != null) {
+                        binding.loader.visibility = View.VISIBLE
+                    }
+                } catch (e: IllegalStateException) {
+                    e.printStackTrace()
                 }
             }
 
             override fun onPageFinished(view: WebView, url: String?) {
-                if (binding.loader != null) {
-                    binding.loader.visibility = View.GONE
+                try {
+                    if (binding.loader != null) {
+                        binding.loader.visibility = View.GONE
+                    }
+                } catch (e: IllegalStateException) {
+                    e.printStackTrace()
                 }
             }
         }

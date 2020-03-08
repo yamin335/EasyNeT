@@ -5,8 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.JsonObject
 import kotlinx.coroutines.launch
-import ltd.royalgreen.pacecloud.paymentmodule.bkash.CreateBkashModel
-import ltd.royalgreen.pacecloud.paymentmodule.bkash.PaymentRequest
 import ltd.royalgreen.pacenet.BaseViewModel
 import ltd.royalgreen.pacenet.billing.BillingRepository
 import ltd.royalgreen.pacenet.network.ApiEmptyResponse
@@ -65,7 +63,7 @@ class BKashPaymentViewModel @Inject constructor(private val application: Applica
                         val paymentExecuteResponse = apiResponse.body
                         if (paymentExecuteResponse.resdata?.resExecuteBk != null) {
                             apiCallStatus.postValue("SUCCESS")
-                            //saveBkashNewRecharge(paymentExecuteResponse.resdata.resExecuteBk)
+                            saveBkashNewRecharge(paymentExecuteResponse.resdata.resExecuteBk)
                         } else {
                             apiCallStatus.postValue("NO_DATA")
                         }
@@ -82,24 +80,24 @@ class BKashPaymentViewModel @Inject constructor(private val application: Applica
         }
     }
 
-//    fun saveBkashNewRecharge(bkashPaymentResponse: String) {
-//        if (checkNetworkStatus(application)) {
-//            apiCallStatus.postValue("LOADING")
-//            viewModelScope.launch {
-//                when (val apiResponse = ApiResponse.create(repository.bkashPaymentSaveRepo(bkashPaymentResponse))) {
-//                    is ApiSuccessResponse -> {
-//                        val rechargeFinalSaveResponse = apiResponse.body
-//                        bKashPaymentStatus.postValue(Pair(rechargeFinalSaveResponse.resdata.resstate ?: false, rechargeFinalSaveResponse.resdata.message))
-//                        apiCallStatus.postValue("SUCCESS")
-//                    }
-//                    is ApiEmptyResponse -> {
-//                        apiCallStatus.postValue("EMPTY")
-//                    }
-//                    is ApiErrorResponse -> {
-//                        apiCallStatus.postValue("ERROR")
-//                    }
-//                }
-//            }
-//        }
-//    }
+    fun saveBkashNewRecharge(bkashPaymentResponse: String) {
+        if (checkNetworkStatus(application)) {
+            apiCallStatus.postValue("LOADING")
+            viewModelScope.launch {
+                when (val apiResponse = ApiResponse.create(repository.bkashPaymentSaveRepo(bkashPaymentResponse))) {
+                    is ApiSuccessResponse -> {
+                        val rechargeFinalSaveResponse = apiResponse.body
+                        bKashPaymentStatus.postValue(Pair(rechargeFinalSaveResponse.resdata.resstate ?: false, rechargeFinalSaveResponse.resdata.message))
+                        apiCallStatus.postValue("SUCCESS")
+                    }
+                    is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
+                    }
+                    is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
+                    }
+                }
+            }
+        }
+    }
 }

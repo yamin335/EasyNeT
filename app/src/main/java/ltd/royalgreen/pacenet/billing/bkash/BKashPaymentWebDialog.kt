@@ -14,8 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.google.gson.JsonParser
-import ltd.royalgreen.pacecloud.paymentmodule.bkash.CreateBkashModel
-import ltd.royalgreen.pacecloud.paymentmodule.bkash.PaymentRequest
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.BillingBkashWebDialogBinding
@@ -175,9 +173,7 @@ class BKashPaymentWebDialog internal constructor(private val callBack: BkashPaym
         @JavascriptInterface
         fun finishBkashPayment() {
             showSuccessToast(requireContext(), viewModel.bKashPaymentStatus.value?.second ?: "UNKNOWN Message!")
-
             callBack.onPaymentSuccess()
-            dismiss()
         }
 
     }

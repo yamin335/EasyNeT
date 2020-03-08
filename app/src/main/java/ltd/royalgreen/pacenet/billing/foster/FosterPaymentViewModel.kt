@@ -30,7 +30,7 @@ class FosterPaymentViewModel @Inject constructor(private val application: Applic
                     is ApiSuccessResponse -> {
                         val rechargeStatusFosterResponse = apiResponse.body
                         if (rechargeStatusFosterResponse.resdata.resstate) {
-                            //saveNewFosterRecharge(rechargeStatusFosterResponse.resdata.fosterRes)
+                            saveNewFosterRecharge(rechargeStatusFosterResponse.resdata.fosterRes)
                         } else {
                             showMessage.postValue(Pair("ERROR", "Payment not successful !"))
                         }
@@ -47,29 +47,29 @@ class FosterPaymentViewModel @Inject constructor(private val application: Applic
         }
     }
 
-//    private fun saveNewFosterRecharge(fosterString: String) {
-//        if (checkNetworkStatus(application)) {
-//            apiCallStatus.postValue("LOADING")
-//            viewModelScope.launch {
-//                when (val apiResponse = ApiResponse.create(repository.fosterRechargeSaveRepo(fosterString))) {
-//                    is ApiSuccessResponse -> {
-//                        val rechargeFinalSaveResponse = apiResponse.body
-//                        if (rechargeFinalSaveResponse.resdata.resstate == true) {
-//                            showMessage.postValue(Pair("SUCCESS", rechargeFinalSaveResponse.resdata.message))
-//                            rechargeSuccessFailureStatus.postValue(rechargeFinalSaveResponse.resdata.resstate)
-//                        } else {
-//                            showMessage.postValue(Pair("ERROR", rechargeFinalSaveResponse.resdata.message))
-//                        }
-//                        apiCallStatus.postValue("SUCCESS")
-//                    }
-//                    is ApiEmptyResponse -> {
-//                        apiCallStatus.postValue("EMPTY")
-//                    }
-//                    is ApiErrorResponse -> {
-//                        apiCallStatus.postValue("ERROR")
-//                    }
-//                }
-//            }
-//        }
-//    }
+    private fun saveNewFosterRecharge(fosterString: String) {
+        if (checkNetworkStatus(application)) {
+            apiCallStatus.postValue("LOADING")
+            viewModelScope.launch {
+                when (val apiResponse = ApiResponse.create(repository.fosterRechargeSaveRepo(fosterString))) {
+                    is ApiSuccessResponse -> {
+                        val rechargeFinalSaveResponse = apiResponse.body
+                        if (rechargeFinalSaveResponse.resdata.resstate == true) {
+                            showMessage.postValue(Pair("SUCCESS", rechargeFinalSaveResponse.resdata.message))
+                            rechargeSuccessFailureStatus.postValue(rechargeFinalSaveResponse.resdata.resstate)
+                        } else {
+                            showMessage.postValue(Pair("ERROR", rechargeFinalSaveResponse.resdata.message))
+                        }
+                        apiCallStatus.postValue("SUCCESS")
+                    }
+                    is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
+                    }
+                    is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
+                    }
+                }
+            }
+        }
+    }
 }

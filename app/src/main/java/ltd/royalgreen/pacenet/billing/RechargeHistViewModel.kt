@@ -13,9 +13,9 @@ import com.google.gson.Gson
 import com.google.gson.JsonParser
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import ltd.royalgreen.pacecloud.paymentmodule.bkash.BkashDataModel
-import ltd.royalgreen.pacecloud.paymentmodule.bkash.CreateBkashModel
-import ltd.royalgreen.pacecloud.paymentmodule.bkash.PaymentRequest
+import ltd.royalgreen.pacenet.billing.bkash.BkashDataModel
+import ltd.royalgreen.pacenet.billing.bkash.CreateBkashModel
+import ltd.royalgreen.pacenet.billing.bkash.PaymentRequest
 import ltd.royalgreen.pacenet.BaseViewModel
 import ltd.royalgreen.pacenet.LoggedUser
 import ltd.royalgreen.pacenet.R
@@ -79,11 +79,6 @@ class RechargeHistViewModel @Inject constructor(val application: Application, pr
                     is ApiSuccessResponse -> {
                         val rechargeResponse = apiResponse.body
                         if (rechargeResponse.resdata != null) {
-//                            preferences.edit().apply {
-//                                putString("paymentStatusUrl", rechargeResponse.resdata.paymentStatusUrl)
-//                                apply()
-//                            }
-
                             fosterUrl.postValue(Pair(rechargeResponse.resdata.paymentProcessUrl, rechargeResponse.resdata.paymentStatusUrl))
                         }
                         apiCallStatus.postValue("SUCCESS")
