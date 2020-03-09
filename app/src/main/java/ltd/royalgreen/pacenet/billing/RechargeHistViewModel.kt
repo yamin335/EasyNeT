@@ -59,10 +59,6 @@ class RechargeHistViewModel @Inject constructor(val application: Application, pr
         MutableLiveData<Pair<String?, String?>>()
     }
 
-    val handler = CoroutineExceptionHandler { _, exception ->
-        exception.printStackTrace()
-    }
-
     init {
         fromDate.value = "dd/mm/yyyy"
         toDate.value = "dd/mm/yyyy"
@@ -73,7 +69,9 @@ class RechargeHistViewModel @Inject constructor(val application: Application, pr
     fun getFosterPaymentUrl(amount: String, note: String) {
         if (checkNetworkStatus(application)) {
             apiCallStatus.postValue("LOADING")
-
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+            }
             viewModelScope.launch(handler) {
                 when (val apiResponse = ApiResponse.create(repository.fosterUrlRepo(amount, note))) {
                     is ApiSuccessResponse -> {
@@ -97,6 +95,9 @@ class RechargeHistViewModel @Inject constructor(val application: Application, pr
     fun getBkashToken(amount: String) {
         if (checkNetworkStatus(application)) {
             apiCallStatus.postValue("LOADING")
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+            }
             viewModelScope.launch(handler) {
                 when (val apiResponse = ApiResponse.create(repository.bkashTokenRepo(amount))) {
                     is ApiSuccessResponse -> {
@@ -131,6 +132,9 @@ class RechargeHistViewModel @Inject constructor(val application: Application, pr
     }
 
     fun prepareBalance() {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            exception.printStackTrace()
+        }
         viewModelScope.launch(handler) {
             val loggedUser = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
             balance.postValue(loggedUser.balance.toString() + " (BDT)")

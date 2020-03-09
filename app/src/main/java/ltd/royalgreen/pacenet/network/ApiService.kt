@@ -5,6 +5,7 @@ import ltd.royalgreen.pacenet.UserDataResponse
 import ltd.royalgreen.pacenet.billing.*
 import ltd.royalgreen.pacenet.dashboard.DashboardChart
 import ltd.royalgreen.pacenet.login.LoginResponse
+import ltd.royalgreen.pacenet.profile.UserPackageResponse
 import ltd.royalgreen.pacenet.support.SupportTicketResponse
 import ltd.royalgreen.pacenet.support.TicketCategoryResponse
 import ltd.royalgreen.pacenet.support.TicketCommentResponse
@@ -105,6 +106,10 @@ interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("/api/ispportal/newrechargebkashpayment")
     suspend fun newrechargebkashpayment(@Body jsonArray: JsonArray): Response<DefaultResponse>
+
+    //API FOR USER ACTIVITY LOG
+    @GET("/api/ispuser/getispuserpackservices")
+    suspend fun getispuserpackservices(@Query("param") param: String): Response<UserPackageResponse>
 
 //    @Multipart
 //    @Headers("Content-Type: multipart/form-data")

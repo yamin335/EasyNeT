@@ -152,11 +152,31 @@
                         android:text="Package"
                         android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/packageName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@{viewModel.packageName}" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/packageName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="@{viewModel.packageName}" />
+
+                        <TextView
+                            android:id="@+id/changePackage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:padding="2dp"
+                            android:text="Change Package"
+                            android:textColor="@color/customColor9" />
+                    </LinearLayout>
                 </LinearLayout>
 
                 <LinearLayout

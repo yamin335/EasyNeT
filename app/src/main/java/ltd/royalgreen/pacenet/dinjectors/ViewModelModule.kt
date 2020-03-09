@@ -15,6 +15,8 @@ import ltd.royalgreen.pacenet.billing.RechargeHistViewModel
 import ltd.royalgreen.pacenet.dashboard.DashboardViewModel
 import ltd.royalgreen.pacenet.login.ForgotPassDialogViewModel
 import ltd.royalgreen.pacenet.login.LoginViewModel
+import ltd.royalgreen.pacenet.profile.ChangePackageDialog
+import ltd.royalgreen.pacenet.profile.ChangePackageViewModel
 import ltd.royalgreen.pacenet.profile.ProfileViewModel
 import ltd.royalgreen.pacenet.support.ConversationDetailViewModel
 import ltd.royalgreen.pacenet.support.SupportViewModel
@@ -88,6 +90,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SupportViewModel::class)
     abstract fun bindSupportViewModel(supportViewModel: SupportViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ChangePackageViewModel::class)
+    abstract fun bindChangePackageViewModel(changePackageViewModel: ChangePackageViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: PaceNetViewModelFactory): ViewModelProvider.Factory

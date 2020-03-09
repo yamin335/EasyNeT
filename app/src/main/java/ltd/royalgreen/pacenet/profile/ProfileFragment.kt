@@ -55,7 +55,7 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
                     requireActivity().finish()
                 }
             }, "Do you want to exit?", "")
-            exitDialog.show(parentFragmentManager, "#app_exit_dialog")
+            exitDialog.show(childFragmentManager, "#app_exit_dialog")
         }
     }
 
@@ -81,6 +81,11 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         viewModel.prepareProfile()
+        binding.changePackage.setOnClickListener {
+            val changePackageDialog = ChangePackageDialog()
+            changePackageDialog.isCancelable = true
+            changePackageDialog.show(childFragmentManager, "#change_package_dialog")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -99,11 +104,11 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
                         requireActivity().finish()
                     }
                 }, "Do you want to Sign Out?", "")
-                exitDialog.show(parentFragmentManager, "#sign_out_dialog")
+                exitDialog.show(childFragmentManager, "#sign_out_dialog")
                 true
             }
             R.id.change_password -> {
-                showChangePasswordDialog(parentFragmentManager)
+                showChangePasswordDialog(childFragmentManager)
                 true
             }
             else -> super.onOptionsItemSelected(item)
