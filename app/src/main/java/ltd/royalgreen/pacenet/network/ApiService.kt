@@ -5,6 +5,7 @@ import ltd.royalgreen.pacenet.UserDataResponse
 import ltd.royalgreen.pacenet.billing.*
 import ltd.royalgreen.pacenet.dashboard.DashboardChart
 import ltd.royalgreen.pacenet.login.LoginResponse
+import ltd.royalgreen.pacenet.profile.PackageServiceResponse
 import ltd.royalgreen.pacenet.profile.UserPackageResponse
 import ltd.royalgreen.pacenet.support.SupportTicketResponse
 import ltd.royalgreen.pacenet.support.TicketCategoryResponse
@@ -110,6 +111,11 @@ interface ApiService {
     //API FOR USER ACTIVITY LOG
     @GET("/api/ispuser/getispuserpackservices")
     suspend fun getispuserpackservices(@Query("param") param: String): Response<UserPackageResponse>
+
+    //API FOR USER ACTIVITY LOG
+    @GET("/api/ispuser/getbizisppackservice")
+    suspend fun getbizisppackservice(@Query("param") param: String): Response<PackageServiceResponse>
+
 
 //    @Multipart
 //    @Headers("Content-Type: multipart/form-data")

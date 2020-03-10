@@ -69,7 +69,7 @@
                 android:layout_marginBottom="16dp"
                 android:text="@{viewModel.name}"
                 android:textColor="#5f5f5f"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -145,38 +145,42 @@
                     android:layout_marginEnd="16dp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Package"
-                        android:textStyle="bold" />
-
                     <LinearLayout
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/packageName"
-                            android:layout_width="0dp"
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:ellipsize="end"
-                            android:maxLines="1"
-                            android:text="@{viewModel.packageName}" />
+                            android:text="Package"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/changePackage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:gravity="bottom"
                             android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
-                            android:padding="2dp"
-                            android:text="Change Package"
+                            android:paddingTop="2dp"
+                            android:paddingBottom="2dp"
+                            android:paddingStart="8dp"
+                            android:paddingEnd="8dp"
+                            android:text="Change"
                             android:textColor="@color/customColor9" />
                     </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/packageName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@{viewModel.packageName}" />
                 </LinearLayout>
 
                 <LinearLayout

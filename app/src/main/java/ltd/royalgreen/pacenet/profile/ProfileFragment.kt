@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.MainNavigationFragment
 import ltd.royalgreen.pacenet.R
@@ -82,9 +83,11 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
         binding.viewModel = viewModel
         viewModel.prepareProfile()
         binding.changePackage.setOnClickListener {
-            val changePackageDialog = ChangePackageDialog()
-            changePackageDialog.isCancelable = true
-            changePackageDialog.show(childFragmentManager, "#change_package_dialog")
+            val action = ProfileFragmentDirections.actionProfileFragmentToPackageChangeFragment()
+            findNavController().navigate(action)
+//            val changePackageDialog = ChangePackageDialog()
+//            changePackageDialog.isCancelable = true
+//            changePackageDialog.show(childFragmentManager, "#change_package_dialog")
         }
     }
 

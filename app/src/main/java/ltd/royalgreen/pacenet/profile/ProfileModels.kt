@@ -10,8 +10,8 @@ data class UserPackage(val userConnectionId: Number?, val connectionNo: Number?,
                        val accountId: Number?, val username: String?,
                        val responsiblePersonName: String?, val email: String?,
                        val phoneNumber: String?, val address: String?,
-                       val packServices: String?, val packServiceList: List<PackService>?,
-                       val isDiabled: Boolean?, val listZone: List<ListZone>?)
+                       val packServices: String?, val packServiceList: ArrayList<PackService>?,
+                       val isDiabled: Boolean?, val listZone: ArrayList<ListZone>?)
 
 data class ListZone(val zoneId: Number?, val zoneName: String?)
 
@@ -25,3 +25,14 @@ data class PackService(val userPackServiceId: Number?, val connectionNo: Number?
                        val packServiceOthersCharge: Number?, val isDefault: Boolean?,
                        val expireDate: String?, val activeDate: String?,
                        val isNew: Boolean?, val isUpdate: Boolean?, val isDelete: Boolean?)
+
+
+data class PackageServiceResponse(val resdata: PackageServiceResdata?)
+
+data class PackageServiceResdata(val ispservices: String?)
+
+data class PackageServiceList(val packServiceTypeId: Number?, val packServiceType: String?, val packServices: ArrayList<PackageService>?)
+
+data class PackageService(val packId: Number?, val packServiceId: Number?,
+                          val packServiceName: String?, val packServicePrice: Number?,
+                          val packServiceTypeId: Number?, val packServiceType: String?, val isChecked: Boolean?)

@@ -110,8 +110,8 @@ class SupportFragment : MainNavigationFragment(), Injectable {
             }
         })
 
-        binding.ticketRecycler.layoutManager = LinearLayoutManager(activity)
-        binding.ticketRecycler.addItemDecoration(RecyclerItemDivider(activity!!.applicationContext, LinearLayoutManager.VERTICAL, 8))
+        binding.ticketRecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.ticketRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 8))
         binding.ticketRecycler.adapter = adapter
 
         //1

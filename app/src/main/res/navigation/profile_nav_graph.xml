@@ -3,12 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/profile_nav_graph"
-    tools:ignore="UnusedNavigation"
-    app:startDestination="@id/profileFragment">
+    android:label="Change Package/Service"
+    app:startDestination="@id/profileFragment"
+    tools:ignore="UnusedNavigation">
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="ltd.royalgreen.pacenet.profile.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/profile_fragment" />
+        tools:layout="@layout/profile_fragment">
+        <action
+            android:id="@+id/action_profileFragment_to_packageChangeFragment"
+            app:destination="@id/packageChangeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/packageChangeFragment"
+        android:name="ltd.royalgreen.pacenet.profile.PackageChangeFragment"
+        android:label="Change Package/Service"
+        tools:layout="@layout/package_change_fragment" />
 </navigation>
