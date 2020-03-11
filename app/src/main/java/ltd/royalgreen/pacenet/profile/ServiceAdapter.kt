@@ -11,13 +11,13 @@ import ltd.royalgreen.pacenet.R
 
 class ServiceAdapter internal constructor(private val serviceList: ArrayList<PackageService>, private val listener: OnItemSelectListener) : RecyclerView.Adapter<ServiceViewHolder>() {
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.service_row, parent, false)
         return ServiceViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ServiceViewHolder, unusedPosition: Int) {
-        val position = holder.adapterPosition
+    override fun onBindViewHolder(holder: ServiceViewHolder, position: Int) {
         val item = serviceList[position]
         holder.itemView.name.text = item.packServiceName
         holder.itemView.price.text = item.packServicePrice.toString()
@@ -30,23 +30,22 @@ class ServiceAdapter internal constructor(private val serviceList: ArrayList<Pac
         }
         holder.itemView.serveCheck.isChecked = item.isChecked == true
         holder.itemView.serveCheck.setOnClickListener {
-            val temp = serviceList[position].isChecked ?: false
-            serviceList[position].isChecked = temp.not()
-            if (serviceList[position].isChecked == true) {
-                serviceList[position].isChecked = true
-                listener.onItemChecked(serviceList[position], position)
+            serviceList[holder.adapterPosition].isChecked?.not()
+            if (serviceList[holder.adapterPosition].isChecked == true) {
+                //serviceList[holder.adapterPosition].isChecked = true
+                listener.onItemChecked(serviceList[holder.adapterPosition], holder.adapterPosition)
             } else {
-                serviceList[position].isChecked = true
-                listener.onItemUnChecked(serviceList[position], position)
+                //serviceList[holder.adapterPosition].isChecked = false
+                listener.onItemUnChecked(serviceList[holder.adapterPosition], holder.adapterPosition)
             }
         }
 //        holder.itemView.serveCheck.setOnCheckedChangeListener { buttonView, isChecked ->
 //            if (isChecked) {
-//                serviceList[position].isChecked = true
-//                listener.onItemChecked(serviceList[position], position)
+//                serviceList[holder.adapterPosition].isChecked = true
+//                listener.onItemChecked(serviceList[holder.adapterPosition], holder.adapterPosition)
 //            } else {
-//                serviceList[position].isChecked = true
-//                listener.onItemUnChecked(serviceList[position], position)
+//                serviceList[holder.adapterPosition].isChecked = false
+//                listener.onItemUnChecked(serviceList[holder.adapterPosition], holder.adapterPosition)
 //            }
 //        }
     }
