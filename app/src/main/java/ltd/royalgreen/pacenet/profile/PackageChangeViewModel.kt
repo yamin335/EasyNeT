@@ -19,6 +19,8 @@ class PackageChangeViewModel @Inject constructor(private val application: Applic
 
     val serviceCounter = ObservableInt()
 
+    var isUpdatingUserPackage = false
+
     val userPackageList: MutableLiveData<ArrayList<UserPackage>> by lazy {
         MutableLiveData<ArrayList<UserPackage>>()
     }
@@ -30,6 +32,10 @@ class PackageChangeViewModel @Inject constructor(private val application: Applic
     val serviceList: MutableLiveData<ArrayList<PackageService>> by lazy {
         MutableLiveData<ArrayList<PackageService>>()
     }
+
+    var userPurchasedPackageIds: ArrayList<Int> = ArrayList()
+
+    var userPurchasedPackageIdsMap: HashMap<Int, Int> = HashMap()
 
     fun getUserPackage() {
         if (checkNetworkStatus(application)) {

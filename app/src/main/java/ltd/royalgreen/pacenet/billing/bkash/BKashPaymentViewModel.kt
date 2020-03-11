@@ -35,9 +35,9 @@ class BKashPaymentViewModel @Inject constructor(private val application: Applica
                     is ApiSuccessResponse -> {
                         apiCallStatus.postValue("SUCCESS")
                         val paymentCreateResponse = apiResponse.body
-                        if (paymentCreateResponse.resdata?.resbKash != null) {
+                        if (!paymentCreateResponse.resdata?.resbKash.isNullOrBlank()) {
                             apiCallStatus.postValue("SUCCESS")
-                            resBkash.postValue(paymentCreateResponse.resdata.resbKash)
+                            resBkash.postValue(paymentCreateResponse.resdata?.resbKash)
                         } else {
                             apiCallStatus.postValue("NO_DATA")
                         }
@@ -61,9 +61,9 @@ class BKashPaymentViewModel @Inject constructor(private val application: Applica
                 when (val apiResponse = ApiResponse.create(repository.bkashExecutePaymentRepo(bkashPaymentExecuteJson, bkashToken))) {
                     is ApiSuccessResponse -> {
                         val paymentExecuteResponse = apiResponse.body
-                        if (paymentExecuteResponse.resdata?.resExecuteBk != null) {
+                        if (!paymentExecuteResponse.resdata?.resExecuteBk.isNullOrBlank()) {
                             apiCallStatus.postValue("SUCCESS")
-                            saveBkashNewRecharge(paymentExecuteResponse.resdata.resExecuteBk)
+                            saveBkashNewRecharge(paymentExecuteResponse.resdata?.resExecuteBk!!)
                         } else {
                             apiCallStatus.postValue("NO_DATA")
                         }

@@ -243,10 +243,13 @@ class RechargeHistFragment : Fragment(), Injectable, BillingRechargeDialog.Recha
     }
 
     override fun onPaymentError() {
+        bkashPaymentDialog.dismiss()
+        showErrorToast(requireContext(), "Something wrong! please try again later")
         viewModel.hasBkashToken = false
     }
 
     override fun onPaymentCancelled() {
+        bkashPaymentDialog.dismiss()
         viewModel.hasBkashToken = false
     }
 

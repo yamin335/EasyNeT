@@ -68,25 +68,84 @@ class PackageChangeFragment : MainNavigationFragment() {
         binding.viewModel = viewModel
 
         packageAdapter = PackageAdapter(packageList, object: PackageAdapter.OnItemSelectListener {
-            override fun onItemChecked(packageService: PackageService) {
+            override fun onItemChecked(packageService: PackageService, position: Int) {
                 var temp = viewModel.packageCounter.get()
                 viewModel.packageCounter.set(++temp)
+                val tempUserConnectionList = viewModel.userPackageList.value
+                val tempUserConnection = tempUserConnectionList?.get(0)!!
+                val newPackService = PackService(0, tempUserConnection.connectionNo,
+                    tempUserConnection.connectionTypeId, tempUserConnection.ispUserId,
+                    tempUserConnection.parentUserId, tempUserConnection.accountId,
+                    packageService.packId, packageService.packServiceId,
+                    packageService.packServiceName, packageService.packServiceTypeId,
+                    tempUserConnection.zoneId, packageService.packServiceType,
+                    packageService.packServicePrice, packServiceInstallCharge = 0,
+                    packServiceOthersCharge = 0, isDefault = false,
+                    expireDate = "", activeDate = "",
+                    isNew = true, isUpdate = false, isDelete = false)
+
+                tempUserConnection.packServiceList?.add(newPackService)
+                tempUserConnectionList[0] = tempUserConnection
+                viewModel.isUpdatingUserPackage = true
+                viewModel.userPackageList.postValue(tempUserConnectionList)
             }
 
-            override fun onItemUnChecked(packageService: PackageService) {
+            override fun onItemUnChecked(packageService: PackageService, position: Int) {
                 var temp = viewModel.packageCounter.get()
                 viewModel.packageCounter.set(--temp)
+
+                val tempUserConnectionList = viewModel.userPackageList.value
+                val tempUserConnection = tempUserConnectionList?.get(0)!!
+
+                val removePosition = viewModel.userPurchasedPackageIdsMap[packageService.packServiceId]
+                removePosition?.let {
+                    viewModel.userPurchasedPackageIdsMap.remove(packageService.packServiceId)
+                    tempUserConnection.packServiceList?.removeAt(it)
+                    tempUserConnectionList[0] = tempUserConnection
+                    viewModel.isUpdatingUserPackage = true
+                    viewModel.userPackageList.postValue(tempUserConnectionList)
+                }
             }
         })
         serviceAdapter = ServiceAdapter(serviceList, object: ServiceAdapter.OnItemSelectListener {
-            override fun onItemChecked(packageService: PackageService) {
+            override fun onItemChecked(packageService: PackageService, position: Int) {
                 var temp = viewModel.serviceCounter.get()
                 viewModel.serviceCounter.set(++temp)
+
+                val tempUserConnectionList = viewModel.userPackageList.value
+                val tempUserConnection = tempUserConnectionList?.get(0)!!
+                val newPackService = PackService(0, tempUserConnection.connectionNo,
+                    tempUserConnection.connectionTypeId, tempUserConnection.ispUserId,
+                    tempUserConnection.parentUserId, tempUserConnection.accountId,
+                    packageService.packId, packageService.packServiceId,
+                    packageService.packServiceName, packageService.packServiceTypeId,
+                    tempUserConnection.zoneId, packageService.packServiceType,
+                    packageService.packServicePrice, packServiceInstallCharge = 0,
+                    packServiceOthersCharge = 0, isDefault = false,
+                    expireDate = "", activeDate = "",
+                    isNew = true, isUpdate = false, isDelete = false)
+
+                tempUserConnection.packServiceList?.add(newPackService)
+                tempUserConnectionList[0] = tempUserConnection
+                viewModel.isUpdatingUserPackage = true
+                viewModel.userPackageList.postValue(tempUserConnectionList)
             }
 
-            override fun onItemUnChecked(packageService: PackageService) {
+            override fun onItemUnChecked(packageService: PackageService, position: Int) {
                 var temp = viewModel.serviceCounter.get()
                 viewModel.serviceCounter.set(--temp)
+
+                val tempUserConnectionList = viewModel.userPackageList.value
+                val tempUserConnection = tempUserConnectionList?.get(0)!!
+
+                val removePosition = viewModel.userPurchasedPackageIdsMap[packageService.packServiceId]
+                removePosition?.let {
+                    viewModel.userPurchasedPackageIdsMap.remove(packageService.packServiceId)
+                    tempUserConnection.packServiceList?.removeAt(it)
+                    tempUserConnectionList[0] = tempUserConnection
+                    viewModel.isUpdatingUserPackage = true
+                    viewModel.userPackageList.postValue(tempUserConnectionList)
+                }
             }
         })
         adapter = UserPackageServiceAdapter(packServiceList)
@@ -99,12 +158,13 @@ class PackageChangeFragment : MainNavigationFragment() {
         binding.serviceRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 15))
         binding.serviceRecycler.adapter = serviceAdapter
 
-        binding.userPackServiceRecycler.layoutManager = LinearLayoutManager(requireContext())
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.stackFromEnd = true
+        binding.userPackServiceRecycler.layoutManager = layoutManager
         binding.userPackServiceRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 15))
         binding.userPackServiceRecycler.adapter = adapter
 
         viewModel.getUserPackage()
-        viewModel.getPackageService()
 
         binding.save.setOnClickListener {
             findNavController().popBackStack()
@@ -115,27 +175,62 @@ class PackageChangeFragment : MainNavigationFragment() {
         }
 
         viewModel.packageList.observe(viewLifecycleOwner, Observer { packList ->
-            packageList.clear()
             packList?.let {
+                packageList.clear()
+                var i = 0
+                while (i < it.size) {
+                    if (viewModel.userPurchasedPackageIds.contains(it[i].packServiceId)) {
+                        it[i].isPurchased = true
+                        var temp = viewModel.packageCounter.get()
+                        viewModel.packageCounter.set(++temp)
+                    }
+                    i++
+                }
                 packageList.addAll(it)
                 packageAdapter.notifyDataSetChanged()
             }
         })
 
         viewModel.serviceList.observe(viewLifecycleOwner, Observer { servList ->
-            serviceList.clear()
             servList?.let {
+                serviceList.clear()
+                var i = 0
+                while (i < it.size) {
+                    if (viewModel.userPurchasedPackageIds.contains(it[i].packServiceId)) {
+                        it[i].isPurchased = true
+                        var temp = viewModel.serviceCounter.get()
+                        viewModel.serviceCounter.set(++temp)
+                    }
+                    i++
+                }
                 serviceList.addAll(it)
                 serviceAdapter.notifyDataSetChanged()
             }
         })
 
         viewModel.userPackageList.observe(viewLifecycleOwner, Observer { userConnectionList ->
-            packServiceList.clear()
             val temp = userConnectionList[0].packServiceList
             temp?.let {
+                packServiceList.clear()
                 packServiceList.addAll(it)
                 adapter.notifyDataSetChanged()
+                val purchasedPackageIds: ArrayList<Int> = ArrayList()
+                val purchasedPackageIdsMap: HashMap<Int, Int> = HashMap()
+                var i = 0
+                while (i < it.size) {
+                    it[i].packServiceId?.let { packServiceId ->
+                        //if (it[i].is)
+                        purchasedPackageIds.add(packServiceId)
+                        purchasedPackageIdsMap[packServiceId] = i
+                    }
+                    i++
+                }
+                viewModel.userPurchasedPackageIds = purchasedPackageIds
+                viewModel.userPurchasedPackageIdsMap = purchasedPackageIdsMap
+
+                if (!viewModel.isUpdatingUserPackage) {
+                    viewModel.getPackageService()
+                }
             }
         })
     }

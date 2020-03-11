@@ -11,6 +11,8 @@ import ltd.royalgreen.pacenet.R
 
 class UserPackageServiceAdapter internal constructor(private val packServiceList: ArrayList<PackService>) : RecyclerView.Adapter<MyViewHolder>() {
 
+    private var alreadyCheckedPosition = -1
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.user_package_row, parent, false)
         return MyViewHolder(view)
@@ -22,6 +24,22 @@ class UserPackageServiceAdapter internal constructor(private val packServiceList
         holder.itemView.name.text = item.packServiceName
         holder.itemView.type.text = item.packServiceType
         holder.itemView.price.text = item.packServicePrice.toString()
+        if (item.isNew == true) {
+            //holder.itemView.packServeCheck.isChecked = true
+            holder.itemView.isNew.visibility = View.VISIBLE
+            holder.itemView.packServeCheck.isEnabled = false
+        } else {
+            holder.itemView.isNew.visibility = View.GONE
+        }
+
+        holder.itemView.packServeCheck.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                //if ()
+                alreadyCheckedPosition = position
+            } else {
+                alreadyCheckedPosition = -1
+            }
+        }
     }
 
     override fun getItemCount(): Int {

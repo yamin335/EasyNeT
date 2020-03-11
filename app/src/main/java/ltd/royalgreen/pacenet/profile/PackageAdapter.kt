@@ -22,8 +22,22 @@ class PackageAdapter internal constructor(private val packageList: ArrayList<Pac
         val item = packageList[position]
         holder.itemView.name.text = item.packServiceName
         holder.itemView.price.text = item.packServicePrice.toString()
+        if (item.isPurchased) {
+            holder.itemView.packCheck.isChecked = true
+            holder.itemView.packCheck.isEnabled = false
+        } else {
+            holder.itemView.packCheck.isChecked = false
+            holder.itemView.packCheck.isEnabled = true
+        }
+        holder.itemView.packCheck.isChecked = item.isChecked == true
         holder.itemView.packCheck.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) listener.onItemChecked(item) else listener.onItemUnChecked(item)
+            if (isChecked) {
+                packageList[position].isChecked = true
+                listener.onItemChecked(packageList[position], position)
+            } else {
+                packageList[position].isChecked = false
+                listener.onItemUnChecked(packageList[position], position)
+            }
         }
     }
 
@@ -32,11 +46,11 @@ class PackageAdapter internal constructor(private val packageList: ArrayList<Pac
     }
 
     interface OnItemSelectListener {
-        fun onItemChecked(packageService: PackageService) {
+        fun onItemChecked(packageService: PackageService, position: Int) {
 
         }
 
-        fun onItemUnChecked(packageService: PackageService) {
+        fun onItemUnChecked(packageService: PackageService, position: Int) {
 
         }
     }

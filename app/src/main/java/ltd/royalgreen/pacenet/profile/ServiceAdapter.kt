@@ -21,9 +21,34 @@ class ServiceAdapter internal constructor(private val serviceList: ArrayList<Pac
         val item = serviceList[position]
         holder.itemView.name.text = item.packServiceName
         holder.itemView.price.text = item.packServicePrice.toString()
-        holder.itemView.serveCheck.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) listener.onItemChecked(item) else listener.onItemUnChecked(item)
+        if (item.isPurchased) {
+            holder.itemView.serveCheck.isChecked = true
+            holder.itemView.serveCheck.isEnabled = false
+        } else {
+            holder.itemView.serveCheck.isChecked = false
+            holder.itemView.serveCheck.isEnabled = true
         }
+        holder.itemView.serveCheck.isChecked = item.isChecked == true
+        holder.itemView.serveCheck.setOnClickListener {
+            val temp = serviceList[position].isChecked ?: false
+            serviceList[position].isChecked = temp.not()
+            if (serviceList[position].isChecked == true) {
+                serviceList[position].isChecked = true
+                listener.onItemChecked(serviceList[position], position)
+            } else {
+                serviceList[position].isChecked = true
+                listener.onItemUnChecked(serviceList[position], position)
+            }
+        }
+//        holder.itemView.serveCheck.setOnCheckedChangeListener { buttonView, isChecked ->
+//            if (isChecked) {
+//                serviceList[position].isChecked = true
+//                listener.onItemChecked(serviceList[position], position)
+//            } else {
+//                serviceList[position].isChecked = true
+//                listener.onItemUnChecked(serviceList[position], position)
+//            }
+//        }
     }
 
     override fun getItemCount(): Int {
@@ -31,11 +56,11 @@ class ServiceAdapter internal constructor(private val serviceList: ArrayList<Pac
     }
 
     interface OnItemSelectListener {
-        fun onItemChecked(packageService: PackageService) {
+        fun onItemChecked(packageService: PackageService, position: Int) {
 
         }
 
-        fun onItemUnChecked(packageService: PackageService) {
+        fun onItemUnChecked(packageService: PackageService, position: Int) {
 
         }
     }

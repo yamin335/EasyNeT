@@ -83,13 +83,17 @@ class BKashPaymentWebDialog internal constructor(private val callBack: BkashPaym
         viewModel.resBkash.observe(viewLifecycleOwner, Observer {
             val errorCode: String? = null
             val errorMessage: String? = null
-            val jsonObject = JsonParser.parseString(it).asJsonObject.apply {
-                addProperty("errorCode", errorCode)
-                addProperty("errorMessage", errorMessage)
+            if (!it.isNullOrBlank()) {
+                val jsonObject = JsonParser.parseString(it).asJsonObject.apply {
+                    addProperty("errorCode", errorCode)
+                    addProperty("errorMessage", errorMessage)
+                }
+                viewModel.bkashPaymentExecuteJson = jsonObject
+                val jsonString = jsonObject.toString()
+                binding.mWebView.loadUrl("javascript:createBkashPayment($jsonString )")
+            } else {
+                callBack.onPaymentError()
             }
-            viewModel.bkashPaymentExecuteJson = jsonObject
-            val jsonString = jsonObject.toString()
-            binding.mWebView.loadUrl("javascript:createBkashPayment($jsonString )")
         })
 
         viewModel.bKashPaymentStatus.observe(viewLifecycleOwner, Observer {
