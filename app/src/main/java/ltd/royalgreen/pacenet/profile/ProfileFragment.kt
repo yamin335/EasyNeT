@@ -82,12 +82,34 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
         viewModel.prepareProfile()
+
         binding.changePackage.setOnClickListener {
-            val action = ProfileFragmentDirections.actionProfileFragmentToPackageChangeFragment()
-            findNavController().navigate(action)
-//            val changePackageDialog = ChangePackageDialog()
-//            changePackageDialog.isCancelable = true
-//            changePackageDialog.show(childFragmentManager, "#change_package_dialog")
+
+            val actionChooserDialog = PackServiceActionChooserDialog(object : PackServiceActionChooserDialog.ChooserActionCallback {
+                override fun onPackageAdd() {
+                    val action = ProfileFragmentDirections.actionProfileFragmentToPackageAddNewFragment()
+                    findNavController().navigate(action)
+                }
+
+                override fun onPackageChange() {
+
+                }
+
+                override fun onServiceAdd() {
+
+                }
+
+                override fun onServiceChange() {
+
+                }
+
+                override fun onShowUserPackService() {
+
+                }
+
+            })
+            actionChooserDialog.isCancelable = true
+            actionChooserDialog.show(childFragmentManager, "#action_chooser_dialog")
         }
     }
 

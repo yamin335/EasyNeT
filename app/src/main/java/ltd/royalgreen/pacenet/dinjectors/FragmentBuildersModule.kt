@@ -62,4 +62,7 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributePackageChangeFragment(): PackageChangeFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributePackageAddFragment(): PackageAddFragment
 }

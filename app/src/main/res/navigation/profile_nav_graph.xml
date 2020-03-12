@@ -15,10 +15,50 @@
         <action
             android:id="@+id/action_profileFragment_to_packageChangeFragment"
             app:destination="@id/packageChangeFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_packageAddNewFragment"
+            app:destination="@id/packageAddFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_packageChangeFragment2"
+            app:destination="@id/packageChangeFragment2" />
+        <action
+            android:id="@+id/action_profileFragment_to_serviceAddNewFragment"
+            app:destination="@id/serviceAddNewFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_serviceChangeFragment"
+            app:destination="@id/serviceChangeFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_userPackageServiceFragment"
+            app:destination="@id/userPackageServiceFragment" />
     </fragment>
     <fragment
         android:id="@+id/packageChangeFragment"
         android:name="ltd.royalgreen.pacenet.profile.PackageChangeFragment"
         android:label="Change Package/Service"
         tools:layout="@layout/package_change_fragment" />
+    <fragment
+        android:id="@+id/packageAddFragment"
+        android:name="ltd.royalgreen.pacenet.PackageAddFragment"
+        android:label="Add New Package"
+        tools:layout="@layout/package_add_fragment" />
+    <fragment
+        android:id="@+id/packageChangeFragment2"
+        android:name="ltd.royalgreen.pacenet.PackageChangeFragment"
+        android:label="Change Existing Package"
+        tools:layout="@layout/package_changee_fragment" />
+    <fragment
+        android:id="@+id/serviceAddNewFragment"
+        android:name="ltd.royalgreen.pacenet.ServiceAddFragment"
+        android:label="Add New Service"
+        tools:layout="@layout/service_add_new_fragment" />
+    <fragment
+        android:id="@+id/serviceChangeFragment"
+        android:name="ltd.royalgreen.pacenet.ServiceChangeFragment"
+        android:label="Change Service"
+        tools:layout="@layout/service_change_fragment" />
+    <fragment
+        android:id="@+id/userPackageServiceFragment"
+        android:name="ltd.royalgreen.pacenet.UserPackageServiceFragment"
+        android:label="user_package_service_fragment"
+        tools:layout="@layout/user_package_service_fragment" />
 </navigation>

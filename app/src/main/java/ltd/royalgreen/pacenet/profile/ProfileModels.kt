@@ -1,5 +1,7 @@
 package ltd.royalgreen.pacenet.profile
 
+import java.io.Serializable
+
 data class UserPackageResponse(val resdata: UserPackageResdata?)
 
 data class UserPackageResdata(val listContactForPackService: String?)
@@ -36,4 +38,4 @@ data class PackageServiceList(val packServiceTypeId: Number?, val packServiceTyp
 data class PackageService(val packId: Number?, val packServiceId: Int?,
                           val packServiceName: String?, val packServicePrice: Number?,
                           val packServiceTypeId: Number?, val packServiceType: String?,
-                          var isChecked: Boolean?, var isPurchased: Boolean = false)
+                          var isChecked: Boolean?, var isPurchased: Boolean = false) : Serializable

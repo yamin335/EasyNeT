@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5dp">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp">
+
+        <Button
+            android:id="@+id/addPackage"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add New Package"
+            android:layout_marginBottom="6dp"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryLight" />
+
+        <Button
+            android:id="@+id/changePackage"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Existing Package"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryLight"
+            android:layout_marginBottom="6dp"/>
+
+        <Button
+            android:id="@+id/addService"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add New Service"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryLight"
+            android:layout_marginBottom="6dp"/>
+
+        <Button
+            android:id="@+id/changeService"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Existing Service"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryLight"
+            android:layout_marginBottom="6dp"/>
+
+        <Button
+            android:id="@+id/showAll"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:text="Show my packages/services"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimaryLight"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
