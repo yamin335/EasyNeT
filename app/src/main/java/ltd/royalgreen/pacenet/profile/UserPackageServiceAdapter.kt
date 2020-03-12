@@ -16,8 +16,8 @@ class UserPackageServiceAdapter internal constructor(private val packServiceList
         return MyViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, unusedPosition: Int) {
-        val position = holder.adapterPosition
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+
         val item = packServiceList[position]
         holder.itemView.name.text = item.packServiceName
         holder.itemView.type.text = item.packServiceType

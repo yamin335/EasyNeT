@@ -17,8 +17,7 @@ class PackageAdapter internal constructor(private val packageList: ArrayList<Pac
         return PackageViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: PackageViewHolder, unusedPosition: Int) {
-        val position = holder.adapterPosition
+    override fun onBindViewHolder(holder: PackageViewHolder, position: Int) {
         val item = packageList[position]
         holder.itemView.name.text = item.packServiceName
         holder.itemView.price.text = item.packServicePrice.toString()
@@ -31,12 +30,13 @@ class PackageAdapter internal constructor(private val packageList: ArrayList<Pac
         }
         holder.itemView.packCheck.isChecked = item.isChecked == true
         holder.itemView.packCheck.setOnCheckedChangeListener { buttonView, isChecked ->
+            val adapterPosition = holder.adapterPosition
             if (isChecked) {
-                packageList[position].isChecked = true
-                listener.onItemChecked(packageList[position], position)
+                packageList[adapterPosition].isChecked = true
+                listener.onItemChecked(packageList[adapterPosition], adapterPosition)
             } else {
-                packageList[position].isChecked = false
-                listener.onItemUnChecked(packageList[position], position)
+                packageList[adapterPosition].isChecked = false
+                listener.onItemUnChecked(packageList[adapterPosition], adapterPosition)
             }
         }
     }
