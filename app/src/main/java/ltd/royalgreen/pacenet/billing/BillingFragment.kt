@@ -6,24 +6,19 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.activity.addCallback
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import ltd.royalgreen.pacenet.*
-import ltd.royalgreen.pacenet.billing.bkash.BKashPaymentWebDialog
-import ltd.royalgreen.pacenet.billing.foster.FosterPaymentWebDialog
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.BillingFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
 import ltd.royalgreen.pacenet.util.autoCleared
 import ltd.royalgreen.pacenet.util.showChangePasswordDialog
-import ltd.royalgreen.pacenet.util.showErrorToast
 import javax.inject.Inject
 
 /**
@@ -46,7 +41,8 @@ class BillingFragment : MainNavigationFragment(), Injectable {
     private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
 
     private lateinit var viewPagerFragments: Array<Fragment>
-    private val viewPagerPageTitles = arrayOf("Payments", "Recharges")
+    private val viewPagerPageTitles = arrayOf("Invoices", "Payments")
+    private val viewPagerPageIcons = arrayOf(R.drawable.ic_receipt_black_24dp, R.drawable.ic_monetization_on_black_24dp)
 
     private lateinit var pagerAdapter: BillingViewPagerAdapter
 
@@ -55,7 +51,7 @@ class BillingFragment : MainNavigationFragment(), Injectable {
     private lateinit var viewPager2PageChangeCallback: ViewPager2PageChangeCallback
 
     private val payHistFragment: PayHistFragment = PayHistFragment()
-    private val rechargeHistFragment: RechargeHistFragment = RechargeHistFragment()
+    private val invoiceFragment: InvoiceFragment = InvoiceFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,9 +91,9 @@ class BillingFragment : MainNavigationFragment(), Injectable {
         binding.lifecycleOwner = viewLifecycleOwner
 
         //payHistFragment = PayHistFragment()
-        //rechargeHistFragment = RechargeHistFragment()
+        //invoiceFragment = InvoiceFragment()
 
-        viewPagerFragments = arrayOf(payHistFragment, rechargeHistFragment)
+        viewPagerFragments = arrayOf(invoiceFragment, payHistFragment)
 
         pagerAdapter = BillingViewPagerAdapter(viewPagerFragments, childFragmentManager, viewLifecycleOwner.lifecycle)
 
@@ -111,6 +107,7 @@ class BillingFragment : MainNavigationFragment(), Injectable {
 
         TabLayoutMediator(binding.tabs, binding.viewPager) { tab, position ->
             tab.text = viewPagerPageTitles[position]
+            tab.icon = ContextCompat.getDrawable(requireContext(), viewPagerPageIcons[position])
         }.attach()
     }
 
@@ -134,10 +131,10 @@ class BillingFragment : MainNavigationFragment(), Injectable {
             R.id.search -> {
                 when (viewPagerCurrentItem) {
                     0 -> {
-                        payHistFragment.toggleExpanded()
+                        invoiceFragment.toggleExpanded()
                     }
                     1 -> {
-                        rechargeHistFragment.toggleExpanded()
+                        payHistFragment.toggleExpanded()
                     }
                 }
                 true

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PacE NeT</string>
+    <string name="app_name">PacENeT</string>
 
     <string name="dashboard">Dashboard</string>
     <string name="profile">Profile</string>
@@ -16,7 +16,7 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="sign_out">Sign Out</string>
     <string name="invalid_username_or_password">Invalid username or password!</string>
-    <string name="copyright">All rights reserved. Copyright ©2019, Royal Green Ltd.</string>
+    <string name="copyright">All rights reserved. Copyright ©2020, Royal Green Ltd.</string>
     <string name="net_error_msg">Please check Your internet connection!</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -29,4 +29,37 @@
     <string name="save">Save</string>
     <string name="deletes_file_ontap">Deletes file onTap</string>
     <string name="attach_file_desc">Attach any type of file</string>
+    <string name="privacy2">Please read carefully and familiarize yourself with this Privacy Policy to use our PacENeT application and contact us at support@royalgreen.net if you have any questions.</string>
+    <string name="privacy1">The PacENeT Privacy Policy was updated on April 22, 2020.</string>
+    <string name="privacy3">This privacy policy sets out how PacENeT collects uses, discloses, stores and protects any information that you gave when you subscribe to use our service(s) and application(s). PacENeT is committed to ensure that your private data that we collect and use is protected and we do not share any of your information to any other third parties. We may ask you to provide certain information depending on the contents and services you use so that we can identify you and provide you appropriate service.</string>
+    <string name="privacy4">Collection and Use of Personal Information</string>
+    <string name="privacy5">What personal information we collect are listed here:</string>
+    <string name="privacy6">When you register an account to get PacENeT services, you may have to provide us some of your personal information including your name, organization name, address, email address, phone number, date of birth, National Identity Number, your passport size photograph.</string>
+    <string name="privacy7">We may collect your location information, device identity to identify you concisely to provide our services.</string>
+    <string name="privacy8">When you log in to PacENeT we provide an authentication number along with your user ID and other information that is saved to your device to let you use PacENeT app securely for entire session and during log out we erase all data that we provided during login.</string>
+    <string name="privacy9">During your monthly bill payment our payment gateways require your debit / credit card information or your mobile banking information to successfully complete online bill payment.</string>
+    <string name="privacy10">When you make conversation with our support team generally you have to send text but you may share photos taken either from your device’s camera or storage to our support team. You may also share any kind of document or media files that describe your problems with our services. All these document and media file sharing depends on your intention, we do not automatically collect any document, media or other types of files from your device without your intention and consent.</string>
+    <string name="privacy11">How we use your personal information</string>
+    <string name="privacy12">We may use your personal information for the following purposes with your consent:</string>
+    <string name="privacy13">We may use your personal information to verify your identity, verify your bill payments and provide your specific services that you bought from us.</string>
+    <string name="privacy14">We may use your email, phone, device identity and other information to periodically notify you about service updates, changes, purchases, billings, dues, payments and your other activities through notifications, emails, messages, phone calls and other communicative ways that you allowed by subscriptions.</string>
+    <string name="privacy15">Collection and Use of Non-Personal Information</string>
+    <string name="privacy16">We may collect some non-personal information and store it to provide you standard quality services. Non- personal information that we collect are listed here:</string>
+    <string name="privacy17">We may collect, use and store your text messages, documents, media files that you shared with us in different times and purposes.</string>
+    <string name="privacy18">We may collect your location information to keep logs of your signing activities and secure your signing in by making alerts to you.</string>
+    <string name="privacy19">Controlling Your Personal Information</string>
+    <string name="privacy20">You may choose to restrict the collection or use of your personal information in the following ways:</string>
+    <string name="privacy21">Whenever you are asked to fill in a form on the application, look for the fields properly that you want or do not want the information to be used by our services.</string>
+    <string name="privacy22">If you have previously agreed to us using your personal information for service purposes, you may change your mind at any time by writing to us.</string>
+    <string name="privacy23">Use of Third Party Library or SDKs</string>
+    <string name="privacy24">We integrated following third-party libraries into PacENeT application:</string>
+    <string name="privacy25">Charts: https://github.com/danielgindi/Charts - for showing various statistics within a chart.</string>
+    <string name="privacy26">Protection of Your Information</string>
+    <string name="privacy27">PacENeT is committed to ensure the security of your data that you provided. In order to prevent unauthorized access or disclosure, we store your data in our server which complies all standard security parameters.</string>
+    <string name="privacy28">Your Privacy Rights</string>
+    <string name="privacy29">We do not share, sell, disclose, distribute or lease any of your personal information to any other third parties unless we have your consent and permission or required by law to do so. You may request any time to correct, erase or permanently remove all of your information that you provided us and if you do so we are obliged to process your request. You can take any actions with legal law against us if we violate any part of this privacy policy.</string>
+    <string name="privacy30">Privacy Queries</string>
+    <string name="privacy31">If you do not understand or agree with the privacy policy we strongly recommend you not to download, install and use PacENeT application. If you have any suggestions or queries about this privacy policy, please contact with us. PacENeT may change this privacy policy from time to time by updating this privacy policy. You should check this privacy policy to ensure that you are not with any inconsistency with any updates of this privacy policy. This privacy policy is effective from April 22, 2020.</string>
+    <string name="billed_to">Billed To</string>
+    <string name="invoice_image">Invoice Image</string>
 </resources>

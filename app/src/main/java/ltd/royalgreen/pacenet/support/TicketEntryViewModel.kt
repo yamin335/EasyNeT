@@ -4,6 +4,7 @@ import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import ltd.royalgreen.pacenet.BaseViewModel
 import ltd.royalgreen.pacenet.network.ApiEmptyResponse
@@ -42,7 +43,11 @@ class TicketEntryViewModel @Inject constructor(private val application: Applicat
         val result = MutableLiveData<DefaultResponse>()
         if (checkNetworkStatus(application)) {
             apiCallStatus.postValue("LOADING")
-            viewModelScope.launch {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
+                exception.printStackTrace()
+            }
+            viewModelScope.launch(handler) {
                 val attachedFileList = ArrayList<MultipartBody.Part>()
                 for (uri in fileUriList) {
                     val file = uri.asFile(application)?.asFilePart()
@@ -71,7 +76,11 @@ class TicketEntryViewModel @Inject constructor(private val application: Applicat
     fun getTicketCategory(): MutableLiveData<ArrayList<TicketCategory>> {
         val ticketCategories = MutableLiveData<ArrayList<TicketCategory>>()
         if (checkNetworkStatus(application)) {
-            viewModelScope.launch {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
+                exception.printStackTrace()
+            }
+            viewModelScope.launch(handler) {
                 when (val apiResponse = ApiResponse.create(repository.ticketCategoryRepo())) {
                     is ApiSuccessResponse -> {
                         ticketCategories.postValue(apiResponse.body.resdata?.listTicketCategory)

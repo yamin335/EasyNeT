@@ -10,28 +10,28 @@ import ltd.royalgreen.pacenet.network.ApiErrorResponse
 import ltd.royalgreen.pacenet.network.ApiResponse
 import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 
-class RechargeHistDataSource(rechargeHistViewModel: RechargeHistViewModel) : PageKeyedDataSource<Long, RechargeTransaction>() {
+class InvoiceDataSource(invoiceViewModel: InvoiceViewModel) : PageKeyedDataSource<Long, Invoice>() {
 
-    val viewModel = rechargeHistViewModel
+    val viewModel = invoiceViewModel
 
-    override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, RechargeTransaction>) {
+    override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, Invoice>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
             val handler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()
             }
-            CoroutineScope(Dispatchers.Main).launch(handler) {
+            viewModel.viewModelScope.launch(handler) {
                 val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
                 val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
-                when (val apiResponse = ApiResponse.create(viewModel.getRechargeHistory(1, 30,
+                when (val apiResponse = ApiResponse.create(viewModel.getInvoiceList(1, 30,
                     viewModel.searchValue.value!!, startDate, endDate))) {
                     is ApiSuccessResponse -> {
-                        if (!apiResponse.body.resdata?.listRecharge.isNullOrBlank()) {
-                            val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listRecharge).asJsonArray
-                            val tempTransactionList: ArrayList<RechargeTransaction> = ArrayList()
-                            for (transaction in transactionList) {
-                                tempTransactionList.add(Gson().fromJson(transaction, RechargeTransaction::class.java))
+                        if (!apiResponse.body.resdata?.userinvoiceList.isNullOrBlank()) {
+                            val invoiceList = JsonParser.parseString(apiResponse.body.resdata?.userinvoiceList).asJsonArray
+                            val tempInvoiceList: ArrayList<Invoice> = ArrayList()
+                            for (invoice in invoiceList) {
+                                tempInvoiceList.add(Gson().fromJson(invoice, Invoice::class.java))
                             }
-                            callback.onResult(tempTransactionList, null, 2)
+                            callback.onResult(tempInvoiceList, null, 2)
                         }
                     }
                     is ApiEmptyResponse -> {
@@ -43,24 +43,24 @@ class RechargeHistDataSource(rechargeHistViewModel: RechargeHistViewModel) : Pag
         }
     }
 
-    override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, RechargeTransaction>) {
+    override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, Invoice>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
             val handler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()
             }
-            CoroutineScope(Dispatchers.Main).launch(handler) {
+            viewModel.viewModelScope.launch(handler) {
                 val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
                 val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
-                when (val apiResponse = ApiResponse.create(viewModel.getRechargeHistory(params.key, 30,
+                when (val apiResponse = ApiResponse.create(viewModel.getInvoiceList(params.key, 30,
                     viewModel.searchValue.value!!, startDate, endDate))) {
                     is ApiSuccessResponse -> {
-                        if (!apiResponse.body.resdata?.listRecharge.isNullOrBlank()) {
-                            val transactionList = JsonParser.parseString(apiResponse.body.resdata?.listRecharge).asJsonArray
-                            val tempTransactionList: ArrayList<RechargeTransaction> = ArrayList()
-                            for (transaction in transactionList) {
-                                tempTransactionList.add(Gson().fromJson(transaction, RechargeTransaction::class.java))
+                        if (!apiResponse.body.resdata?.userinvoiceList.isNullOrBlank()) {
+                            val invoiceList = JsonParser.parseString(apiResponse.body.resdata?.userinvoiceList).asJsonArray
+                            val tempInvoiceList: ArrayList<Invoice> = ArrayList()
+                            for (invoice in invoiceList) {
+                                tempInvoiceList.add(Gson().fromJson(invoice, Invoice::class.java))
                             }
-                            callback.onResult(tempTransactionList, params.key + 1)
+                            callback.onResult(tempInvoiceList, params.key + 1)
                         }
                     }
                     is ApiEmptyResponse -> {
@@ -72,7 +72,7 @@ class RechargeHistDataSource(rechargeHistViewModel: RechargeHistViewModel) : Pag
         }
     }
 
-    override fun loadBefore(params: LoadParams<Long>, callback: LoadCallback<Long, RechargeTransaction>) {
+    override fun loadBefore(params: LoadParams<Long>, callback: LoadCallback<Long, Invoice>) {
 
     }
 }

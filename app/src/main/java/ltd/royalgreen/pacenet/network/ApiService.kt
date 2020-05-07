@@ -3,9 +3,11 @@ package ltd.royalgreen.pacenet.network
 import com.google.gson.JsonArray
 import ltd.royalgreen.pacenet.UserDataResponse
 import ltd.royalgreen.pacenet.billing.*
+import ltd.royalgreen.pacenet.dashboard.DashSessionResponse
 import ltd.royalgreen.pacenet.dashboard.DashboardChart
 import ltd.royalgreen.pacenet.login.LoginResponse
 import ltd.royalgreen.pacenet.profile.PackageServiceResponse
+import ltd.royalgreen.pacenet.profile.UserPackServiceResponse
 import ltd.royalgreen.pacenet.profile.UserPackageResponse
 import ltd.royalgreen.pacenet.support.SupportTicketResponse
 import ltd.royalgreen.pacenet.support.TicketCategoryResponse
@@ -39,8 +41,8 @@ interface ApiService {
     suspend fun billhistory(@Query("param") param: String): Response<PaymentHistory>
 
     //API FOR USER RECHARGE HISTORY
-    @GET("/api/ispportal/rechargehistory")
-    suspend fun rechargehistory(@Query("param") param: String): Response<RechargeHistory>
+    @GET("/api/ispportal/getallispinvbyusrid")
+    suspend fun getallispinvbyusrid(@Query("param") param: String): Response<InvoiceResponse>
 
 
     //API FOR  SUPPORT TICKET CATEGORY
@@ -50,6 +52,10 @@ interface ApiService {
     //API FOR  DASHBOARD CHART
     @GET("/api/ispportal/getdashboardchartportal")
     suspend fun getdashboardchartportal(@Query("param") param: String): Response<DashboardChart>
+
+    //API FOR  DASHBOARD SESSION CHART
+    @GET("/api/ispportal/getbizispsessionchart")
+    suspend fun getbizispsessionchart(@Query("param") param: String): Response<DashSessionResponse>
 
     //API FOR TICKET HISTORY
     @GET("/api/ispportal/getbypageispticket")
@@ -77,12 +83,12 @@ interface ApiService {
     //API FOR RECHARGE
     @Headers("Content-Type: application/json")
     @POST("/api/ispportal/isprecharge")
-    suspend fun cloudrecharge(@Body jsonArray: JsonArray): Response<RechargeResponse>
+    suspend fun isprecharge(@Body jsonArray: JsonArray): Response<RechargeResponse>
 
     //API FOR RECHARGE STATUS CHECK
     @Headers("Content-Type: application/json")
     @POST("/api/ispportal/isprechargesave")
-    suspend fun cloudrechargesave(@Body jsonArray: JsonArray): Response<RechargeStatusFosterCheckModel>
+    suspend fun isprechargesave(@Body jsonArray: JsonArray): Response<RechargeStatusFosterCheckModel>
 
     //API FOR RECHARGE SAVE
     @Headers("Content-Type: application/json")
@@ -108,6 +114,11 @@ interface ApiService {
     @POST("/api/ispportal/newrechargebkashpayment")
     suspend fun newrechargebkashpayment(@Body jsonArray: JsonArray): Response<DefaultResponse>
 
+    // API for save payment from balance
+    @Headers("Content-Type: application/json")
+    @POST("/api/ispportal/newpayment")
+    suspend fun newpayment(@Body jsonArray: JsonArray): Response<DefaultResponse>
+
     //API FOR USER ACTIVITY LOG
     @GET("/api/ispuser/getispuserpackservices")
     suspend fun getispuserpackservices(@Query("param") param: String): Response<UserPackageResponse>
@@ -115,6 +126,18 @@ interface ApiService {
     //API FOR USER ACTIVITY LOG
     @GET("/api/ispuser/getbizisppackservice")
     suspend fun getbizisppackservice(@Query("param") param: String): Response<PackageServiceResponse>
+
+    //API FOR USER PROFILE PACK_SERVICE
+    @GET("/api/ispuser/getprofileuserbyid")
+    suspend fun getprofileuserbyid(@Query("param") param: String): Response<UserPackServiceResponse>
+
+    //API FOR USER INVOICE DETAILS
+    @GET("/api/ispuser/getispuserinvocedetail")
+    suspend fun getispuserinvocedetail(@Query("param") param: String): Response<InvoiceDetailResponse>
+
+    //API FOR USER BALANCE
+    @GET("/api/ispportal/billispuserbalance")
+    suspend fun billispuserbalance(@Query("param") param: String): Response<UserBalanceResponse>
 
 
 //    @Multipart

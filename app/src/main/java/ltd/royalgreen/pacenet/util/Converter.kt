@@ -8,3 +8,30 @@ fun convertToPackageString(intValue: Int): String {
 fun convertToServiceString(intValue: Int): String {
     return "$intValue Service Selected"
 }
+
+fun convertToSessionChartType(type: String?): String {
+    return when (type) {
+        "monthly" -> "Monthly Data Traffic in:"
+        "daily" -> "Daily Data Traffic in:"
+        "hourly" -> "Hourly Data Traffic in:"
+        else -> "Data Traffic in:"
+    }
+}
+
+fun convertIntToMonth(month: Int?): String {
+    return when (month) {
+        1 -> "January"
+        2 -> "February"
+        3 -> "March"
+        4 -> "April"
+        5 -> "May"
+        6 -> "June"
+        7 -> "July"
+        8 -> "August"
+        9 -> "September"
+        10 -> "October"
+        11 -> "November"
+        12 -> "December"
+        else -> ""
+    }
+}

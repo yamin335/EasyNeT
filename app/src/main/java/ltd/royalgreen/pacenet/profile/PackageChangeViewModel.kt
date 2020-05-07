@@ -40,6 +40,7 @@ class PackageChangeViewModel @Inject constructor(private val application: Applic
     fun getUserPackage() {
         if (checkNetworkStatus(application)) {
             val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
             }
             viewModelScope.launch(handler) {

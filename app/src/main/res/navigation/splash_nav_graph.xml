@@ -21,5 +21,22 @@
         android:id="@+id/loginFragment"
         android:name="ltd.royalgreen.pacenet.login.LoginFragment"
         android:label="login_fragment"
-        tools:layout="@layout/login_fragment" />
+        tools:layout="@layout/login_fragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_privacyPolicyFragment"
+            app:destination="@id/privacyPolicyFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_contactFragment"
+            app:destination="@id/contactFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/privacyPolicyFragment"
+        android:name="ltd.royalgreen.pacenet.PrivacyPolicyFragment"
+        android:label="Privacy Policy"
+        tools:layout="@layout/privacy_policy_fragment" />
+    <fragment
+        android:id="@+id/contactFragment"
+        android:name="ltd.royalgreen.pacenet.ContactFragment"
+        android:label="Contact Us"
+        tools:layout="@layout/contact_fragment" />
 </navigation>

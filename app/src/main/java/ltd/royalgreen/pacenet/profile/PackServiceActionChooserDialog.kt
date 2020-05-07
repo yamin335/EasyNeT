@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.user_package_action_chooser.*
+import kotlinx.android.synthetic.main.profile_package_action_chooser_dialog.*
 import ltd.royalgreen.pacenet.R
 
 class PackServiceActionChooserDialog internal constructor(private val callBack: ChooserActionCallback) : DialogFragment() {
@@ -23,7 +23,7 @@ class PackServiceActionChooserDialog internal constructor(private val callBack: 
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.user_package_action_chooser, container)
+        return inflater.inflate(R.layout.profile_package_action_chooser_dialog, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

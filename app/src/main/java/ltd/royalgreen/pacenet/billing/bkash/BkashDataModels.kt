@@ -4,13 +4,13 @@ import java.io.Serializable
 
 class CreateBkashModel : Serializable {
     var authToken: String? = null
-    var rechargeAmount: String? = null
+    var rechargeAmount: Double? = null
     var currency: String? = null
     var mrcntNumber: String? = null
 }
 
 class PaymentRequest : Serializable {
-    var amount: String? = null
+    var amount: Double? = null
     var intent: String? = "sale"
 }
 

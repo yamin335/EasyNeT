@@ -30,9 +30,9 @@ class UserPackageServiceAdapter internal constructor(private val packServiceList
             holder.itemView.isNew.visibility = View.GONE
         }
 
-        holder.itemView.packServeCheck.setOnCheckedChangeListener { buttonView, isChecked ->
-
-        }
+//        holder.itemView.packServeCheck.setOnCheckedChangeListener { buttonView, isChecked ->
+//
+//        }
     }
 
     override fun getItemCount(): Int {

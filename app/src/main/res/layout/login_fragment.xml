@@ -35,8 +35,8 @@
 
                 <ImageView
                     android:id="@+id/logo"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:padding="16dp"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
@@ -62,10 +62,10 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/username"
                     android:windowSoftInputMode="adjustResize"
-                    app:boxCornerRadiusBottomStart="2dp"
-                    app:boxCornerRadiusBottomEnd="2dp"
-                    app:boxCornerRadiusTopStart="2dp"
-                    app:boxCornerRadiusTopEnd="2dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
                     app:boxStrokeColor="@color/edittext_box_stroke_color"
                     app:errorTextColor="@color/colorRed"
                     app:hintTextColor="@color/colorGreenTheme"
@@ -81,6 +81,7 @@
                         android:drawableStart="@drawable/user_20"
                         android:drawableTint="@color/edittext_icon_color"
                         android:drawablePadding="8dp"
+                        android:importantForAutofill="yes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={viewModel.userName}"
@@ -100,10 +101,10 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
                     android:windowSoftInputMode="adjustResize"
-                    app:boxCornerRadiusBottomStart="2dp"
-                    app:boxCornerRadiusBottomEnd="2dp"
-                    app:boxCornerRadiusTopStart="2dp"
-                    app:boxCornerRadiusTopEnd="2dp"
+                    app:boxCornerRadiusBottomStart="5dp"
+                    app:boxCornerRadiusBottomEnd="5dp"
+                    app:boxCornerRadiusTopStart="5dp"
+                    app:boxCornerRadiusTopEnd="5dp"
                     app:boxStrokeColor="@color/edittext_box_stroke_color"
                     app:endIconMode="password_toggle"
                     app:errorTextColor="@color/colorRed"
@@ -116,6 +117,7 @@
                         android:drawableStart="@drawable/password_20"
                         android:drawableTint="@color/edittext_icon_color"
                         android:drawablePadding="8dp"
+                        android:importantForAutofill="yes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@={viewModel.password}"
@@ -142,7 +144,7 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginEnd="24dp"
                     android:backgroundTint="@color/colorGreenTheme"
-                    app:cornerRadius="2dp"/>
+                    app:cornerRadius="5dp"/>
 
                 <TextView
                     android:id="@+id/errorText"
@@ -166,6 +168,7 @@
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:paddingTop="2dp"
+                    android:visibility="gone"
                     android:paddingBottom="2dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -175,6 +178,7 @@
 
                 <LinearLayout
                     android:layout_gravity="center_horizontal"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
@@ -219,33 +223,14 @@
 
                     <LinearLayout
                         android:id="@+id/bottomMenu"
+                        android:gravity="center_vertical"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toTopOf="@+id/copyright"
-                        app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.9">
-
-                        <TextView
-                            android:id="@+id/faq"
-                            android:text="FAQs"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:paddingStart="8dp"
-                            android:paddingEnd="8dp"
-                            android:paddingTop="2dp"
-                            android:paddingBottom="2dp"
-                            android:background="?attr/selectableItemBackground"
-                            android:textColor="@color/colorDarkGreen"
-                            android:textAllCaps="false"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginEnd="2dp"
-                            android:layout_height="13dp"
-                            android:layout_gravity="center_vertical"
-                            android:background="@color/colorDarkGreen"/>
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.9">
 
                         <TextView
                             android:id="@+id/privacy"
@@ -256,6 +241,7 @@
                             android:paddingEnd="8dp"
                             android:paddingTop="2dp"
                             android:paddingBottom="2dp"
+                            android:gravity="center_vertical"
                             android:background="?attr/selectableItemBackground"
                             android:textColor="@color/colorDarkGreen"
                             android:textAllCaps="false"
@@ -266,8 +252,8 @@
                             android:layout_width="1dp"
                             android:layout_marginStart="2dp"
                             android:layout_marginEnd="2dp"
-                            android:layout_height="13dp"
-                            android:layout_gravity="center_vertical"
+                            android:layout_height="14dp"
+                            android:layout_marginTop="1dp"
                             android:background="@color/colorDarkGreen"/>
 
                         <TextView
@@ -293,7 +279,9 @@
                         android:textSize="10sp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/copyright" app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginBottom="6dp"
+                        android:text="@string/copyright"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

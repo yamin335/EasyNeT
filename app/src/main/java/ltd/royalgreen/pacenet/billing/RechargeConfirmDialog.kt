@@ -10,8 +10,11 @@ import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.billing_recharge_confirm_dialog.*
 import ltd.royalgreen.pacenet.R
 
-class RechargeConfirmDialog internal constructor(private val callBack: RechargeConfirmCallback, private val rechargeAmount: String, private val note: String) : DialogFragment(), View.OnClickListener {
+class RechargeConfirmDialog internal constructor(private val callBack: RechargeConfirmCallback, private val rechargeAmount: Double) : DialogFragment(), View.OnClickListener {
 
+    override fun getTheme(): Int {
+        return R.style.AppTheme_Dialog
+    }
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
         dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
@@ -24,21 +27,20 @@ class RechargeConfirmDialog internal constructor(private val callBack: RechargeC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rechargeQuestion.text = "Recharge Amount: $rechargeAmount"
-        rechargeNote.text = "Note: $note"
-        processToRecharge.setOnClickListener(this)
-        bKashRecharge.setOnClickListener(this)
+        billAmount.text = "$rechargeAmount BDT"
+        visa.setOnClickListener(this)
+        bkash.setOnClickListener(this)
         cancel.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.processToRecharge -> {
-                callBack.onFosterClicked(amount = rechargeAmount, note = note)
+            R.id.visa -> {
+                callBack.onFosterClicked(amount = rechargeAmount)
                 dismiss()
             }
 
-            R.id.bKashRecharge -> {
+            R.id.bkash -> {
                 callBack.onBKashClicked(amount = rechargeAmount)
                 dismiss()
             }
@@ -48,7 +50,7 @@ class RechargeConfirmDialog internal constructor(private val callBack: RechargeC
     }
 
     interface RechargeConfirmCallback{
-        fun onFosterClicked(amount: String, note: String)
-        fun onBKashClicked(amount: String)
+        fun onFosterClicked(amount: Double)
+        fun onBKashClicked(amount: Double)
     }
 }

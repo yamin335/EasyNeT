@@ -3,10 +3,12 @@ package ltd.royalgreen.pacenet.dinjectors
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.SHARED_PREFS_KEY
+import ltd.royalgreen.pacenet.login.LoggedUserID
 import ltd.royalgreen.pacenet.network.ApiService
 import ltd.royalgreen.pacenet.util.LiveDataCallAdapterFactory
 import okhttp3.Interceptor
@@ -37,11 +39,15 @@ object AppModule {
     @Singleton
     @Provides
     @JvmStatic
-    fun provideApiService(applicationContext: Application): ApiService {
+    fun provideApiService(applicationContext: Application, preferences: SharedPreferences): ApiService {
+
+        val userLoggedData = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
 
         val interceptor = Interceptor { chain ->
             val newRequest = chain.request().newBuilder()
-                .addHeader("AuthorizedToken", "cmdsX3NlY3JldF9hcGlfa2V5")
+                .addHeader("AuthorizedToken", userLoggedData.ispToken ?: "cmdsX3NlY3JldF9hcGlfa2V5")
+                .addHeader("userId", userLoggedData.userID.toString())
+                .addHeader("platformId", "3")
                 .build()
             chain.proceed(newRequest)
         }

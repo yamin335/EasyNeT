@@ -19,7 +19,7 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
             val handler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()
             }
-            CoroutineScope(Dispatchers.Main).launch(handler) {
+            viewModel.viewModelScope.launch(handler) {
                 val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
                 val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
                 when (val apiResponse = ApiResponse.create(viewModel.getPaymentHistory(1, 30,
@@ -48,7 +48,7 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
             val handler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()
             }
-            CoroutineScope(Dispatchers.Main).launch(handler) {
+            viewModel.viewModelScope.launch(handler) {
                 val startDate = if (viewModel.fromDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.fromDate.value!!
                 val endDate = if (viewModel.toDate.value.equals("dd/mm/yyyy", true)) "" else viewModel.toDate.value!!
                 when (val apiResponse = ApiResponse.create(viewModel.getPaymentHistory(params.key, 30,

@@ -30,4 +30,22 @@ class DashRepository @Inject constructor(private val apiService: ApiService, pri
             apiService.getdashboardchartportal(param)
         }
     }
+
+    suspend fun dashSessionChartRepo(month: Int, type: String): Response<DashSessionResponse> {
+        val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUser::class.java)
+        val jsonObject = JsonObject().apply {
+            addProperty("CompanyId", 1)
+            addProperty("userName", user.userName)
+            addProperty("values", type)
+            addProperty("month", month)
+        }
+
+        val param = JsonArray().apply {
+            add(jsonObject)
+        }.toString()
+
+        return withContext(Dispatchers.IO) {
+            apiService.getbizispsessionchart(param)
+        }
+    }
 }

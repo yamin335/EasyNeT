@@ -95,6 +95,8 @@ class LoginViewModel @Inject constructor(private val application: Application, p
 
             val handler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()
+                apiCallStatus.postValue("ERROR")
+                errorToast.postValue("Can not connect to server! Please try again later.")
             }
 
             apiCallStatus.postValue("LOADING")

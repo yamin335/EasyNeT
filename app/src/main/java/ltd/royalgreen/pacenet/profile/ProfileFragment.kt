@@ -10,8 +10,10 @@ import androidx.activity.addCallback
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.MainNavigationFragment
 import ltd.royalgreen.pacenet.R
@@ -20,6 +22,7 @@ import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.ProfileFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
 import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
+import ltd.royalgreen.pacenet.util.RecyclerItemDivider
 import ltd.royalgreen.pacenet.util.autoCleared
 import ltd.royalgreen.pacenet.util.showChangePasswordDialog
 import javax.inject.Inject
@@ -81,36 +84,45 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
+
+        viewModel.userPackServiceList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                val vmAdapter = UserPackServiceListAdapter(it)
+                binding.serviceRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 16))
+                binding.serviceRecycler.adapter = vmAdapter
+            }
+        })
         viewModel.prepareProfile()
+        viewModel.getUserPackServiceList()
 
-        binding.changePackage.setOnClickListener {
-
-            val actionChooserDialog = PackServiceActionChooserDialog(object : PackServiceActionChooserDialog.ChooserActionCallback {
-                override fun onPackageAdd() {
-                    val action = ProfileFragmentDirections.actionProfileFragmentToPackageAddNewFragment()
-                    findNavController().navigate(action)
-                }
-
-                override fun onPackageChange() {
-
-                }
-
-                override fun onServiceAdd() {
-
-                }
-
-                override fun onServiceChange() {
-
-                }
-
-                override fun onShowUserPackService() {
-
-                }
-
-            })
-            actionChooserDialog.isCancelable = true
-            actionChooserDialog.show(childFragmentManager, "#action_chooser_dialog")
-        }
+//        binding.changePackage.setOnClickListener {
+//
+//            val actionChooserDialog = PackServiceActionChooserDialog(object : PackServiceActionChooserDialog.ChooserActionCallback {
+//                override fun onPackageAdd() {
+//                    val action = ProfileFragmentDirections.actionProfileFragmentToPackageAddNewFragment()
+//                    findNavController().navigate(action)
+//                }
+//
+//                override fun onPackageChange() {
+//
+//                }
+//
+//                override fun onServiceAdd() {
+//
+//                }
+//
+//                override fun onServiceChange() {
+//
+//                }
+//
+//                override fun onShowUserPackService() {
+//
+//                }
+//
+//            })
+//            actionChooserDialog.isCancelable = true
+//            actionChooserDialog.show(childFragmentManager, "#action_chooser_dialog")
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

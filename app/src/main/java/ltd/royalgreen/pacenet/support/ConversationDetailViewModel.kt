@@ -15,6 +15,7 @@ import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 import ltd.royalgreen.pacenet.util.DefaultResponse
 import ltd.royalgreen.pacenet.util.asFile
 import ltd.royalgreen.pacenet.util.asFilePart
+import ltd.royalgreen.pacenet.util.formatDateTime
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
@@ -55,12 +56,12 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
     fun entryNewComment(ispTicketId: String): MutableLiveData<DefaultResponse> {
         val result = MutableLiveData<DefaultResponse>()
 
-        val handler = CoroutineExceptionHandler { _, exception ->
-            exception.printStackTrace()
-        }
-
         if (checkNetworkStatus(application)) {
             apiCallStatus.postValue("LOADING")
+            val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
+                exception.printStackTrace()
+            }
             viewModelScope.launch(handler) {
                 val attachedFileList = ArrayList<MultipartBody.Part>()
                 for (uri in fileUriList) {
@@ -88,11 +89,15 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
 
     fun getTicketConversation(id: Long) {
         if (checkNetworkStatus(application)) {
-            viewModelScope.launch {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
+                exception.printStackTrace()
+            }
+            viewModelScope.launch(handler) {
                 when (val apiResponse = ApiResponse.create(repository.ticketConversationRepo(id))) {
                     is ApiSuccessResponse -> {
                         messageList.postValue(apiResponse.body.resdata?.objCrmIspTicket?.listIspTicketConversation)
-                        ticketDate.postValue(formatDateTime(apiResponse.body.resdata?.objCrmIspTicket?.createDate))
+                        ticketDate.postValue(apiResponse.body.resdata?.objCrmIspTicket?.createDate?.formatDateTime()?.first)
                         ticketNo.postValue("Ticket No: ${apiResponse.body.resdata?.objCrmIspTicket?.ispTicketNo}")
                         ticketStatus.postValue(apiResponse.body.resdata?.objCrmIspTicket?.status)
                         ticketSubject.postValue(apiResponse.body.resdata?.objCrmIspTicket?.ticketSummary)
@@ -105,77 +110,5 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
                 }
             }
         }
-    }
-
-    private fun formatDateTime(value: String?): String {
-        val months = arrayOf("Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec")
-        var formattedDateTime = ""
-        if (value != null && value.contains("T")) {
-            val tempStringArray = value.split("T")
-            var tempString1 = tempStringArray[1]
-            if (tempString1.contains(".")){
-                tempString1 = tempString1.split(".")[0]
-                tempString1 = when {
-                    tempString1.split(":")[0].toInt()>12 -> {
-                        val hour = tempString1.split(":")[0].toInt()
-                        val minute = tempString1.split(":")[1].toInt()
-                        val seconds = tempString1.split(":")[2].toInt()
-                        "${hour-12}:$minute PM"
-                    }
-                    tempString1.split(":")[0].toInt() == 0 -> {
-                        val hour = tempString1.split(":")[0].toInt()
-                        val minute = tempString1.split(":")[1].toInt()
-                        val seconds = tempString1.split(":")[2].toInt()
-                        "${hour+12}:$minute AM"
-                    }
-                    tempString1.split(":")[0].toInt()==12 -> {
-                        val hour = tempString1.split(":")[0].toInt()
-                        val minute = tempString1.split(":")[1].toInt()
-                        val seconds = tempString1.split(":")[2].toInt()
-                        "$hour:$minute PM"
-                    }
-                    else -> {
-                        val hour = tempString1.split(":")[0].toInt()
-                        val minute = tempString1.split(":")[1].toInt()
-                        val seconds = tempString1.split(":")[2].toInt()
-                        "$hour:$minute AM"
-                    }
-                }
-            } else {
-                tempString1 = when {
-                    tempString1.split(":")[0].toInt()>12 -> {
-                        val hour = tempString1.split(":")[0].toInt()
-                        val minute = tempString1.split(":")[1].toInt()
-                        val seconds = tempString1.split(":")[2].toInt()
-                        "${hour-12}:$minute PM"
-                    }
-                    tempString1.split(":")[0].toInt() == 0 -> {
-                        val hour = tempString1.split(":")[0].toInt()
-                        val minute = tempString1.split(":")[1].toInt()
-                        val seconds = tempString1.split(":")[2].toInt()
-                        "${hour+12}:$minute AM"
-                    }
-                    tempString1.split(":")[0].toInt()==12 -> {
-                        val hour = tempString1.split(":")[0].toInt()
-                        val minute = tempString1.split(":")[1].toInt()
-                        val seconds = tempString1.split(":")[2].toInt()
-                        "$hour:$minute PM"
-                    }
-                    else -> {
-                        val hour = tempString1.split(":")[0].toInt()
-                        val minute = tempString1.split(":")[1].toInt()
-                        val seconds = tempString1.split(":")[2].toInt()
-                        "$hour:$minute AM"
-                    }
-                }
-            }
-            val year = tempStringArray[0].split("-")[0]
-            val month = tempStringArray[0].split("-")[1]
-            val day = tempStringArray[0].split("-")[2]
-            formattedDateTime = "$tempString1  $day ${months[month.toInt() - 1]} $year"
-        } else {
-            formattedDateTime = value ?: ""
-        }
-        return  formattedDateTime
     }
 }

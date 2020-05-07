@@ -2,7 +2,7 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="viewModel" type="ltd.royalgreen.pacenet.billing.RechargeHistViewModel"/>
+        <variable name="viewModel" type="ltd.royalgreen.pacenet.billing.InvoiceViewModel"/>
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,68 +11,10 @@
         android:id="@+id/rootView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/rechargeSection"
-            android:orientation="horizontal"
-            android:layout_alignParentTop="true"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:text="Balance:"
-                android:textSize="16sp"
-                android:textColor="@color/colorPrimaryLight"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/balance"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:textSize="16sp"
-                android:ellipsize="end"
-                android:text="@{viewModel.balance}"
-                android:textColor="@color/colorPrimaryLight"
-                app:layout_constraintBottom_toBottomOf="@+id/textView7"
-                app:layout_constraintEnd_toStartOf="@+id/rechargeButton"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/textView7"
-                app:layout_constraintTop_toTopOf="@+id/textView7" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/rechargeButton"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"
-                android:backgroundTint="@color/colorGreenTheme"
-                android:text="Recharge Now"
-                android:textAllCaps="false"
-                android:textColor="@color/colorWhite"
-                app:cornerRadius="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/searchContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/rechargeSection"
+            android:layout_alignParentTop="true"
             android:visibility="gone">
 
             <TextView

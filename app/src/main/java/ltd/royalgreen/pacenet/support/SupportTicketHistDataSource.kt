@@ -14,7 +14,10 @@ class SupportTicketHistDataSource(supportViewModel: SupportViewModel) : PageKeye
 
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, SupportTicket>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+            }
+            viewModel.viewModelScope.launch(handler) {
                 when (val apiResponse = ApiResponse.create(viewModel.getAllSupportTicketHist(1, 30,
                     null, null, null))) {
                     is ApiSuccessResponse -> {
@@ -33,7 +36,10 @@ class SupportTicketHistDataSource(supportViewModel: SupportViewModel) : PageKeye
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, SupportTicket>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
-            viewModel.viewModelScope.launch {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                exception.printStackTrace()
+            }
+            viewModel.viewModelScope.launch(handler) {
                 when (val apiResponse = ApiResponse.create(viewModel.getAllSupportTicketHist(params.key, 30,
                     null, null, null))) {
                     is ApiSuccessResponse -> {

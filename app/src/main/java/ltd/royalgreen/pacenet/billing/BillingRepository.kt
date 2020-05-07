@@ -12,6 +12,7 @@ import ltd.royalgreen.pacenet.billing.bkash.PaymentRequest
 import ltd.royalgreen.pacenet.LoggedUser
 import ltd.royalgreen.pacenet.login.LoggedUserID
 import ltd.royalgreen.pacenet.network.ApiService
+import ltd.royalgreen.pacenet.profile.UserPackServiceResponse
 import ltd.royalgreen.pacenet.util.DefaultResponse
 import retrofit2.Response
 import java.text.SimpleDateFormat
@@ -21,6 +22,23 @@ import javax.inject.Singleton
 
 @Singleton
 class BillingRepository @Inject constructor(private val apiService: ApiService, private val preferences: SharedPreferences) {
+
+    suspend fun userBalanceRepo(): Response<UserBalanceResponse> {
+
+        val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
+        val jsonObject = JsonObject()
+        user?.let {
+            jsonObject.addProperty("UserID", user.userID)
+        }
+        val param = JsonArray().apply {
+            add(jsonObject)
+        }.toString()
+
+        return withContext(Dispatchers.IO) {
+            apiService.billispuserbalance(param)
+        }
+    }
+
     suspend fun paymentHistoryRepo(pageNumber: Long, pageSize: Int, searchValue: String, SDate: String, EDate: String): Response<PaymentHistory> {
         val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUser::class.java)
         val jsonObject = JsonObject().apply {
@@ -41,7 +59,7 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         }
     }
 
-    suspend fun rechargeHistoryRepo(pageNumber: Long, pageSize: Int, searchValue: String, SDate: String, EDate: String): Response<RechargeHistory> {
+    suspend fun invoiceRepo(pageNumber: Long, pageSize: Int, searchValue: String, SDate: String, EDate: String): Response<InvoiceResponse> {
         val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUser::class.java)
         val jsonObject = JsonObject().apply {
             addProperty("UserID", user.userID)
@@ -57,18 +75,52 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         }.toString()
 
         return withContext(Dispatchers.IO) {
-            apiService.rechargehistory(param)
+            apiService.getallispinvbyusrid(param)
         }
     }
 
-    suspend fun fosterUrlRepo(amount: String, note: String): Response<RechargeResponse> {
+    suspend fun invoiceDetailRepo(SDate: String, EDate: String, CDate: String, invId: Int, userPackServiceId: Int): Response<InvoiceDetailResponse> {
+        val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUser::class.java)
+        val jsonObject = JsonObject().apply {
+            addProperty("SDate", SDate)
+            addProperty("EDate", EDate)
+            addProperty("CDate", CDate)
+            addProperty("invId", invId)
+            addProperty("IspUserID", user.userID)
+            addProperty("userPackServiceId", userPackServiceId)
+        }
+
+        val param = JsonArray().apply {
+            add(jsonObject)
+        }.toString()
+
+        return withContext(Dispatchers.IO) {
+            apiService.getispuserinvocedetail(param)
+        }
+    }
+
+    suspend fun getUserPackServiceRepo(): Response<UserPackServiceResponse> {
+        val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+        val jsonObject = JsonObject().apply {
+            addProperty("id", user.userID)
+        }
+
+        val param = JsonArray().apply {
+            add(jsonObject)
+        }.toString()
+
+        return withContext(Dispatchers.IO) {
+            apiService.getprofileuserbyid(param)
+        }
+    }
+
+    suspend fun fosterUrlRepo(amount: Double): Response<RechargeResponse> {
 
         val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
         val jsonObject = JsonObject()
         user?.let {
             jsonObject.addProperty("UserID", user.userID)
             jsonObject.addProperty("rechargeAmount", amount)
-            jsonObject.addProperty("Particulars", note)
             jsonObject.addProperty("IsActive", true)
         }
         val param = JsonArray().apply {
@@ -76,7 +128,7 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         }
 
         return withContext(Dispatchers.IO) {
-            apiService.cloudrecharge(param)
+            apiService.isprecharge(param)
         }
     }
 
@@ -91,11 +143,11 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         }
 
         return withContext(Dispatchers.IO) {
-            apiService.cloudrechargesave(param)
+            apiService.isprechargesave(param)
         }
     }
 
-    suspend fun fosterRechargeSaveRepo(fosterString: String): Response<DefaultResponse> {
+    suspend fun fosterRechargeSaveRepo(fosterString: String, billPaymentHelper: BillPaymentHelper): Response<DefaultResponse> {
 
         val fosterJsonObject = JsonParser.parseString(fosterString).asJsonArray[0].asJsonObject
         val fosterModel = Gson().fromJson(fosterJsonObject, FosterModel::class.java)
@@ -106,17 +158,19 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         val df = SimpleDateFormat("yyyy-MM-dd")
         val today = df.format(todayInMilSec)
         val jsonObject = JsonObject().apply {
+            addProperty("BalanceAmount", billPaymentHelper.balanceAmount)
+            addProperty("DeductedAmount", billPaymentHelper.deductedAmount)
             addProperty("ISPUserID", user?.userID)
-            addProperty("ProfileId", user?.profileID)
-            addProperty("UserTypeId", userLoggedData?.userTypeId)
-            addProperty("TransactionNo", fosterModel.MerchantTxnNo)
-            addProperty("InvoiceId", 0)
-            addProperty("UserName", user?.displayName)
-            addProperty("TransactionDate", today)
-            addProperty("RechargeType", "foster")
-            addProperty("BalanceAmount", fosterModel.TxnAmount)
-            addProperty("Particulars", "")
+            addProperty("InvoiceId", billPaymentHelper.invoiceId)
             addProperty("IsActive", true)
+            addProperty("Particulars", "")
+            addProperty("ProfileId", user?.profileID)
+            addProperty("RechargeType", "foster")
+            addProperty("TransactionDate", today)
+            addProperty("TransactionNo", fosterModel.MerchantTxnNo)
+            addProperty("UserName", user?.displayName)
+            addProperty("UserPackServiceId", billPaymentHelper.userPackServiceId)
+            addProperty("UserTypeId", userLoggedData?.userTypeId)
         }
 
         val param = JsonArray().apply {
@@ -129,10 +183,13 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         }
     }
 
-    suspend fun bkashTokenRepo(amount: String): Response<BKashTokenResponse> {
-
+    suspend fun bkashTokenRepo(billPaymentHelper: BillPaymentHelper): Response<BKashTokenResponse> {
+        val userLoggedData = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
         val jsonObject = JsonObject().apply {
-            addProperty("id", 0)
+            addProperty("invId", billPaymentHelper.invoiceId)
+            addProperty("id", billPaymentHelper.userPackServiceId)
+            addProperty("rechargeAmount", billPaymentHelper.balanceAmount)
+            addProperty("loggedUserId", userLoggedData.userID)
         }
 
         val param = JsonArray().apply {
@@ -179,7 +236,7 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         }
     }
 
-    suspend fun bkashPaymentSaveRepo(bkashPaymentResponse: String): Response<DefaultResponse> {
+    suspend fun bkashPaymentSaveRepo(bkashPaymentResponse: String, billPaymentHelper: BillPaymentHelper): Response<DefaultResponse> {
         val bkashJsonObject = JsonParser.parseString(bkashPaymentResponse).asJsonObject
         val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
         val userLoggedData = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
@@ -188,17 +245,19 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         val df = SimpleDateFormat("yyyy-MM-dd")
         val today = df.format(todayInMilSec)
         val jsonObject = JsonObject().apply {
+            addProperty("BalanceAmount", billPaymentHelper.balanceAmount)
+            addProperty("DeductedAmount", billPaymentHelper.deductedAmount)
             addProperty("ISPUserID", user?.userID)
-            addProperty("ProfileId", user?.profileID)
-            addProperty("UserTypeId", userLoggedData?.userTypeId)
-            addProperty("TransactionNo", bkashJsonObject.get("trxID").asString)
-            addProperty("InvoiceId", 0)
-            addProperty("UserName", user?.displayName)
-            addProperty("TransactionDate", today)
-            addProperty("RechargeType", "bKash")
-            addProperty("BalanceAmount", bkashJsonObject.get("amount").asString)
-            addProperty("Particulars", "")
+            addProperty("InvoiceId", billPaymentHelper.invoiceId)
             addProperty("IsActive", true)
+            addProperty("Particulars", "")
+            addProperty("ProfileId", user?.profileID)
+            addProperty("RechargeType", "bkash")
+            addProperty("TransactionDate", today)
+            addProperty("TransactionNo", bkashJsonObject.get("trxID").asString)
+            addProperty("UserName", user?.displayName)
+            addProperty("UserPackServiceId", billPaymentHelper.userPackServiceId)
+            addProperty("UserTypeId", userLoggedData?.userTypeId)
         }
 
         val param = JsonArray().apply {
@@ -208,6 +267,36 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
 
         return withContext(Dispatchers.IO) {
             apiService.newrechargebkashpayment(param)
+        }
+    }
+
+    suspend fun newPaymentSaveRepo(billPaymentHelper: BillPaymentHelper): Response<DefaultResponse> {
+        val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
+        val userLoggedData = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+        //Current Date
+        val todayInMilSec = Calendar.getInstance().time
+        val df = SimpleDateFormat("yyyy-MM-dd")
+        val today = df.format(todayInMilSec)
+        val jsonObject = JsonObject().apply {
+            addProperty("ispUserID", user?.userID)
+            addProperty("userPackServiceId", billPaymentHelper.userPackServiceId)
+            addProperty("profileId", user?.profileID)
+            addProperty("userTypeId", userLoggedData?.userTypeId)
+            addProperty("invoiceId", billPaymentHelper.invoiceId)
+            addProperty("username", user?.displayName)
+            addProperty("transactionDate", today)
+            addProperty("rechargeType", "From Balance")
+            addProperty("balanceAmount", billPaymentHelper.deductedAmount)
+            addProperty("particulars", "Payment by user existing balance")
+            addProperty("isActive", true)
+        }
+
+        val param = JsonArray().apply {
+            add(jsonObject)
+        }
+
+        return withContext(Dispatchers.IO) {
+            apiService.newpayment(param)
         }
     }
 }

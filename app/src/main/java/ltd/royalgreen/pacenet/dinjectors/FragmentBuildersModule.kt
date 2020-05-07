@@ -5,7 +5,8 @@ import dagger.android.ContributesAndroidInjector
 import ltd.royalgreen.pacenet.*
 import ltd.royalgreen.pacenet.billing.PayHistFragment
 import ltd.royalgreen.pacenet.billing.BillingFragment
-import ltd.royalgreen.pacenet.billing.RechargeHistFragment
+import ltd.royalgreen.pacenet.billing.InvoiceDetailDialog
+import ltd.royalgreen.pacenet.billing.InvoiceFragment
 import ltd.royalgreen.pacenet.billing.bkash.BKashPaymentWebDialog
 import ltd.royalgreen.pacenet.billing.foster.FosterPaymentWebDialog
 import ltd.royalgreen.pacenet.dashboard.DashboardFragment
@@ -55,7 +56,7 @@ abstract class FragmentBuildersModule {
     abstract fun contributePayHistFragment(): PayHistFragment
 
     @ContributesAndroidInjector
-    abstract fun contributeRechargeHistFragment(): RechargeHistFragment
+    abstract fun contributeRechargeHistFragment(): InvoiceFragment
 
     @ContributesAndroidInjector
     abstract fun contributeTicketEntryFragment(): TicketEntryFragment
@@ -64,5 +65,14 @@ abstract class FragmentBuildersModule {
     abstract fun contributePackageChangeFragment(): PackageChangeFragment
 
     @ContributesAndroidInjector
+    abstract fun contributePrivacyPolicyFragment(): PrivacyPolicyFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributePrivacyContactFragment(): ContactFragment
+
+    @ContributesAndroidInjector
     abstract fun contributePackageAddFragment(): PackageAddFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeInvoiceDetailDialog(): InvoiceDetailDialog
 }

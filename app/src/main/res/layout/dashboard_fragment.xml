@@ -3,44 +3,28 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <import type="ltd.royalgreen.pacenet.util.Converter"/>
+        <variable
+            name="viewModel"
+            type="ltd.royalgreen.pacenet.dashboard.DashboardViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:layout_constraintBottom_toTopOf="@+id/constraint1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0">
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/colorWhite"
-                android:theme="@style/AppTheme.AppBarOverlay"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:titleTextColor="@color/colorPrimaryLight" />
-
-        </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint1"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="10"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/accountStatusChart"
+            android:paddingTop="8dp"
+            app:layout_constraintVertical_weight="8"
+            app:layout_constraintBottom_toTopOf="@+id/linear1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout3">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linearLayout2"
@@ -61,6 +45,7 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/payNow"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -72,7 +57,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginEnd="8dp"
                         app:layout_constraintBottom_toTopOf="@+id/label1"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -102,6 +87,7 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/payHistory"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -113,7 +99,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginEnd="8dp"
                         app:layout_constraintBottom_toTopOf="@+id/label2"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -142,6 +128,7 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -153,7 +140,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginEnd="8dp"
                         app:layout_constraintBottom_toTopOf="@+id/label3"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -197,6 +184,7 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/openTicket"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -208,7 +196,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginEnd="8dp"
                         app:layout_constraintBottom_toTopOf="@+id/label4"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -237,6 +225,7 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/ticketHistory"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -248,7 +237,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginEnd="8dp"
                         app:layout_constraintBottom_toTopOf="@+id/label5"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -277,6 +266,7 @@
                     android:layout_height="match_parent"
                     android:clickable="true"
                     android:focusable="true"
+                    android:background="?attr/selectableItemBackground"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -288,7 +278,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginEnd="8dp"
                         app:layout_constraintBottom_toTopOf="@+id/label6"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -315,15 +305,77 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linear1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/accountStatusChart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraint1">
+
+            <TextView
+                android:id="@+id/chartTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@{Converter.convertToSessionChartType(viewModel.selectedType)}"
+                android:textColor="@color/colorPrimaryLight"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/month"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@{Converter.convertIntToMonth(viewModel.selectedMonth)}"
+                android:paddingStart="4dp"
+                android:paddingEnd="0dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimaryLight"
+                app:layout_constraintBottom_toBottomOf="@+id/chartTitle"
+                app:layout_constraintStart_toEndOf="@+id/chartTitle"
+                app:layout_constraintTop_toTopOf="@+id/chartTitle" />
+
+            <TextView
+                android:id="@+id/change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_settings_black_24dp"
+                android:text="Change"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="2dp"
+                android:background="?attr/selectableItemBackground"
+                android:textColor="@color/colorGreenTheme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/accountStatusChart"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="8"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            app:layout_constraintVertical_weight="10"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraint1" />
+            app:layout_constraintTop_toBottomOf="@+id/linear1" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

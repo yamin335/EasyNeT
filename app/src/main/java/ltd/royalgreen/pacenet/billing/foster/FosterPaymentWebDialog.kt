@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import ltd.royalgreen.pacenet.R
+import ltd.royalgreen.pacenet.billing.BillPaymentHelper
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.BillingFosterWebDialogBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
@@ -19,7 +20,11 @@ import ltd.royalgreen.pacenet.util.showErrorToast
 import ltd.royalgreen.pacenet.util.showSuccessToast
 import javax.inject.Inject
 
-class FosterPaymentWebDialog internal constructor(private val callBack: FosterPaymentCallback, private val fosterProcessUrl: String, private val fosterPaymentStatusUrl: String): DialogFragment(),
+class FosterPaymentWebDialog internal constructor(
+    private val callBack: FosterPaymentCallback,
+    private val fosterProcessUrl: String,
+    private val fosterPaymentStatusUrl: String,
+    private val billPaymentHelper: BillPaymentHelper): DialogFragment(),
     Injectable {
 
     @Inject
@@ -62,29 +67,17 @@ class FosterPaymentWebDialog internal constructor(private val callBack: FosterPa
             if (binding.mWebView.canGoBack()) {
                 binding.mWebView.goBack()
             } else {
-                callBack.onFosterPaymentCancelled()
-                dismiss()
+                viewModel.showMessage.postValue(Pair(false, "Payment cancelled!"))
             }
         }
 
-        viewModel.rechargeSuccessFailureStatus.observe(viewLifecycleOwner, Observer { status ->
-            if (status) {
-                showSuccessToast(requireContext(), "Payment Successful")
-                callBack.onFosterPaymentSuccess()
-            } else {
-                showErrorToast(requireContext(), "Payment not successful !")
-                callBack.onFosterPaymentError()
-            }
-        })
-
-        viewModel.showMessage.observe(viewLifecycleOwner, Observer { (type, message) ->
-            if (type == "SUCCESS") {
+        viewModel.showMessage.observe(viewLifecycleOwner, Observer { (isSuccess, message) ->
+            if (isSuccess) {
                 showSuccessToast(requireContext(), message)
-//                viewModel.showMessage.postValue(Pair("null", ""))
-            } else if (type == "ERROR") {
+            } else {
                 showErrorToast(requireContext(), message)
-//                viewModel.showMessage.postValue(Pair("null", ""))
             }
+            callBack.onFosterPaymentFinished()
         })
 
         val webSettings: WebSettings = binding.mWebView.settings
@@ -107,9 +100,9 @@ class FosterPaymentWebDialog internal constructor(private val callBack: FosterPa
                     if (host == url.host) {
                         val paymentStatus = it[1].split("=")
                         if (paymentStatus[0] == "paymentStatus" && paymentStatus[1] == "true") {
-                            viewModel.checkFosterPaymentStatus(fosterPaymentStatusUrl)
+                            viewModel.checkFosterPaymentStatus(fosterPaymentStatusUrl, billPaymentHelper)
                         } else {
-                            viewModel.showMessage.postValue(Pair("ERROR", "Payment not successful !"))
+                            viewModel.showMessage.postValue(Pair(false, "Payment not successful, please try again later!"))
                         }
                     }
                 }
@@ -141,8 +134,6 @@ class FosterPaymentWebDialog internal constructor(private val callBack: FosterPa
     }
 
     interface FosterPaymentCallback {
-        fun onFosterPaymentSuccess()
-        fun onFosterPaymentError()
-        fun onFosterPaymentCancelled()
+        fun onFosterPaymentFinished()
     }
 }

@@ -82,7 +82,7 @@ class ConversationDetailsAdapter internal constructor(private val messageList: L
     }
 
     private fun formatDateTime(value: String?): Pair<String, String> {
-        val months = arrayOf("Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec")
+        val months = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
         var formattedDateTime: Pair<String, String>
         if (value != null && value.contains("T")) {
             val tempStringArray = value.split("T")

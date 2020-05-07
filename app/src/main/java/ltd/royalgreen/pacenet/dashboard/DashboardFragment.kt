@@ -112,13 +112,17 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
-        listener?.setupToolbar(binding.toolbar)
+        //listener?.setupToolbar(binding.toolbar)
 
         val formatter: ValueFormatter =
             object : ValueFormatter() {
                 override fun getAxisLabel(value: Float, axis: AxisBase): String {
-                    return xAxisLabels[value.toInt()]
+                    if (value.toInt() in xAxisLabels.indices) {
+                        return xAxisLabels[value.toInt()]
+                    }
+                    return ""
                 }
             }
         val xAxis: XAxis = binding.accountStatusChart.xAxis
@@ -126,10 +130,10 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
         xAxis.valueFormatter = formatter
 
         val description = Description()
-        description.text = "User's Recharges and Payments"
+        description.text = "Data Traffic"
         binding.accountStatusChart.description = description
 
-        refreshDashChart()
+        observeDashSessionChartData()
 
         binding.myAccount.setOnClickListener {
             listener?.onDashItemClicked("PROFILE")
@@ -151,64 +155,73 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
             listener?.onDashItemClicked("TICKET_HISTORY")
         }
 
-//        logout.setOnClickListener {
-//            startActivity(Intent(requireActivity(), SplashActivity::class.java))
-//            requireActivity().finish()
-//        }
+        binding.change.setOnClickListener {
+            val sessionChartChangeDialog = DashSessionChartChangeDialog(object : DashSessionChartChangeDialog.SessionChartChangeCallback {
+                override fun onSessionChartChanged(selectedType: String, selectedMonth: Int) {
+                    viewModel.getSessionChartData(selectedMonth, selectedType)
+                }
+
+            }, viewModel.selectedType.value ?: "daily", viewModel.selectedMonth.value ?: 1)
+            sessionChartChangeDialog.isCancelable = true
+            sessionChartChangeDialog.show(childFragmentManager, "#session_change_dialog")
+        }
+
+        viewModel.getSessionChartData(viewModel.selectedMonth.value ?: 1, viewModel.selectedType.value ?: "daily")
     }
 
-    private fun refreshDashChart() {
-        viewModel.getChartData().observe(viewLifecycleOwner, Observer {
-            val chartData = it.resdata?.dashboardchartdata
-            if (chartData != null) {
+    private fun observeDashSessionChartData() {
+        viewModel.sessionChartData.observe(viewLifecycleOwner, Observer { sessionData ->
+            val sessionChartData = sessionData.resdata?.sessionChartData
+            sessionChartData?.let {
                 val xAxisLabelsMap = HashMap<String, Float>()
                 xAxisLabelsMap.clear()
                 var mappedValue = 0.0F
-                for (data in chartData) {
-                    val dataMonth = data.dataMonth
-                    if (dataMonth != null && !xAxisLabelsMap.containsKey(dataMonth)) {
-                        xAxisLabelsMap[dataMonth] = mappedValue
-                        xAxisLabels.add(dataMonth)
+                for (data in it) {
+                    val xLabel = data.dataName
+                    if (xLabel != null && !xAxisLabelsMap.containsKey(xLabel)) {
+                        xAxisLabelsMap[xLabel] = mappedValue
+                        xAxisLabels.add(xLabel)
                         mappedValue += 1.0F
                     }
                 }
 
-                val rechargeEntryList = ArrayList<Entry>()
-                val paymentEntryList = ArrayList<Entry>()
+                val uploadList = ArrayList<Entry>()
+                val downloadList = ArrayList<Entry>()
 
-                for (data in chartData) {
-                    val dataMonth = data.dataMonth
-                    val dataRecharge = data.dataRecharge
-                    val dataPayment = data.dataPayment
-                    if (dataMonth != null) {
-                        if (dataRecharge != null) {
-                            rechargeEntryList.add(Entry(xAxisLabelsMap[dataMonth]!!, dataRecharge))
+                for (data in it) {
+                    val xLabel = data.dataName
+                    val upload = data.dataValueUp
+                    val download = data.dataValueDown
+                    xLabel?.let {
+                        upload?.let {
+                            uploadList.add(Entry(xAxisLabelsMap[xLabel]!!, upload))
                         }
-                        if (dataPayment != null) {
-                            paymentEntryList.add(Entry(xAxisLabelsMap[dataMonth]!!, dataPayment))
+
+                        download?.let {
+                            downloadList.add(Entry(xAxisLabelsMap[xLabel]!!, download))
                         }
                     }
                 }
 
-                val rechargeLineDataSet = LineDataSet(rechargeEntryList, "Total Recharge")
-                rechargeLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
-                rechargeLineDataSet.colors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorGreenTheme))
-                rechargeLineDataSet.circleColors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorGreenTheme))
-                rechargeLineDataSet.lineWidth = 2F
-                rechargeLineDataSet.circleRadius = 4F
-                rechargeLineDataSet.valueTextSize = 11F
+                val uploadLineDataSet = LineDataSet(uploadList, "Upload")
+                uploadLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
+                uploadLineDataSet.colors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorGreenTheme))
+                uploadLineDataSet.circleColors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorGreenTheme))
+                uploadLineDataSet.lineWidth = 2F
+                uploadLineDataSet.circleRadius = 4F
+                uploadLineDataSet.valueTextSize = 11F
 
-                val paymentLineDataSet = LineDataSet(paymentEntryList, "Total Payment")
-                paymentLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
-                paymentLineDataSet.colors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorRed))
-                paymentLineDataSet.circleColors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorRed))
-                paymentLineDataSet.lineWidth = 2F
-                paymentLineDataSet.circleRadius = 4F
-                paymentLineDataSet.valueTextSize = 11F
+                val downloadLineDataSet = LineDataSet(downloadList, "Download")
+                downloadLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
+                downloadLineDataSet.colors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorRed))
+                downloadLineDataSet.circleColors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorRed))
+                downloadLineDataSet.lineWidth = 2F
+                downloadLineDataSet.circleRadius = 4F
+                downloadLineDataSet.valueTextSize = 11F
 
                 val dataSets: ArrayList<ILineDataSet> = ArrayList()
-                dataSets.add(rechargeLineDataSet)
-                dataSets.add(paymentLineDataSet)
+                dataSets.add(uploadLineDataSet)
+                dataSets.add(downloadLineDataSet)
 
                 val data = LineData(dataSets)
                 binding.accountStatusChart.data = data
@@ -216,6 +229,65 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
                 binding.accountStatusChart.animateX(900)
             }
         })
+
+//        viewModel.getChartData().observe(viewLifecycleOwner, Observer {
+//            val chartData = it.resdata?.dashboardchartdata
+//            if (chartData != null) {
+//                val xAxisLabelsMap = HashMap<String, Float>()
+//                xAxisLabelsMap.clear()
+//                var mappedValue = 0.0F
+//                for (data in chartData) {
+//                    val dataMonth = data.dataMonth
+//                    if (dataMonth != null && !xAxisLabelsMap.containsKey(dataMonth)) {
+//                        xAxisLabelsMap[dataMonth] = mappedValue
+//                        xAxisLabels.add(dataMonth)
+//                        mappedValue += 1.0F
+//                    }
+//                }
+//
+//                val rechargeEntryList = ArrayList<Entry>()
+//                val paymentEntryList = ArrayList<Entry>()
+//
+//                for (data in chartData) {
+//                    val dataMonth = data.dataMonth
+//                    val dataRecharge = data.dataRecharge
+//                    val dataPayment = data.dataPayment
+//                    if (dataMonth != null) {
+//                        if (dataRecharge != null) {
+//                            rechargeEntryList.add(Entry(xAxisLabelsMap[dataMonth]!!, dataRecharge))
+//                        }
+//                        if (dataPayment != null) {
+//                            paymentEntryList.add(Entry(xAxisLabelsMap[dataMonth]!!, dataPayment))
+//                        }
+//                    }
+//                }
+//
+//                val rechargeLineDataSet = LineDataSet(rechargeEntryList, "Total Recharge")
+//                rechargeLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
+//                rechargeLineDataSet.colors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorGreenTheme))
+//                rechargeLineDataSet.circleColors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorGreenTheme))
+//                rechargeLineDataSet.lineWidth = 2F
+//                rechargeLineDataSet.circleRadius = 4F
+//                rechargeLineDataSet.valueTextSize = 11F
+//
+//                val paymentLineDataSet = LineDataSet(paymentEntryList, "Total Payment")
+//                paymentLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
+//                paymentLineDataSet.colors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorRed))
+//                paymentLineDataSet.circleColors = arrayListOf(ContextCompat.getColor(requireContext(), R.color.colorRed))
+//                paymentLineDataSet.lineWidth = 2F
+//                paymentLineDataSet.circleRadius = 4F
+//                paymentLineDataSet.valueTextSize = 11F
+//
+//                val dataSets: ArrayList<ILineDataSet> = ArrayList()
+//                dataSets.add(rechargeLineDataSet)
+//                dataSets.add(paymentLineDataSet)
+//
+//                val data = LineData(dataSets)
+//                binding.accountStatusChart.data = data
+//                binding.accountStatusChart.invalidate()
+//                binding.accountStatusChart.animateX(900)
+//            }
+//        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

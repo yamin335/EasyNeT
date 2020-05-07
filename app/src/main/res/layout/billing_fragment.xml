@@ -26,9 +26,10 @@
                 android:theme="@style/AppTheme.AppBarOverlay"
                 app:tabBackground="@color/colorWhite"
                 app:tabGravity="fill"
+                app:tabIconTint="@color/billing_pager2_icon_colors"
                 app:tabIndicatorGravity="bottom"
                 app:tabIndicatorColor="@color/colorGreenTheme"
-                app:tabSelectedTextColor="@color/colorGreenTheme"
+                app:tabTextColor="@color/billing_pager2_icon_colors"
                 app:tabMode="fixed"/>
 
         </com.google.android.material.appbar.AppBarLayout>

@@ -11,8 +11,10 @@ import ltd.royalgreen.pacenet.util.PaceNetViewModelFactory
 import ltd.royalgreen.pacenet.MainViewModel
 import ltd.royalgreen.pacenet.billing.PayHistViewModel
 import ltd.royalgreen.pacenet.billing.BillingViewModel
-import ltd.royalgreen.pacenet.billing.RechargeHistViewModel
+import ltd.royalgreen.pacenet.billing.InvoiceDetailViewModel
+import ltd.royalgreen.pacenet.billing.InvoiceViewModel
 import ltd.royalgreen.pacenet.dashboard.DashboardViewModel
+import ltd.royalgreen.pacenet.login.ContactFragmentViewModel
 import ltd.royalgreen.pacenet.login.ForgotPassDialogViewModel
 import ltd.royalgreen.pacenet.login.LoginViewModel
 import ltd.royalgreen.pacenet.profile.PackageAddViewModel
@@ -63,8 +65,8 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(RechargeHistViewModel::class)
-    abstract fun bindRechargeHistViewModel(rechargeHistViewModel: RechargeHistViewModel): ViewModel
+    @ViewModelKey(InvoiceViewModel::class)
+    abstract fun bindRechargeHistViewModel(invoiceViewModel: InvoiceViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -100,6 +102,16 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(PackageAddViewModel::class)
     abstract fun bindPackageAddViewModel(packageAddViewModel: PackageAddViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ContactFragmentViewModel::class)
+    abstract fun bindContactFragmentViewModel(contactFragmentViewModel: ContactFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(InvoiceDetailViewModel::class)
+    abstract fun bindInvoiceDetailViewModel(invoiceDetailViewModel: InvoiceDetailViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: PaceNetViewModelFactory): ViewModelProvider.Factory

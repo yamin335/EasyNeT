@@ -45,4 +45,19 @@ class ProfileRepository @Inject constructor(private val apiService: ApiService, 
             apiService.getbizisppackservice(param)
         }
     }
+
+    suspend fun getUserPackServiceRepo(): Response<UserPackServiceResponse> {
+        val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+        val jsonObject = JsonObject().apply {
+            addProperty("id", user.userID)
+        }
+
+        val param = JsonArray().apply {
+            add(jsonObject)
+        }.toString()
+
+        return withContext(Dispatchers.IO) {
+            apiService.getprofileuserbyid(param)
+        }
+    }
 }

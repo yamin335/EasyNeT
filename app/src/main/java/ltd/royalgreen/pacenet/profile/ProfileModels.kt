@@ -39,3 +39,39 @@ data class PackageService(val packId: Number?, val packServiceId: Int?,
                           val packServiceName: String?, val packServicePrice: Number?,
                           val packServiceTypeId: Number?, val packServiceType: String?,
                           var isChecked: Boolean?, var isPurchased: Boolean = false) : Serializable
+
+data class UserPackServiceResponse(val resdata: UserPackServiceResdata?)
+
+data class UserPackServiceResdata(val listProfileUser: String?)
+
+data class UserPackServiceList(
+    val userConnectionId: Int?, val ispUserId: Int?,
+    val ContactPerson: String, val packServices: String?,
+    val packList: ArrayList<UserPackService>?
+)
+
+data class UserPackService(
+    val userId: Int?, val ispUserId: Int?, val connectionNo: Int?,
+    val username: String?,
+    val userTypeId: Int?, val connectionTypeId: Int?, val parentUserId: Int?, val accountId: Int?,
+    val profileId: Int?,
+    val password: String?,
+    val userPackServiceId: Int,
+    val packServiceId: Int?, val packServiceTypeId: Int?,
+    val packServiceType: String?, val packServiceName: String?,
+    val parentPackServiceId: Int?,
+    val parentPackServiceName: String?, val particulars: String?,
+    val zoneId: Int?,
+    val packServicePrice: Double?,
+    val packServiceInstallCharge: Double?, val packServiceOthersCharge: Double?,
+    val activeDate: String?, val expireDate: String?, val billingStartDate: String?, val billingEndDate: String?,
+    val expireDay: Int?, val graceDay: Int?,
+    val lastPayDate: String?,
+    val isActive: Boolean?, val tempInActive: Boolean?, val isNoneStop: Boolean?, val isDefault: Boolean?,
+    val status: String?,
+    val enabled: Boolean?,
+    val actualPayAmount: Double?, val payAmount: Double?, val saveAmount: Double?,
+    val methodId: Int?,
+    val isParent: Boolean?, val isUpGrade: Boolean?, val isDownGrade: Boolean?, val isNew: Boolean?,
+    val isUpdate: Boolean?, val isDelete: Boolean?
+)

@@ -10,18 +10,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.roundToInt
 
-class RecyclerItemDivider(context: Context, orientation: Int = 0, margin: Int = 0) : RecyclerView.ItemDecoration() {
+class RecyclerItemDivider(context: Context, orientation: Int = 0, marginStart: Int = 0, marginEnd: Int = 0) : RecyclerView.ItemDecoration() {
     private val ATTRS = intArrayOf(android.R.attr.listDivider)
     private val HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL
     private val VERTICAL_LIST = LinearLayoutManager.VERTICAL
     private val mDivider: Drawable?
     private var mOrientation: Int
     private val mContext: Context = context
-    private val mMargin: Int
+    private val mMarginStart: Int
+    private val mMarginEnd: Int
 
     init {
         mOrientation = orientation
-        mMargin = margin
+        mMarginStart = marginStart
+        mMarginEnd = marginEnd
         val a = context.obtainStyledAttributes(ATTRS)
         mDivider = a.getDrawable(0)
         a.recycle()
@@ -54,7 +56,7 @@ class RecyclerItemDivider(context: Context, orientation: Int = 0, margin: Int = 
                 .layoutParams as RecyclerView.LayoutParams
             val top = child.bottom + params.bottomMargin
             val bottom = top + mDivider!!.intrinsicHeight
-            mDivider.setBounds(left + dpToPx(mMargin), top, right - dpToPx(mMargin), bottom)
+            mDivider.setBounds(left + dpToPx(mMarginStart), top, right - dpToPx(mMarginEnd), bottom)
             mDivider.draw(c)
         }
     }
@@ -70,7 +72,7 @@ class RecyclerItemDivider(context: Context, orientation: Int = 0, margin: Int = 
                 .layoutParams as RecyclerView.LayoutParams
             val left = child.right + params.rightMargin
             val right = left + mDivider!!.intrinsicHeight
-            mDivider.setBounds(left, top + dpToPx(mMargin), right, bottom - dpToPx(mMargin))
+            mDivider.setBounds(left, top + dpToPx(mMarginStart), right, bottom - dpToPx(mMarginEnd))
             mDivider.draw(c)
         }
     }

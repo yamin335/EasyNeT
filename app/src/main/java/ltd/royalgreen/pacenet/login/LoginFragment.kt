@@ -16,6 +16,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +31,7 @@ import ltd.royalgreen.pacenet.databinding.LoginFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
 import ltd.royalgreen.pacenet.util.autoCleared
 import ltd.royalgreen.pacenet.util.hideKeyboard
+import ltd.royalgreen.pacenet.util.showErrorToast
 import javax.inject.Inject
 
 class LoginFragment : Fragment(), Injectable {
@@ -139,17 +142,19 @@ class LoginFragment : Fragment(), Injectable {
 //            signUpDialog.show(parentFragmentManager, "#sign_up_dialog")
         }
 
-        binding.faq.setOnClickListener {
-//            findNavController().navigate(R.id.action_loginFragment_to_faqsFragment)
+        binding.privacy.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_privacyPolicyFragment)
         }
 
-        binding.privacy.setOnClickListener {
-//            findNavController().navigate(R.id.action_loginFragment_to_privacyFragment)
-        }
+        //binding.contact.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.contactFragment, null))
 
         binding.contact.setOnClickListener {
-//            findNavController().navigate(R.id.action_loginFragment_to_contactFragment)
+            findNavController().navigate(R.id.action_loginFragment_to_contactFragment)
         }
+
+        viewModel.errorToast.observe(viewLifecycleOwner, Observer {
+            showErrorToast(requireContext(), it)
+        })
 
         viewModel.userName.observe(viewLifecycleOwner, Observer {
             viewModel.errorMessage.value = false

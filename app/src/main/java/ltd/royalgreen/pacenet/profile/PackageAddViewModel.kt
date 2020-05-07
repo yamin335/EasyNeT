@@ -40,6 +40,7 @@ class PackageAddViewModel @Inject constructor(private val application: Applicati
     fun getUserPackage() {
         if (checkNetworkStatus(application)) {
             val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
             }
             viewModelScope.launch(handler) {
@@ -72,6 +73,7 @@ class PackageAddViewModel @Inject constructor(private val application: Applicati
     fun getPackageService() {
         if (checkNetworkStatus(application)) {
             val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
             }
             viewModelScope.launch(handler) {

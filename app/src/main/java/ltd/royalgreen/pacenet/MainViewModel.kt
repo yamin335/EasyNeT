@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.google.gson.JsonParser
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import ltd.royalgreen.pacenet.network.*
 import ltd.royalgreen.pacenet.util.ConnectivityLiveData
@@ -26,7 +27,11 @@ class MainViewModel @Inject constructor(private val application: Application, pr
 
     fun getLoggedUserData() {
         if (checkNetworkStatus(application)) {
-            viewModelScope.launch {
+            val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
+                exception.printStackTrace()
+            }
+            viewModelScope.launch(handler) {
                 when (val apiResponse = ApiResponse.create(repository.loggedUserRepo())) {
                     is ApiSuccessResponse -> {
                         val user = Gson().fromJson(JsonParser.parseString(apiResponse.body.resdata.userIsp).asJsonArray[0], LoggedUser::class.java)

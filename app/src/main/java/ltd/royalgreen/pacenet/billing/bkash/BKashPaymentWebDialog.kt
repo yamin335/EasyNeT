@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.webkit.*
 import androidx.databinding.DataBindingComponent
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import ltd.royalgreen.pacenet.R
+import ltd.royalgreen.pacenet.billing.BillPaymentHelper
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.BillingBkashWebDialogBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
@@ -23,7 +25,11 @@ import ltd.royalgreen.pacenet.util.showErrorToast
 import ltd.royalgreen.pacenet.util.showSuccessToast
 import javax.inject.Inject
 
-class BKashPaymentWebDialog internal constructor(private val callBack: BkashPaymentCallback, private val createBkash: CreateBkashModel, private val paymentRequest: PaymentRequest): DialogFragment(),
+class BKashPaymentWebDialog internal constructor(
+    private val callBack: BkashPaymentCallback,
+    private val createBkash: CreateBkashModel,
+    private val paymentRequest: PaymentRequest,
+    private val billPaymentHelper: BillPaymentHelper): DialogFragment(),
     Injectable {
 
     @Inject
@@ -38,20 +44,6 @@ class BKashPaymentWebDialog internal constructor(private val callBack: BkashPaym
 
     private var binding by autoCleared<BillingBkashWebDialogBinding>()
     private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
-
-//    override fun onResume() {
-//        super.onResume()
-//        val params = dialog?.window?.attributes
-//        params?.width = WindowManager.LayoutParams.MATCH_PARENT
-//        params?.height = WindowManager.LayoutParams.WRAP_CONTENT
-//        dialog?.window?.attributes = params
-//    }
-//
-//    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-//        val dialog = super.onCreateDialog(savedInstanceState)
-//        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
-//        return dialog
-//    }
 
     override fun getTheme(): Int {
         return R.style.DialogFullScreenTheme
@@ -80,38 +72,36 @@ class BKashPaymentWebDialog internal constructor(private val callBack: BkashPaym
 
         request = Gson().toJson(paymentRequest)
 
+        viewModel.dismissListener.observe(viewLifecycleOwner, Observer { (isSuccessful, message) ->
+            if (isSuccessful) {
+                showSuccessToast(requireContext(), message)
+            } else {
+                showErrorToast(requireContext(), message)
+            }
+            binding.mWebView.evaluateJavascript("javascript:finishBkashPayment()") {
+                Log.d("JavaScriptReturnValue:", it)
+            }
+            callBack.onBkashPaymentFinished()
+        })
+
         viewModel.resBkash.observe(viewLifecycleOwner, Observer {
             val errorCode: String? = null
             val errorMessage: String? = null
-            if (!it.isNullOrBlank()) {
-                val jsonObject = JsonParser.parseString(it).asJsonObject.apply {
-                    addProperty("errorCode", errorCode)
-                    addProperty("errorMessage", errorMessage)
-                }
-                viewModel.bkashPaymentExecuteJson = jsonObject
-                val jsonString = jsonObject.toString()
-                binding.mWebView.loadUrl("javascript:createBkashPayment($jsonString )")
-            } else {
-                callBack.onPaymentError()
+            val jsonObject = JsonParser.parseString(it).asJsonObject.apply {
+                addProperty("errorCode", errorCode)
+                addProperty("errorMessage", errorMessage)
             }
-        })
-
-        viewModel.bKashPaymentStatus.observe(viewLifecycleOwner, Observer {
-            if (it.first) {
-                binding.mWebView.evaluateJavascript("javascript:finishBkashPayment()", null)
-            } else {
-                showErrorToast(requireContext(), it.second)
-                callBack.onPaymentError()
-                dismiss()
-            }
+            viewModel.bkashPaymentExecuteJson = jsonObject
+            val jsonString = jsonObject.toString()
+            binding.mWebView.loadUrl("javascript:createBkashPayment($jsonString )")
         })
 
         binding.goBack.setOnClickListener {
             if (binding.mWebView.canGoBack()) {
                 binding.mWebView.goBack()
             } else {
-                callBack.onPaymentCancelled()
-                dismiss()
+                showErrorToast(requireContext(), "Payment cancelled!")
+                callBack.onBkashPaymentFinished()
             }
         }
 
@@ -127,10 +117,6 @@ class BKashPaymentWebDialog internal constructor(private val callBack: BkashPaym
         binding.mWebView.clearCache(false)
         binding.mWebView.settings.allowFileAccessFromFileURLs = true
         binding.mWebView.settings.allowUniversalAccessFromFileURLs = true
-
-        //To control any kind of interaction from html file
-
-//        mWebView.addJavascriptInterface( JavaScriptInterface(requireContext()), "AndroidNative")
 
         binding.mWebView.addJavascriptInterface( JavaScriptWebViewInterface(requireContext()), "AndroidNative")
 
@@ -171,20 +157,12 @@ class BKashPaymentWebDialog internal constructor(private val callBack: BkashPaym
 
         @JavascriptInterface
         fun executePayment() {
-            viewModel.executeBkashPayment()
-        }
-
-        @JavascriptInterface
-        fun finishBkashPayment() {
-            showSuccessToast(requireContext(), viewModel.bKashPaymentStatus.value?.second ?: "UNKNOWN Message!")
-            callBack.onPaymentSuccess()
+            viewModel.executeBkashPayment(billPaymentHelper)
         }
 
     }
 
     interface BkashPaymentCallback {
-        fun onPaymentSuccess()
-        fun onPaymentError()
-        fun onPaymentCancelled()
+        fun onBkashPaymentFinished()
     }
 }
