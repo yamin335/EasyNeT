@@ -1,5 +1,6 @@
 package ltd.royalgreen.pacenet.billing.bkash
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.http.SslError
@@ -64,6 +65,7 @@ class BKashPaymentWebDialog internal constructor(
         return binding.root
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -121,10 +123,6 @@ class BKashPaymentWebDialog internal constructor(
         binding.mWebView.addJavascriptInterface( JavaScriptWebViewInterface(requireContext()), "AndroidNative")
 
         binding.mWebView.webViewClient = object : WebViewClient() {
-
-            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler, error: SslError?) {
-                handler.proceed()
-            }
 
             override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
                 if (binding.loader != null) {
