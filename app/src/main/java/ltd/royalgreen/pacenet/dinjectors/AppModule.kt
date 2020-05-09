@@ -42,11 +42,20 @@ object AppModule {
     fun provideApiService(applicationContext: Application, preferences: SharedPreferences): ApiService {
 
         val userLoggedData = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+        var userID = "0"
+        var ispToken = "cmdsX3NlY3JldF9hcGlfa2V5"
+
+        userLoggedData?.let {
+            userID = it.userID.toString()
+            it.ispToken?.let { token ->
+                ispToken = token
+            }
+        }
 
         val interceptor = Interceptor { chain ->
             val newRequest = chain.request().newBuilder()
-                .addHeader("AuthorizedToken", userLoggedData.ispToken ?: "cmdsX3NlY3JldF9hcGlfa2V5")
-                .addHeader("userId", userLoggedData.userID.toString())
+                .addHeader("AuthorizedToken", ispToken)
+                .addHeader("userId", userID)
                 .addHeader("platformId", "3")
                 .build()
             chain.proceed(newRequest)

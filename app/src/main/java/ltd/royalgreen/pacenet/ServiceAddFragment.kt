@@ -19,6 +19,4 @@ class ServiceAddFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.service_add_new_fragment, container, false)
     }
-
-
 }
