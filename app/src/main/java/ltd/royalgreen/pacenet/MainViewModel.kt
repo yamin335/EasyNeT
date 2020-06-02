@@ -17,12 +17,35 @@ class MainViewModel @Inject constructor(private val application: Application, pr
     @Inject
     lateinit var preferences: SharedPreferences
 
-//    val userBalance: MutableLiveData<BalanceModel> by lazy {
-//        MutableLiveData<BalanceModel>()
-//    }
+    val isLoggedOut = MutableLiveData(Pair(false, ""))
 
     val internetStatus: ConnectivityLiveData by lazy {
         ConnectivityLiveData(application)
+    }
+
+    fun doLogOut() {
+        if (checkNetworkStatus(application)) {
+            apiCallStatus.postValue("LOADING")
+            val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
+                exception.printStackTrace()
+            }
+            viewModelScope.launch(handler) {
+                when (val apiResponse = ApiResponse.create(repository.logoutRepo())) {
+                    is ApiSuccessResponse -> {
+                        val response = apiResponse.body.resdata
+                        isLoggedOut.postValue(Pair(response.resstate ?: false, response.message))
+                        apiCallStatus.postValue("SUCCESS")
+                    }
+                    is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
+                    }
+                    is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
+                    }
+                }
+            }
+        }
     }
 
     fun getLoggedUserData() {

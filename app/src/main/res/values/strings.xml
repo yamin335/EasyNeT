@@ -62,4 +62,5 @@
     <string name="privacy31">If you do not understand or agree with the privacy policy we strongly recommend you not to download, install and use PacENeT application. If you have any suggestions or queries about this privacy policy, please contact with us. PacENeT may change this privacy policy from time to time by updating this privacy policy. You should check this privacy policy to ensure that you are not with any inconsistency with any updates of this privacy policy. This privacy policy is effective from April 22, 2020.</string>
     <string name="billed_to">Billed To</string>
     <string name="invoice_image">Invoice Image</string>
+    <string name="change">Change</string>
 </resources>

@@ -139,6 +139,11 @@ interface ApiService {
     @GET("/api/ispportal/billispuserbalance")
     suspend fun billispuserbalance(@Query("param") param: String): Response<UserBalanceResponse>
 
+    // API for logout
+    @Headers("Content-Type: application/json")
+    @POST("/api/ispportal/loggedout")
+    suspend fun loggedout(@Body jsonArray: JsonArray): Response<DefaultResponse>
+
 
 //    @Multipart
 //    @Headers("Content-Type: multipart/form-data")

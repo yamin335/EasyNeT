@@ -11,7 +11,7 @@ import ltd.royalgreen.pacenet.util.formatDateTime
 
 
 class UserPackServiceListAdapter internal constructor(
-    private val packServiceList: MutableList<UserPackService>
+    private val packServiceList: MutableList<UserPackService>, private val listener: ChangeButtonCallback
 ) : RecyclerView.Adapter<UserPackServiceListAdapter.UserPackServiceViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserPackServiceViewHolder {
@@ -40,6 +40,14 @@ class UserPackServiceListAdapter internal constructor(
             } else {
                 itemView.status.setColorFilter(ContextCompat.getColor(itemView.context, R.color.colorRed))
             }
+
+            itemView.changeButton.setOnClickListener {
+                listener.onChangeClicked(item)
+            }
         }
+    }
+
+    interface ChangeButtonCallback {
+        fun onChangeClicked(userPackService: UserPackService)
     }
 }

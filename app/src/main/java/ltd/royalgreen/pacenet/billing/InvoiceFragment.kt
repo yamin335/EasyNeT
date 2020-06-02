@@ -69,17 +69,16 @@ class InvoiceFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
 
         toggle = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_bar_toogle)
 
-        // This callback will only be called when MyFragment is at least Started.
-        requireActivity().onBackPressedDispatcher.addCallback(this, true) {
-            val exitDialog = CustomAlertDialog(object :
-                CustomAlertDialog.YesCallback {
-                override fun onYes() {
-                    viewModel.onAppExit(preferences)
-                    requireActivity().finish()
-                }
-            }, "Do you want to exit?", "")
-            exitDialog.show(parentFragmentManager, "#app_exit_dialog")
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(this, true) {
+//            val exitDialog = CustomAlertDialog(object :
+//                CustomAlertDialog.YesCallback {
+//                override fun onYes() {
+//                    viewModel.onAppExit(preferences)
+//                    requireActivity().finish()
+//                }
+//            }, "Do you want to exit?", "")
+//            exitDialog.show(childFragmentManager, "#app_exit_dialog")
+//        }
     }
 
     override fun onCreateView(
@@ -118,9 +117,15 @@ class InvoiceFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
                             if (amount > 0.0) {
                                 val userBalance = viewModel.userBalance.value?.balanceAmount
                                 if ( userBalance != null && userBalance >= amount) {
-                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = 0.0, deductedAmount = amount, invoiceId = invoiceId, userPackServiceId = userPackServiceId)
+                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = amount, deductedAmount = amount, invoiceId = invoiceId, userPackServiceId = userPackServiceId)
                                     viewModel.billPaymentHelper?.let { billPayment ->
-                                        viewModel.saveNewPaymentFromBalance(billPayment)
+                                        val paymentConfirmDialog = CustomAlertDialog(object :
+                                            CustomAlertDialog.YesCallback {
+                                            override fun onYes() {
+                                                viewModel.saveNewPaymentFromBalance(billPayment)
+                                            }
+                                        }, "Are you sure to pay from your balance?", "")
+                                        paymentConfirmDialog.show(childFragmentManager, "#pay_from_balance_confirm_dialog")
                                     }
                                 } else if (userBalance != null && userBalance < amount) {
                                     val balanceAmount = amount - userBalance
@@ -172,11 +177,13 @@ class InvoiceFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
             adapter.submitList(pagedList)
         })
 
-        viewModel.toastPublisher.observe(viewLifecycleOwner, Observer { (isSuccess, message) ->
-            if (isSuccess) {
-                showSuccessToast(requireContext(), message)
-            } else {
-                showErrorToast(requireContext(), message)
+        viewModel.toastPublisher.observe(viewLifecycleOwner, Observer { pair ->
+            pair?.let {
+                if (it.first) {
+                    showSuccessToast(requireContext(), it.second)
+                } else {
+                    showErrorToast(requireContext(), it.second)
+                }
             }
         })
 
@@ -262,6 +269,7 @@ class InvoiceFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
         viewModel.fosterUrl.postValue(Pair(null, null))
         viewModel.hasBkashToken = false
         if (expanded) toggleExpanded()
+        viewModel.toastPublisher.postValue(null)
     }
 
     override fun onFosterPaymentFinished() {

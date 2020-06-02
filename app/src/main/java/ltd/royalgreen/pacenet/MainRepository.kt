@@ -9,6 +9,7 @@ import kotlinx.coroutines.withContext
 import ltd.royalgreen.pacenet.login.LoggedUserID
 import ltd.royalgreen.pacenet.login.LoginResponse
 import ltd.royalgreen.pacenet.network.ApiService
+import ltd.royalgreen.pacenet.util.DefaultResponse
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -27,6 +28,31 @@ class MainRepository @Inject constructor(private val apiService: ApiService, pri
 
         return withContext(Dispatchers.IO) {
             apiService.getuserisp(param)
+        }
+    }
+
+    suspend fun logoutRepo(): Response<DefaultResponse> {
+        val userLoggedData = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+        var userID = "0"
+        var ispToken = "cmdsX3NlY3JldF9hcGlfa2V5"
+
+        userLoggedData?.let {
+            userID = it.userID.toString()
+            it.ispToken?.let { token ->
+                ispToken = token
+            }
+        }
+        val jsonObject = JsonObject().apply {
+            addProperty("userId", userID)
+            addProperty("values", ispToken)
+        }
+
+        val body = JsonArray().apply {
+            add(jsonObject)
+        }
+
+        return withContext(Dispatchers.IO) {
+            apiService.loggedout(body)
         }
     }
 }

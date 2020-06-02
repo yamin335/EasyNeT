@@ -1,5 +1,6 @@
 package ltd.royalgreen.pacenet.billing
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -53,19 +54,28 @@ class BillingFragment : MainNavigationFragment(), Injectable {
     private val payHistFragment: PayHistFragment = PayHistFragment()
     private val invoiceFragment: InvoiceFragment = InvoiceFragment()
 
+    private var mainActivityCallback: MainActivityCallback? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivityCallback) {
+            mainActivityCallback = context
+        } else {
+            throw RuntimeException("$context must implement MainActivityCallback")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mainActivityCallback = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         // This callback will only be called when MyFragment is at least Started.
         requireActivity().onBackPressedDispatcher.addCallback(this, true) {
-            val exitDialog = CustomAlertDialog(object :
-                CustomAlertDialog.YesCallback {
-                override fun onYes() {
-                    viewModel.onAppExit(preferences)
-                    requireActivity().finish()
-                }
-            }, "Do you want to exit?", "")
-            exitDialog.show(parentFragmentManager, "#app_exit_dialog")
+            mainActivityCallback?.onAppExit()
         }
     }
 
@@ -141,15 +151,7 @@ class BillingFragment : MainNavigationFragment(), Injectable {
             }
 
             R.id.logout -> {
-                val exitDialog = CustomAlertDialog(object :
-                    CustomAlertDialog.YesCallback {
-                    override fun onYes() {
-                        viewModel.onLogOut(preferences)
-                        startActivity(Intent(requireActivity(), SplashActivity::class.java))
-                        requireActivity().finish()
-                    }
-                }, "Do you want to Sign Out?", "")
-                exitDialog.show(parentFragmentManager, "#sign_out_dialog")
+                mainActivityCallback?.onLogOut()
                 true
             }
             R.id.change_password -> {

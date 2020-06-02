@@ -1,6 +1,7 @@
 package ltd.royalgreen.pacenet.profile
 
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -14,10 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import ltd.royalgreen.pacenet.CustomAlertDialog
-import ltd.royalgreen.pacenet.MainNavigationFragment
-import ltd.royalgreen.pacenet.R
-import ltd.royalgreen.pacenet.SplashActivity
+import ltd.royalgreen.pacenet.*
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.ProfileFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
@@ -43,23 +41,32 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
         viewModelFactory
     }
 
+    private var mainActivityCallback: MainActivityCallback? = null
+
     private var binding by autoCleared<ProfileFragmentBinding>()
 
     private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivityCallback) {
+            mainActivityCallback = context
+        } else {
+            throw RuntimeException("$context must implement MainActivityCallback")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mainActivityCallback = null
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         // This callback will only be called when MyFragment is at least Started.
         requireActivity().onBackPressedDispatcher.addCallback(this, true) {
-            val exitDialog = CustomAlertDialog(object :
-                CustomAlertDialog.YesCallback {
-                override fun onYes() {
-                    viewModel.onAppExit(preferences)
-                    requireActivity().finish()
-                }
-            }, "Do you want to exit?", "")
-            exitDialog.show(childFragmentManager, "#app_exit_dialog")
+            mainActivityCallback?.onAppExit()
         }
     }
 
@@ -87,9 +94,14 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
 
         viewModel.userPackServiceList.observe(viewLifecycleOwner, Observer {
             it?.let {
-                val vmAdapter = UserPackServiceListAdapter(it)
+                val userPackServiceAdapter = UserPackServiceListAdapter(it, object : UserPackServiceListAdapter.ChangeButtonCallback {
+                    override fun onChangeClicked(userPackService: UserPackService) {
+                        val action = ProfileFragmentDirections.actionProfileFragmentToPackageChangeFragment()
+                        findNavController().navigate(action)
+                    }
+                })
                 binding.serviceRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 16))
-                binding.serviceRecycler.adapter = vmAdapter
+                binding.serviceRecycler.adapter = userPackServiceAdapter
             }
         })
         viewModel.prepareProfile()
@@ -133,15 +145,7 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.logout -> {
-                val exitDialog = CustomAlertDialog(object :
-                    CustomAlertDialog.YesCallback {
-                    override fun onYes() {
-                        viewModel.onLogOut(preferences)
-                        startActivity(Intent(requireActivity(), SplashActivity::class.java))
-                        requireActivity().finish()
-                    }
-                }, "Do you want to Sign Out?", "")
-                exitDialog.show(childFragmentManager, "#sign_out_dialog")
+                mainActivityCallback?.onLogOut()
                 true
             }
             R.id.change_password -> {

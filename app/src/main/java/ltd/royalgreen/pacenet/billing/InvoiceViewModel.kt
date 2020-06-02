@@ -59,8 +59,8 @@ class InvoiceViewModel @Inject constructor(val application: Application, private
 
     var billPaymentHelper: BillPaymentHelper? = null
 
-    val toastPublisher: MutableLiveData<Pair<Boolean, String>> by lazy {
-        MutableLiveData<Pair<Boolean, String>>()
+    val toastPublisher: MutableLiveData<Pair<Boolean, String>?> by lazy {
+        MutableLiveData<Pair<Boolean, String>?>()
     }
 
     init {

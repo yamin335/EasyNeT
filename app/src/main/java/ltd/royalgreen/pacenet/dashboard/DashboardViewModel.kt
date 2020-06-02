@@ -56,6 +56,7 @@ class DashboardViewModel @Inject constructor(private val application: Applicatio
         selectedType.value = type
         selectedMonth.value = month
         if (checkNetworkStatus(application)) {
+            apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
@@ -63,11 +64,14 @@ class DashboardViewModel @Inject constructor(private val application: Applicatio
             viewModelScope.launch(handler) {
                 when (val apiResponse = ApiResponse.create(repository.dashSessionChartRepo(month, type))) {
                     is ApiSuccessResponse -> {
+                        apiCallStatus.postValue("SUCCESS")
                         sessionChartData.postValue(apiResponse.body)
                     }
                     is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
                     }
                     is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
                     }
                 }
             }

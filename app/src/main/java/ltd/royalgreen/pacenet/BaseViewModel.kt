@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import ltd.royalgreen.pacenet.util.isNetworkAvailable
 import ltd.royalgreen.pacenet.util.showErrorToast
 

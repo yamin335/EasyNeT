@@ -17,7 +17,6 @@ import ltd.royalgreen.pacenet.dashboard.DashboardViewModel
 import ltd.royalgreen.pacenet.login.ContactFragmentViewModel
 import ltd.royalgreen.pacenet.login.ForgotPassDialogViewModel
 import ltd.royalgreen.pacenet.login.LoginViewModel
-import ltd.royalgreen.pacenet.profile.PackageAddViewModel
 import ltd.royalgreen.pacenet.profile.PackageChangeViewModel
 import ltd.royalgreen.pacenet.profile.ProfileViewModel
 import ltd.royalgreen.pacenet.support.ConversationDetailViewModel
@@ -51,6 +50,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ProfileViewModel::class)
     abstract fun bindProfileViewModel(profileViewModel: ProfileViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PackageChangeViewModel::class)
+    abstract fun bindPackageChangeViewModel(packageChangeViewModel: PackageChangeViewModel): ViewModel
 
 
     @Binds
@@ -92,16 +96,6 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SupportViewModel::class)
     abstract fun bindSupportViewModel(supportViewModel: SupportViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(PackageChangeViewModel::class)
-    abstract fun bindPackageChangeViewModel(packageChangeViewModel: PackageChangeViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(PackageAddViewModel::class)
-    abstract fun bindPackageAddViewModel(packageAddViewModel: PackageAddViewModel): ViewModel
 
     @Binds
     @IntoMap

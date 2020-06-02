@@ -16,7 +16,9 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
 
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, PaymentTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
+            viewModel.apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
+                viewModel.apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
             }
             viewModel.viewModelScope.launch(handler) {
@@ -33,10 +35,13 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
                             }
                             callback.onResult(tempTransactionList, null, 2)
                         }
+                        viewModel.apiCallStatus.postValue("SUCCESS")
                     }
                     is ApiEmptyResponse -> {
+                        viewModel.apiCallStatus.postValue("EMPTY")
                     }
                     is ApiErrorResponse -> {
+                        viewModel.apiCallStatus.postValue("ERROR")
                     }
                 }
             }
@@ -45,7 +50,9 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, PaymentTransaction>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
+            viewModel.apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
+                viewModel.apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
             }
             viewModel.viewModelScope.launch(handler) {
@@ -62,10 +69,13 @@ class PayHistDataSource(payHistViewModel: PayHistViewModel) : PageKeyedDataSourc
                             }
                             callback.onResult(tempTransactionList, params.key + 1)
                         }
+                        viewModel.apiCallStatus.postValue("SUCCESS")
                     }
                     is ApiEmptyResponse -> {
+                        viewModel.apiCallStatus.postValue("EMPTY")
                     }
                     is ApiErrorResponse -> {
+                        viewModel.apiCallStatus.postValue("ERROR")
                     }
                 }
             }

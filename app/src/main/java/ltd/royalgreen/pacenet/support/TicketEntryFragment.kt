@@ -6,6 +6,8 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -257,4 +259,25 @@ class TicketEntryFragment : MainNavigationFragment(), Injectable {
             binding.spinnerticketCategory.adapter = ticketCategoryAdapter
         })
     }
+
+    private fun drawPage(page: PdfDocument.Page) {
+        page.canvas.apply {
+
+            // units are in points (1/72 of an inch)
+            val titleBaseLine = 72f
+            val leftMargin = 54f
+
+            val paint = Paint()
+            paint.color = Color.BLACK
+            paint.textSize = 36f
+            drawText("Test Title", leftMargin, titleBaseLine, paint)
+
+            paint.textSize = 11f
+            drawText("Test paragraph", leftMargin, titleBaseLine + 25, paint)
+
+            paint.color = Color.BLUE
+            drawRect(100f, 100f, 172f, 172f, paint)
+        }
+    }
+
 }

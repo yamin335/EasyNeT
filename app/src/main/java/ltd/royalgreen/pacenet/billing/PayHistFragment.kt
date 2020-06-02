@@ -19,12 +19,11 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import ltd.royalgreen.pacenet.CustomAlertDialog
-import ltd.royalgreen.pacenet.LoggedUser
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.billing.bkash.BKashPaymentWebDialog
 import ltd.royalgreen.pacenet.billing.foster.FosterPaymentWebDialog
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
-import ltd.royalgreen.pacenet.databinding.BillingPaymentTabBinding
+import ltd.royalgreen.pacenet.databinding.BillingPaymentFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
 import ltd.royalgreen.pacenet.login.LoggedUserID
 import ltd.royalgreen.pacenet.util.*
@@ -47,7 +46,7 @@ class PayHistFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
         viewModelFactory
     }
 
-    private var binding by autoCleared<BillingPaymentTabBinding>()
+    private var binding by autoCleared<BillingPaymentFragmentBinding>()
     private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
 
     //For Payment History
@@ -65,17 +64,16 @@ class PayHistFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
         super.onCreate(savedInstanceState)
 
         toggle = TransitionInflater.from(requireContext()).inflateTransition(R.transition.search_bar_toogle)
-        // This callback will only be called when MyFragment is at least Started.
-        requireActivity().onBackPressedDispatcher.addCallback(this, true) {
-            val exitDialog = CustomAlertDialog(object :
-                CustomAlertDialog.YesCallback {
-                override fun onYes() {
-                    viewModel.onAppExit(preferences)
-                    requireActivity().finish()
-                }
-            }, "Do you want to exit?", "")
-            exitDialog.show(parentFragmentManager, "#app_exit_dialog")
-        }
+//        requireActivity().onBackPressedDispatcher.addCallback(this, true) {
+//            val exitDialog = CustomAlertDialog(object :
+//                CustomAlertDialog.YesCallback {
+//                override fun onYes() {
+//                    viewModel.onAppExit(preferences)
+//                    requireActivity().finish()
+//                }
+//            }, "Do you want to exit?", "")
+//            exitDialog.show(parentFragmentManager, "#app_exit_dialog")
+//        }
     }
 
     override fun onCreateView(
@@ -85,7 +83,7 @@ class PayHistFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.billing_payment_tab,
+            R.layout.billing_payment_fragment,
             container,
             false,
             dataBindingComponent
@@ -117,9 +115,15 @@ class PayHistFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
                             if (amount > 0.0) {
                                 val userBalance = viewModel.userBalance.value?.balanceAmount
                                 if ( userBalance != null && userBalance >= amount) {
-                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = 0.0, deductedAmount = amount, invoiceId = invoiceId, userPackServiceId = userPackServiceId)
+                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = amount, deductedAmount = amount, invoiceId = invoiceId, userPackServiceId = userPackServiceId)
                                     viewModel.billPaymentHelper?.let { billPayment ->
-                                        viewModel.saveNewPaymentFromBalance(billPayment)
+                                        val paymentConfirmDialog = CustomAlertDialog(object :
+                                            CustomAlertDialog.YesCallback {
+                                            override fun onYes() {
+                                                viewModel.saveNewPaymentFromBalance(billPayment)
+                                            }
+                                        }, "Are you sure to pay from your balance?", "")
+                                        paymentConfirmDialog.show(childFragmentManager, "#pay_from_balance_confirm_dialog")
                                     }
                                 } else if (userBalance != null && userBalance < amount) {
                                     val balanceAmount = amount - userBalance
@@ -169,11 +173,13 @@ class PayHistFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
             resetSearch()
         }
 
-        viewModel.toastPublisher.observe(viewLifecycleOwner, Observer { (isSuccess, message) ->
-            if (isSuccess) {
-                showSuccessToast(requireContext(), message)
-            } else {
-                showErrorToast(requireContext(), message)
+        viewModel.toastPublisher.observe(viewLifecycleOwner, Observer { pair ->
+            pair?.let {
+                if (it.first) {
+                    showSuccessToast(requireContext(), it.second)
+                } else {
+                    showErrorToast(requireContext(), it.second)
+                }
             }
         })
 
@@ -282,6 +288,7 @@ class PayHistFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
         viewModel.fosterUrl.postValue(Pair(null, null))
         viewModel.hasBkashToken = false
         if (expanded) toggleExpanded()
+        viewModel.toastPublisher.postValue(null)
     }
 
     private fun applyFilter() {

@@ -286,7 +286,7 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
             addProperty("username", user?.displayName)
             addProperty("transactionDate", today)
             addProperty("rechargeType", "From Balance")
-            addProperty("balanceAmount", billPaymentHelper.deductedAmount)
+            addProperty("balanceAmount", billPaymentHelper.balanceAmount)
             addProperty("particulars", "Payment by user existing balance")
             addProperty("isActive", true)
         }

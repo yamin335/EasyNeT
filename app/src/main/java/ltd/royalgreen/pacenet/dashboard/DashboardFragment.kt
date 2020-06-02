@@ -3,10 +3,10 @@ package ltd.royalgreen.pacenet.dashboard
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import androidx.activity.addCallback
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
@@ -24,10 +24,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import com.google.android.material.appbar.MaterialToolbar
-import ltd.royalgreen.pacenet.CustomAlertDialog
-import ltd.royalgreen.pacenet.MainNavigationFragment
-import ltd.royalgreen.pacenet.R
-import ltd.royalgreen.pacenet.SplashActivity
+import ltd.royalgreen.pacenet.*
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.DashboardFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
@@ -59,6 +56,8 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
 
     private var listener: DashItemInteractionListener? = null
 
+    private var mainActivityCallback: MainActivityCallback? = null
+
     interface DashItemInteractionListener {
         fun onDashItemClicked(navigation: String)
         fun setupToolbar(toolbar: MaterialToolbar)
@@ -69,13 +68,20 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
         if (context is DashItemInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement DashItemInteractionListener")
+            throw RuntimeException("$context must implement DashItemInteractionListener")
+        }
+
+        if (context is MainActivityCallback) {
+            mainActivityCallback = context
+        } else {
+            throw RuntimeException("$context must implement MainActivityCallback")
         }
     }
 
     override fun onDetach() {
         super.onDetach()
         listener = null
+        mainActivityCallback = null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,14 +89,7 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
         setHasOptionsMenu(true)
         // This callback will only be called when MyFragment is at least Started.
         requireActivity().onBackPressedDispatcher.addCallback(this, true) {
-            val exitDialog = CustomAlertDialog(object :
-                CustomAlertDialog.YesCallback {
-                override fun onYes() {
-                    viewModel.onAppExit(preferences)
-                    requireActivity().finish()
-                }
-            }, "Do you want to exit?", "")
-            exitDialog.show(parentFragmentManager, "#app_exit_dialog")
+            mainActivityCallback?.onAppExit()
         }
     }
 
@@ -210,6 +209,7 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
                 uploadLineDataSet.lineWidth = 2F
                 uploadLineDataSet.circleRadius = 4F
                 uploadLineDataSet.valueTextSize = 11F
+                uploadLineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
 
                 val downloadLineDataSet = LineDataSet(downloadList, "Download")
                 downloadLineDataSet.axisDependency = YAxis.AxisDependency.LEFT
@@ -218,6 +218,15 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
                 downloadLineDataSet.lineWidth = 2F
                 downloadLineDataSet.circleRadius = 4F
                 downloadLineDataSet.valueTextSize = 11F
+                downloadLineDataSet.mode = LineDataSet.Mode.CUBIC_BEZIER
+
+                // IMPORTANT!!!! DO NOT DELETE!!!!
+                // FillDrawable is only supported on api level 18 and higher
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+//                    downloadLineDataSet.setDrawFilled(true)
+//                    val fillGradient = ContextCompat.getDrawable(requireContext(), R.drawable.red_gradient)
+//                    downloadLineDataSet.fillDrawable = fillGradient
+//                }
 
                 val dataSets: ArrayList<ILineDataSet> = ArrayList()
                 dataSets.add(uploadLineDataSet)
@@ -225,6 +234,20 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
 
                 val data = LineData(dataSets)
                 binding.accountStatusChart.data = data
+
+                // IMPORTANT!!!! DO NOT DELETE!!!!
+                // get the paint renderer to create the line shading.
+//                val paint: Paint = binding.accountStatusChart.renderer.paintRender
+//                val height: Float = binding.accountStatusChart.height.toFloat()
+//
+//                val linearGradient = LinearGradient(
+//                    0F, 0F, 0F, height,
+//                    ContextCompat.getColor(requireContext(), R.color.colorGreenTheme),
+//                    ContextCompat.getColor(requireContext(), R.color.colorRed),
+//                    Shader.TileMode.REPEAT
+//                )
+//                paint.shader = linearGradient
+
                 binding.accountStatusChart.invalidate()
                 binding.accountStatusChart.animateX(900)
             }

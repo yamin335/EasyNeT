@@ -44,6 +44,9 @@ abstract class FragmentBuildersModule {
     abstract fun contributeServiceFragment(): ProfileFragment
 
     @ContributesAndroidInjector
+    abstract fun contributePackageChangeFragment(): PackageChangeFragment
+
+    @ContributesAndroidInjector
     abstract fun contributePaymentFragment(): BillingFragment
 
     @ContributesAndroidInjector
@@ -62,16 +65,10 @@ abstract class FragmentBuildersModule {
     abstract fun contributeTicketEntryFragment(): TicketEntryFragment
 
     @ContributesAndroidInjector
-    abstract fun contributePackageChangeFragment(): PackageChangeFragment
-
-    @ContributesAndroidInjector
     abstract fun contributePrivacyPolicyFragment(): PrivacyPolicyFragment
 
     @ContributesAndroidInjector
     abstract fun contributePrivacyContactFragment(): ContactFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributePackageAddFragment(): PackageAddFragment
 
     @ContributesAndroidInjector
     abstract fun contributeInvoiceDetailDialog(): InvoiceDetailDialog

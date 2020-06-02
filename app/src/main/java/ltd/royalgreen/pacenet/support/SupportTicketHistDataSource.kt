@@ -14,7 +14,9 @@ class SupportTicketHistDataSource(supportViewModel: SupportViewModel) : PageKeye
 
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, SupportTicket>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
+            viewModel.apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
+                viewModel.apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
             }
             viewModel.viewModelScope.launch(handler) {
@@ -24,10 +26,13 @@ class SupportTicketHistDataSource(supportViewModel: SupportViewModel) : PageKeye
                         if (!apiResponse.body.resdata?.listCrmIspTicket.isNullOrEmpty()) {
                             callback.onResult(apiResponse.body.resdata?.listCrmIspTicket!!, null, 2)
                         }
+                        viewModel.apiCallStatus.postValue("SUCCESS")
                     }
                     is ApiEmptyResponse -> {
+                        viewModel.apiCallStatus.postValue("EMPTY")
                     }
                     is ApiErrorResponse -> {
+                        viewModel.apiCallStatus.postValue("ERROR")
                     }
                 }
             }
@@ -36,7 +41,9 @@ class SupportTicketHistDataSource(supportViewModel: SupportViewModel) : PageKeye
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, SupportTicket>) {
         if (viewModel.checkNetworkStatus(viewModel.application)) {
+            viewModel.apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
+                viewModel.apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
             }
             viewModel.viewModelScope.launch(handler) {
@@ -46,10 +53,13 @@ class SupportTicketHistDataSource(supportViewModel: SupportViewModel) : PageKeye
                         if (!apiResponse.body.resdata?.listCrmIspTicket.isNullOrEmpty()) {
                             callback.onResult(apiResponse.body.resdata?.listCrmIspTicket!!, params.key + 1)
                         }
+                        viewModel.apiCallStatus.postValue("SUCCESS")
                     }
                     is ApiEmptyResponse -> {
+                        viewModel.apiCallStatus.postValue("EMPTY")
                     }
                     is ApiErrorResponse -> {
+                        viewModel.apiCallStatus.postValue("ERROR")
                     }
                 }
             }

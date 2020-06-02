@@ -61,8 +61,8 @@ class PayHistViewModel @Inject constructor(val application: Application, private
 
     var billPaymentHelper: BillPaymentHelper? = null
 
-    val toastPublisher: MutableLiveData<Pair<Boolean, String>> by lazy {
-        MutableLiveData<Pair<Boolean, String>>()
+    val toastPublisher: MutableLiveData<Pair<Boolean, String>?> by lazy {
+        MutableLiveData<Pair<Boolean, String>?>()
     }
 
     lateinit var paymentHistoryList: LiveData<PagedList<PaymentTransaction>>
@@ -109,6 +109,7 @@ class PayHistViewModel @Inject constructor(val application: Application, private
 
     fun getUserPackServiceList() {
         if (checkNetworkStatus(application)) {
+            apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
@@ -129,10 +130,13 @@ class PayHistViewModel @Inject constructor(val application: Application, private
                                 }
                             }
                         }
+                        apiCallStatus.postValue("SUCCESS")
                     }
                     is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
                     }
                     is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
                     }
                 }
             }

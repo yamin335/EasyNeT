@@ -39,6 +39,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:context="onair.onmessanger.MessageListActivity">
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:id="@+id/loaderr"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="-6dp"
+                    android:layout_height="15dp"
+                    android:indeterminate="true"
+                    app:showLoader="@{viewModel.apiCallStatus}"/>
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/header"
                     android:orientation="vertical"
@@ -108,7 +118,7 @@
                         android:layout_marginBottom="8dp"
                         android:drawableStart="@drawable/ic_extension_black_24dp"
                         android:drawablePadding="4dp"
-                        android:text="Category :"
+                        android:text="Category:"
                         android:textColor="@color/customColor10"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -142,7 +152,7 @@
                         android:layout_marginBottom="8dp"
                         android:drawableStart="@drawable/ic_receipt_black_24dp"
                         android:drawablePadding="4dp"
-                        android:text="Subject :"
+                        android:text="Subject:"
                         android:textColor="@color/customColor10"
                         android:textSize="16sp"
                         android:textStyle="bold"
@@ -209,16 +219,6 @@
                     android:layout_above="@id/footer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-
-                <ProgressBar
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:id="@+id/loader"
-                    android:layout_width="match_parent"
-                    android:layout_marginBottom="-7dp"
-                    android:layout_height="15dp"
-                    android:indeterminate="true"
-                    android:layout_above="@id/footer"
-                    app:showLoader="@{viewModel.apiCallStatus}"/>
 
                 <LinearLayout
                     android:id="@+id/footer"

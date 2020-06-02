@@ -1,6 +1,7 @@
 package ltd.royalgreen.pacenet.support
 
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -17,10 +18,7 @@ import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.LinearLayoutManager
-import ltd.royalgreen.pacenet.CustomAlertDialog
-import ltd.royalgreen.pacenet.MainNavigationFragment
-import ltd.royalgreen.pacenet.R
-import ltd.royalgreen.pacenet.SplashActivity
+import ltd.royalgreen.pacenet.*
 import ltd.royalgreen.pacenet.billing.PayHistDataSource
 import ltd.royalgreen.pacenet.billing.PaymentListAdapter
 import ltd.royalgreen.pacenet.billing.PaymentTransaction
@@ -61,19 +59,28 @@ class SupportFragment : MainNavigationFragment(), Injectable {
     //For Support Ticket History
     private lateinit var adapter: SupportTicketListAdapter
 
+    private var mainActivityCallback: MainActivityCallback? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is MainActivityCallback) {
+            mainActivityCallback = context
+        } else {
+            throw RuntimeException("$context must implement MainActivityCallback")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        mainActivityCallback = null
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         // This callback will only be called when MyFragment is at least Started.
         requireActivity().onBackPressedDispatcher.addCallback(this, true) {
-            val exitDialog = CustomAlertDialog(object :
-                CustomAlertDialog.YesCallback {
-                override fun onYes() {
-                    viewModel.onAppExit(preferences)
-                    requireActivity().finish()
-                }
-            }, "Do you want to exit?", "")
-            exitDialog.show(parentFragmentManager, "#app_exit_dialog")
+            mainActivityCallback?.onAppExit()
         }
     }
 
@@ -97,6 +104,7 @@ class SupportFragment : MainNavigationFragment(), Injectable {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
         binding.newTicket.setOnClickListener {
             val action = SupportFragmentDirections.actionSupportFragmentToTicketEntryFragment()
@@ -146,15 +154,7 @@ class SupportFragment : MainNavigationFragment(), Injectable {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.logout -> {
-                val exitDialog = CustomAlertDialog(object :
-                    CustomAlertDialog.YesCallback {
-                    override fun onYes() {
-                        viewModel.onLogOut(preferences)
-                        startActivity(Intent(requireActivity(), SplashActivity::class.java))
-                        requireActivity().finish()
-                    }
-                }, "Do you want to Sign Out?", "")
-                exitDialog.show(parentFragmentManager, "#sign_out_dialog")
+                mainActivityCallback?.onLogOut()
                 true
             }
             R.id.change_password -> {

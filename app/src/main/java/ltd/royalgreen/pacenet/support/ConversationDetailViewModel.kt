@@ -89,6 +89,7 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
 
     fun getTicketConversation(id: Long) {
         if (checkNetworkStatus(application)) {
+            apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
@@ -102,10 +103,13 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
                         ticketStatus.postValue(apiResponse.body.resdata?.objCrmIspTicket?.status)
                         ticketSubject.postValue(apiResponse.body.resdata?.objCrmIspTicket?.ticketSummary)
                         ticketCategory.postValue(apiResponse.body.resdata?.objCrmIspTicket?.ticketCategory)
+                        apiCallStatus.postValue("SUCCESS")
                     }
                     is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
                     }
                     is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
                     }
                 }
             }

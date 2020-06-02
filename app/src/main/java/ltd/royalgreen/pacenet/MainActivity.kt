@@ -1,5 +1,6 @@
 package ltd.royalgreen.pacenet
 
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,11 +22,13 @@ import ltd.royalgreen.pacenet.databinding.MainActivityBinding
 import ltd.royalgreen.pacenet.network.ApiService
 import ltd.royalgreen.pacenet.network.NetworkStatusDialog
 import ltd.royalgreen.pacenet.util.setupWithNavController
+import ltd.royalgreen.pacenet.util.showErrorToast
+import ltd.royalgreen.pacenet.util.showSuccessToast
 import javax.inject.Inject
 
 const val SHARED_PREFS_KEY = "%*APP_DEFAULT_KEY*%"
 
-class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, DashboardFragment.DashItemInteractionListener {
+class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, DashboardFragment.DashItemInteractionListener, MainActivityCallback {
 
     @Inject
     lateinit var apiService: ApiService
@@ -72,6 +75,11 @@ class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, Da
 
     override fun androidInjector() = dispatchingAndroidInjector
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.onAppExit(preferences)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -86,6 +94,17 @@ class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, Da
 //        viewModel.userBalance.observe(this, Observer { balance ->
 //            nav_view.getHeaderView(0).loggedUserBalance.text = BigDecimal(balance.resdata?.billCloudUserBalance?.balanceAmount?.toDouble()?:0.00).setScale(2, RoundingMode.HALF_UP).toString()
 //        })
+
+        viewModel.isLoggedOut.observe(this, Observer {(logout, message) ->
+            if (logout) {
+                viewModel.onLogOut(preferences)
+                showSuccessToast(this, message)
+                startActivity(Intent(this, SplashActivity::class.java))
+                finish()
+            } else if (!message.isBlank()) {
+                showErrorToast(this, message)
+            }
+        })
 
         exitDialog = NetworkStatusDialog(object : NetworkStatusDialog.NetworkChangeCallback {
             override fun onExit() {
@@ -103,46 +122,6 @@ class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, Da
                     exitDialog.show(supportFragmentManager, "#net_status_dialog")
             }
         })
-
-//        viewModel.apiCallStatus.observe(this, Observer {
-//            val parent: ViewGroup? = null
-//            when(it) {
-//                ApiCallStatus.SUCCESS -> Log.d("Successful", "Nothing to do")
-//                ApiCallStatus.ERROR -> {
-//                    val toast = Toast.makeText(this@MainActivity, "", Toast.LENGTH_LONG)
-//                    val inflater = this@MainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//                    val toastView = inflater.inflate(R.layout.toast_custom_red, parent)
-//                    toastView.message.text = this@MainActivity.getString(R.string.error_msg)
-//                    toast.view = toastView
-//                    toast.show()
-//                }
-//                ApiCallStatus.NO_DATA -> {
-//                    val toast = Toast.makeText(this@MainActivity, "", Toast.LENGTH_LONG)
-//                    val inflater = this@MainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//                    val toastView = inflater.inflate(R.layout.toast_custom_red, parent)
-//                    toastView.message.text = this@MainActivity.getString(R.string.no_data_msg)
-//                    toast.view = toastView
-//                    toast.show()
-//                }
-//                ApiCallStatus.EMPTY -> {
-//                    val toast = Toast.makeText(this@MainActivity, "", Toast.LENGTH_LONG)
-//                    val inflater = this@MainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//                    val toastView = inflater.inflate(R.layout.toast_custom_red, parent)
-//                    toastView.message.text = this@MainActivity.getString(R.string.empty_msg)
-//                    toast.view = toastView
-//                    toast.show()
-//                }
-//                ApiCallStatus.TIMEOUT -> {
-//                    val toast = Toast.makeText(this@MainActivity, "", Toast.LENGTH_LONG)
-//                    val inflater = this@MainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//                    val toastView = inflater.inflate(R.layout.toast_custom_red, parent)
-//                    toastView.message.text = this@MainActivity.getString(R.string.timeout_msg)
-//                    toast.view = toastView
-//                    toast.show()
-//                }
-//                else -> Log.d("NOTHING", "Nothing to do")
-//            }
-//        })
 
         if (savedInstanceState == null) {
             viewModel.getLoggedUserData()
@@ -278,6 +257,27 @@ class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, Da
         currentNavController?.value?.let {
             setupActionBarWithNavController(it)
         }
+    }
+
+    override fun onLogOut() {
+        val exitDialog = CustomAlertDialog(object :
+            CustomAlertDialog.YesCallback {
+            override fun onYes() {
+                viewModel.doLogOut()
+            }
+        }, "Do you want to Sign Out?", "")
+        exitDialog.show(supportFragmentManager, "#sign_out_dialog")
+    }
+
+    override fun onAppExit() {
+        val exitDialog = CustomAlertDialog(object :
+            CustomAlertDialog.YesCallback {
+            override fun onYes() {
+                viewModel.onAppExit(preferences)
+                finish()
+            }
+        }, "Do you want to exit?", "")
+        exitDialog.show(supportFragmentManager, "#app_exit_dialog")
     }
 
 }

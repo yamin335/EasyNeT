@@ -76,6 +76,7 @@ class TicketEntryViewModel @Inject constructor(private val application: Applicat
     fun getTicketCategory(): MutableLiveData<ArrayList<TicketCategory>> {
         val ticketCategories = MutableLiveData<ArrayList<TicketCategory>>()
         if (checkNetworkStatus(application)) {
+            apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
@@ -84,10 +85,13 @@ class TicketEntryViewModel @Inject constructor(private val application: Applicat
                 when (val apiResponse = ApiResponse.create(repository.ticketCategoryRepo())) {
                     is ApiSuccessResponse -> {
                         ticketCategories.postValue(apiResponse.body.resdata?.listTicketCategory)
+                        apiCallStatus.postValue("SUCCESS")
                     }
                     is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
                     }
                     is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
                     }
                 }
             }
