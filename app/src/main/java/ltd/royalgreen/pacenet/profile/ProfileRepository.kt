@@ -16,25 +16,24 @@ import javax.inject.Singleton
 
 @Singleton
 class ProfileRepository @Inject constructor(private val apiService: ApiService, private val preferences: SharedPreferences) {
-    suspend fun userPackageRepo(): Response<UserPackageResponse> {
-        val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+//    suspend fun userPackageRepo(): Response<UserPackageResponse> {
+//        val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
+//        val jsonObject = JsonObject().apply {
+//            addProperty("id", user.userID)
+//        }
+//
+//        val param = JsonArray().apply {
+//            add(jsonObject)
+//        }.toString()
+//
+//        return withContext(Dispatchers.IO) {
+//            apiService.getispuserpackservices(param)
+//        }
+//    }
+
+    suspend fun packageServiceRepo(): Response<PackServiceResponse> {
         val jsonObject = JsonObject().apply {
-            addProperty("id", user.userID)
-        }
-
-        val param = JsonArray().apply {
-            add(jsonObject)
-        }.toString()
-
-        return withContext(Dispatchers.IO) {
-            apiService.getispuserpackservices(param)
-        }
-    }
-
-    suspend fun packageServiceRepo(): Response<PackageServiceResponse> {
-        val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
-        val jsonObject = JsonObject().apply {
-            addProperty("id", user.userID)
+            addProperty("id", 0)
         }
 
         val param = JsonArray().apply {

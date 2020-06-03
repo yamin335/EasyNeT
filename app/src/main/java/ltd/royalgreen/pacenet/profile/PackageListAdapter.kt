@@ -10,7 +10,7 @@ import ltd.royalgreen.pacenet.R
 
 
 class PackageListAdapter internal constructor
-    (private val packageList: ArrayList<PackageService>,
+    (private val packageList: ArrayList<ChildPackService>,
      private val listener: OnItemSelectListener
 ) : RecyclerView.Adapter<PackageListAdapter.PackageListViewHolder>() {
 
@@ -28,11 +28,11 @@ class PackageListAdapter internal constructor
     }
 
     interface OnItemSelectListener {
-        fun onItemClicked(packageService: PackageService)
+        fun onItemClicked(packService: ChildPackService)
     }
 
     inner class PackageListViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: PackageService) {
+        fun bind(item: ChildPackService) {
             itemView.packageName.text = item.packServiceName
             itemView.packagePrice.text = item.packServicePrice.toString()
             itemView.setOnClickListener {

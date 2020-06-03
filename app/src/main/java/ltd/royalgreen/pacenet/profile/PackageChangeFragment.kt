@@ -1,6 +1,5 @@
 package ltd.royalgreen.pacenet.profile
 
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,13 +8,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import ltd.royalgreen.pacenet.MainNavigationFragment
 
 import ltd.royalgreen.pacenet.R
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.ProfilePackageChangeFragmentBinding
 import ltd.royalgreen.pacenet.support.TicketEntryViewModel
+import ltd.royalgreen.pacenet.util.RecyclerItemDivider
 import ltd.royalgreen.pacenet.util.autoCleared
 import javax.inject.Inject
 
@@ -54,6 +57,20 @@ class PackageChangeFragment : MainNavigationFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
-    }
 
+        viewModel.packServiceList.observe(viewLifecycleOwner, Observer { packList ->
+            packList?.let {
+                val adapter = PackageListAdapter(it as ArrayList<ChildPackService>, object : PackageListAdapter.OnItemSelectListener {
+                    override fun onItemClicked(packService: ChildPackService) {
+
+                    }
+                })
+                binding.packRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 16))
+                binding.packRecycler.adapter = adapter
+            }
+        })
+
+        viewModel.getUserBalance()
+        viewModel.getAllPackService()
+    }
 }
