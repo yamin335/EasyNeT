@@ -43,6 +43,10 @@ fun Double.toRounded(digit: Int): Double {
     return BigDecimal(this).setScale(digit, RoundingMode.HALF_UP).toDouble()
 }
 
+inline fun<T> T?.returnIfNull(nullClause: () -> Nothing): T {
+    return this ?: nullClause()
+}
+
 fun String.formatDateTime(): Pair<String, String> {
     val months = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
     val formattedDateTime: Pair<String, String>

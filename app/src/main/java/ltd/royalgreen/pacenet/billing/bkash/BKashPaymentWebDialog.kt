@@ -149,7 +149,7 @@ class BKashPaymentWebDialog internal constructor(
         // Handle event from the web page
         @JavascriptInterface
         fun createPayment() {
-            viewModel.createBkashCheckout(paymentRequest, createBkash)
+            viewModel.createBkashCheckout(paymentRequest, createBkash, billPaymentHelper)
             viewModel.bkashToken = createBkash.authToken
         }
 

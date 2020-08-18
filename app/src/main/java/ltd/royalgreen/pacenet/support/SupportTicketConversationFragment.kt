@@ -162,7 +162,7 @@ class SupportTicketConversationFragment : MainNavigationFragment(), Injectable {
 
         binding.send.setOnClickListener {
             viewModel.entryNewComment(args.ispTicketId.toString()).observe(viewLifecycleOwner, Observer {
-                if (it.resdata.resstate == true) {
+                if (it.resdata?.resstate == true) {
                     viewModel.getTicketConversation(args.ispTicketId)
                     viewModel.fileUriList.clear()
                     fileUriList.clear()

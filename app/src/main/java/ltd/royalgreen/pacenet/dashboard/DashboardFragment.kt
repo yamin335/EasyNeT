@@ -138,16 +138,8 @@ class DashboardFragment : MainNavigationFragment(), Injectable {
             listener?.onDashItemClicked("PROFILE")
         }
 
-        binding.payNow.setOnClickListener {
-            listener?.onDashItemClicked("PAY_NOW")
-        }
-
         binding.payHistory.setOnClickListener {
             listener?.onDashItemClicked("PAY_HISTORY")
-        }
-
-        binding.openTicket.setOnClickListener {
-            listener?.onDashItemClicked("OPEN_TICKET")
         }
 
         binding.ticketHistory.setOnClickListener {

@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,11 +37,26 @@ class ContactFragment : MainNavigationFragment() {
     private var binding by autoCleared<ContactFragmentBinding>()
     private var dataBindingComponent: DataBindingComponent = FragmentDataBindingComponent(this)
 
+    private var windowConfig: Int? = null
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        if (windowConfig != null) {
+            requireActivity().window.decorView.systemUiVisibility = windowConfig!!
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        //For dark status bar color
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val uiOptions = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            windowConfig = requireActivity().window.decorView.systemUiVisibility
+            requireActivity().window.decorView.systemUiVisibility = uiOptions
+        }
+
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater,

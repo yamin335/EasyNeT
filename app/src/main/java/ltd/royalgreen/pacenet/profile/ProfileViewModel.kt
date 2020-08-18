@@ -19,9 +19,10 @@ import ltd.royalgreen.pacenet.network.ApiResponse
 import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 import ltd.royalgreen.pacenet.util.formatDateTime
 import java.util.*
+import java.util.function.Consumer
 import javax.inject.Inject
 
-class ProfileViewModel @Inject constructor(private val application: Application, private val repository: ProfileRepository, private val billingRepository: BillingRepository, private val preferences: SharedPreferences) : BaseViewModel() {
+class ProfileViewModel @Inject constructor(private val application: Application, private val repository: ProfileRepository, private val billingRepository: BillingRepository, private val preferences: SharedPreferences) : BaseViewModel(application) {
     val name: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
@@ -48,6 +49,11 @@ class ProfileViewModel @Inject constructor(private val application: Application,
 
     val userPackServiceList = MutableLiveData<MutableList<UserPackService>>()
 
+    val consumeData = MutableLiveData<ConsumeData>()
+
+    var changingUserPackage: UserPackService? = null
+
+    var userConnectionId: Int? = null
     init {
         Log.d("P-VIEWMODEL--> ", "${Random().nextInt(8)+1}")
     }
@@ -74,7 +80,7 @@ class ProfileViewModel @Inject constructor(private val application: Application,
     }
 
     fun getUserBalance() {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -105,7 +111,7 @@ class ProfileViewModel @Inject constructor(private val application: Application,
     }
 
     fun getUserPackServiceList() {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -122,10 +128,41 @@ class ProfileViewModel @Inject constructor(private val application: Application,
                                     val packService = Gson().fromJson(jsonArray[0], UserPackServiceList::class.java)
                                     packService.packList?.let { list ->
                                         mutableDeploymentList.addAll(list)
-                                        userPackServiceList.postValue(mutableDeploymentList)
+                                        val connectionId = packService.userConnectionId
+                                        if (connectionId != null) {
+                                            userPackServiceList.postValue(mutableDeploymentList)
+                                            userConnectionId = connectionId
+                                        }
                                     }
                                 }
                             }
+                        }
+                        apiCallStatus.postValue("SUCCESS")
+                    }
+                    is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
+                    }
+                    is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
+                    }
+                }
+            }
+        }
+    }
+
+    fun getConsumeData(userPackServiceId: Int) {
+        if (checkNetworkStatus()) {
+            apiCallStatus.postValue("LOADING")
+            val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
+                exception.printStackTrace()
+            }
+            viewModelScope.launch(handler) {
+                when (val apiResponse = ApiResponse.create(repository.getConsumeDataRepo(userPackServiceId))) {
+                    is ApiSuccessResponse -> {
+                        val response = apiResponse.body.resdata
+                        response.let {
+                            consumeData.postValue(response)
                         }
                         apiCallStatus.postValue("SUCCESS")
                     }

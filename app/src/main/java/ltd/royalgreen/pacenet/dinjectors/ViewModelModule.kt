@@ -17,6 +17,8 @@ import ltd.royalgreen.pacenet.dashboard.DashboardViewModel
 import ltd.royalgreen.pacenet.login.ContactFragmentViewModel
 import ltd.royalgreen.pacenet.login.ForgotPassDialogViewModel
 import ltd.royalgreen.pacenet.login.LoginViewModel
+import ltd.royalgreen.pacenet.pgw.BKashPGWViewModel
+import ltd.royalgreen.pacenet.pgw.FosterPGWViewModel
 import ltd.royalgreen.pacenet.profile.PackageChangeViewModel
 import ltd.royalgreen.pacenet.profile.ProfileViewModel
 import ltd.royalgreen.pacenet.support.ConversationDetailViewModel
@@ -106,6 +108,16 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(InvoiceDetailViewModel::class)
     abstract fun bindInvoiceDetailViewModel(invoiceDetailViewModel: InvoiceDetailViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(BKashPGWViewModel::class)
+    abstract fun bindBKashPGWViewModel(bKashPGWViewModel: BKashPGWViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FosterPGWViewModel::class)
+    abstract fun bindFosterPGWViewModel(fosterPGWViewModel: FosterPGWViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: PaceNetViewModelFactory): ViewModelProvider.Factory

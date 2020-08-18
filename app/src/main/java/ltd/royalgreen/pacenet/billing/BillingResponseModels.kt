@@ -47,7 +47,9 @@ data class BillPaymentHelper(
     val balanceAmount: Double,
     val deductedAmount: Double,
     val invoiceId : Int,
-    val userPackServiceId : Int
+    val userPackServiceId : Int,
+    val canModify: Boolean,
+    val isChildInvoice: Boolean = false
 )
 
 
@@ -63,7 +65,7 @@ data class InvoiceResdata(
 )
 
 data class Invoice(
-    val ispInvoiceId: Int?, val ispUserID: Int?, val userPackServiceId: Int?,
+    val ispInvoiceParentId: Int?, val ispUserID: Int?,
     val fullName: String?, val emailAddr: String?, val address: String?, val phoneNumber: String?,
     val userCode: String?, val invoiceNo: String?, val genMonth: String?, val invoiceDate: String?,
     val invoiceTotal: Double?, val taxAmount: Double?, val discountAmount: Double?, val dueAmount: Double?,
@@ -88,6 +90,25 @@ data class InvoiceDetail(
     val packageName: String?,
     val packagePrice : Double?
 )
+
+//Child Invoice Models
+data class ChildInvoiceResponse(
+    val resdata : ChildInvoiceResdata?
+)
+
+data class ChildInvoiceResdata(
+    val userChildInvoiceDetail : String?
+)
+
+data class ChildInvoice(val ispInvoiceParentId: Int?, val ispInvoiceId: Int?,
+                        val ispUserID: Int?, val userPackServiceId: Int?,
+                        val packageId: Int?, val packageName: String?, val fullName: String?,
+                        val emailAddr: String?, val address: String?, val phoneNumber: String?,
+                        val userCode: String?, val invoiceNo: String?, val genMonth: String?,
+                        val invoiceDate: String?, val invoiceTotal: Double?, val taxAmount: Double?,
+                        val discountAmount: Double?, val dueAmount: Double?, val grandTotal: Double?,
+                        val isPaid: Boolean?, val fromDate: String?, val toDate: String?,
+                        val createDate: String?, val dueAmountInWord: String?)
 
 // User Balance Models
 data class UserBalanceResponse(

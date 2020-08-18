@@ -19,5 +19,15 @@
     <fragment
         android:id="@+id/packageChangeFragment"
         android:name="ltd.royalgreen.pacenet.profile.PackageChangeFragment"
-        android:label="Change Package" />
+        android:label="Change Package" >
+        <argument
+            android:name="ChangingUserPackService"
+            app:argType="ltd.royalgreen.pacenet.profile.UserPackService" />
+        <argument
+            android:name="UserConnectionId"
+            app:argType="integer" />
+        <argument
+            android:name="ConsumeData"
+            app:argType="ltd.royalgreen.pacenet.profile.ConsumeData" />
+    </fragment>
 </navigation>

@@ -7,7 +7,7 @@ import ltd.royalgreen.pacenet.BaseViewModel
 import ltd.royalgreen.pacenet.network.*
 import javax.inject.Inject
 
-class ForgotPassDialogViewModel @Inject constructor(app: Application) : BaseViewModel() {
+class ForgotPassDialogViewModel @Inject constructor(app: Application) : BaseViewModel(app) {
 
     @Inject
     lateinit var apiService: ApiService

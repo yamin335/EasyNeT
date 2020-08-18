@@ -11,7 +11,8 @@ import ltd.royalgreen.pacenet.util.formatDateTime
 
 
 class UserPackServiceListAdapter internal constructor(
-    private val packServiceList: MutableList<UserPackService>, private val listener: ChangeButtonCallback
+    private val packServiceList: MutableList<UserPackService>,
+    private val listener: ChangeButtonCallback
 ) : RecyclerView.Adapter<UserPackServiceListAdapter.UserPackServiceViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserPackServiceViewHolder {

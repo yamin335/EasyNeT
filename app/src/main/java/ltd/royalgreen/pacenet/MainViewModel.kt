@@ -12,7 +12,7 @@ import ltd.royalgreen.pacenet.network.*
 import ltd.royalgreen.pacenet.util.ConnectivityLiveData
 import javax.inject.Inject
 
-class MainViewModel @Inject constructor(private val application: Application, private val repository: MainRepository) : BaseViewModel() {
+class MainViewModel @Inject constructor(private val application: Application, private val repository: MainRepository) : BaseViewModel(application) {
 
     @Inject
     lateinit var preferences: SharedPreferences
@@ -24,7 +24,7 @@ class MainViewModel @Inject constructor(private val application: Application, pr
     }
 
     fun doLogOut() {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -34,7 +34,7 @@ class MainViewModel @Inject constructor(private val application: Application, pr
                 when (val apiResponse = ApiResponse.create(repository.logoutRepo())) {
                     is ApiSuccessResponse -> {
                         val response = apiResponse.body.resdata
-                        isLoggedOut.postValue(Pair(response.resstate ?: false, response.message))
+                        isLoggedOut.postValue(Pair(response?.resstate ?: false, response?.message ?: "Try again later!"))
                         apiCallStatus.postValue("SUCCESS")
                     }
                     is ApiEmptyResponse -> {
@@ -49,7 +49,7 @@ class MainViewModel @Inject constructor(private val application: Application, pr
     }
 
     fun getLoggedUserData() {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()

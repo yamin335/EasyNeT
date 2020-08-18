@@ -21,7 +21,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 
-class TicketEntryViewModel @Inject constructor(private val application: Application, private val repository: SupportRepository) : BaseViewModel() {
+class TicketEntryViewModel @Inject constructor(private val application: Application, private val repository: SupportRepository) : BaseViewModel(application) {
 
     val selectedTicketCategory: MutableLiveData<TicketCategory> by lazy {
         MutableLiveData<TicketCategory>()
@@ -41,7 +41,7 @@ class TicketEntryViewModel @Inject constructor(private val application: Applicat
 
     fun entryNewTicket(): MutableLiveData<DefaultResponse> {
         val result = MutableLiveData<DefaultResponse>()
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -75,7 +75,7 @@ class TicketEntryViewModel @Inject constructor(private val application: Applicat
 
     fun getTicketCategory(): MutableLiveData<ArrayList<TicketCategory>> {
         val ticketCategories = MutableLiveData<ArrayList<TicketCategory>>()
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")

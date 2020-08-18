@@ -72,11 +72,25 @@ class InvoiceDetailDialog internal constructor(private val callBack: InvoiceDeta
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-        viewModel.getInvoiceDetail(invoice.fromDate ?: "", invoice.toDate ?: "",
-            invoice.createDate ?: "", invoice.ispInvoiceId ?: 0,
-            invoice.userPackServiceId ?: 0).observe(viewLifecycleOwner, Observer {
-            it?.let { detailList ->
-                val adapter = InvoiceDetailListAdapter(detailList)
+//        viewModel.getInvoiceDetail(invoice.fromDate ?: "", invoice.toDate ?: "",
+//            invoice.createDate ?: "", invoice.ispInvoiceId ?: 0,
+//            invoice.userPackServiceId ?: 0).observe(viewLifecycleOwner, Observer {
+//            it?.let { detailList ->
+//                val adapter = InvoiceDetailListAdapter(detailList)
+//                binding.particularsRecycler.adapter = adapter
+//            }
+//        })
+
+        viewModel.getChildInvoice(invoice.fromDate ?: "",
+            invoice.toDate ?: "", invoice.createDate ?: "",
+            invoice.ispInvoiceParentId ?: 0).observe(viewLifecycleOwner, Observer {
+            it?.let { childList ->
+                val adapter = ChildInvoiceListAdapter(childList, object :
+                    ChildInvoiceListAdapter.PayCallback {
+                    override fun onPay(invoiceId: Int, userPackServiceId: Int, amount: Double, isChild: Boolean) {
+                        callBack.onPayBill(invoiceId, userPackServiceId, amount, isChild)
+                    }
+                })
                 binding.particularsRecycler.adapter = adapter
             }
         })
@@ -107,14 +121,14 @@ class InvoiceDetailDialog internal constructor(private val callBack: InvoiceDeta
         }
 
         binding.payBill.setOnClickListener {
-            if (invoice.ispInvoiceId != null && invoice.userPackServiceId != null && invoice.dueAmount != null) {
-                callBack.onPayBill(invoice.ispInvoiceId, invoice.userPackServiceId, invoice.dueAmount)
+            if (invoice.ispInvoiceParentId != null && invoice.dueAmount != null) {
+                callBack.onPayBill(invoice.ispInvoiceParentId, 0, invoice.dueAmount, isChild = false)
             }
             dismiss()
         }
     }
 
     interface InvoiceDetailCallback{
-        fun onPayBill(invoiceId: Int, userPackServiceId: Int, amount: Double)
+        fun onPayBill(invoiceId: Int, userPackServiceId: Int, amount: Double, isChild: Boolean)
     }
 }

@@ -31,7 +31,7 @@
                 android:background="@color/colorWhite"
                 android:theme="@style/AppTheme.AppBarOverlay"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:titleTextColor="@color/colorPrimaryLight" />
+                app:titleTextColor="@color/colorGreenTheme" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

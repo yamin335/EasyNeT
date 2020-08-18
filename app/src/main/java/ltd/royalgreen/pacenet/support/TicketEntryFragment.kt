@@ -168,11 +168,11 @@ class TicketEntryFragment : MainNavigationFragment(), Injectable {
 
         binding.submit.setOnClickListener {
             viewModel.entryNewTicket().observe(viewLifecycleOwner, Observer {
-                if (it != null && it.resdata.resstate == true) {
-                    showSuccessToast(requireContext(), it.resdata.message)
+                if (it != null && it.resdata?.resstate == true) {
+                    showSuccessToast(requireContext(), it.resdata.message ?: "Successful")
                     findNavController().popBackStack()
                 } else {
-                    showErrorToast(requireContext(), it.resdata.message)
+                    showErrorToast(requireContext(), it.resdata?.message ?: "Not Successful!")
                 }
             })
         }

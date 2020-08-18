@@ -6,7 +6,9 @@ import ltd.royalgreen.pacenet.billing.*
 import ltd.royalgreen.pacenet.dashboard.DashSessionResponse
 import ltd.royalgreen.pacenet.dashboard.DashboardChart
 import ltd.royalgreen.pacenet.login.LoginResponse
+import ltd.royalgreen.pacenet.profile.ConsumeDataResponse
 import ltd.royalgreen.pacenet.profile.PackServiceResponse
+import ltd.royalgreen.pacenet.profile.PayMethodResponse
 import ltd.royalgreen.pacenet.profile.UserPackServiceResponse
 import ltd.royalgreen.pacenet.support.SupportTicketResponse
 import ltd.royalgreen.pacenet.support.TicketCategoryResponse
@@ -126,9 +128,25 @@ interface ApiService {
     @GET("/api/ispuser/getprofileuserbyid")
     suspend fun getprofileuserbyid(@Query("param") param: String): Response<UserPackServiceResponse>
 
+    //API FOR PACKAGE CHANGE CONSUME DATA
+    @GET("/api/ispuser/getuserpackserviceconsumdata")
+    suspend fun getuserpackserviceconsumdata(@Query("param") param: String): Response<ConsumeDataResponse>
+
+    //API FOR PACKAGE CHANGE PAYMENT METHOD
+    @GET("/api/dropdown/getisppaymentmethod")
+    suspend fun getisppaymentmethod(@Query("param") param: String): Response<PayMethodResponse>
+
+    //API FOR PACKAGE CHANGE SAVE
+    @POST("/api/ispportal/saveupdatesingleuserpackserivce")
+    suspend fun saveupdatesingleuserpackserivce(@Body jsonArray: JsonArray): Response<DefaultResponse>
+
     //API FOR USER INVOICE DETAILS
     @GET("/api/ispuser/getispuserinvocedetail")
     suspend fun getispuserinvocedetail(@Query("param") param: String): Response<InvoiceDetailResponse>
+
+    //API FOR USER CHILD INVOICE
+    @GET("/api/ispportal/getallispchildinvdetailsbyusrid")
+    suspend fun getallispchildinvdetailsbyusrid(@Query("param") param: String): Response<ChildInvoiceResponse>
 
     //API FOR USER BALANCE
     @GET("/api/ispportal/billispuserbalance")
@@ -138,6 +156,16 @@ interface ApiService {
     @Headers("Content-Type: application/json")
     @POST("/api/ispportal/loggedout")
     suspend fun loggedout(@Body jsonArray: JsonArray): Response<DefaultResponse>
+
+    // Api for saving package changed by bkash payment
+    @Headers("Content-Type: application/json")
+    @POST("/api/ispportal/changepaybybkashpayment")
+    suspend fun changepaybybkashpayment(@Body jsonArray: JsonArray): Response<DefaultResponse>
+
+    // Api for saving package changed by foster payment
+    @Headers("Content-Type: application/json")
+    @POST("/api/ispportal/changepaybyfoster")
+    suspend fun changepaybyfoster(@Body jsonArray: JsonArray): Response<DefaultResponse>
 
 
 //    @Multipart

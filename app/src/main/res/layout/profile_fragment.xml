@@ -30,37 +30,9 @@
                 android:background="@color/colorWhite"
                 android:theme="@style/AppTheme.AppBarOverlay"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:titleTextColor="@color/colorPrimaryLight" />
+                app:titleTextColor="@color/colorGreenTheme" />
 
         </com.google.android.material.appbar.AppBarLayout>
-
-<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--            android:id="@+id/header"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@color/customColor6"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"-->
-<!--            app:layout_constraintVertical_bias="0.0">-->
-
-<!--            <ImageView-->
-<!--                android:id="@+id/imageView"-->
-<!--                android:layout_width="96dp"-->
-<!--                android:layout_height="96dp"-->
-<!--                android:layout_marginTop="16dp"-->
-<!--                android:background="@drawable/circle_white"-->
-<!--                android:padding="16dp"-->
-<!--                android:src="@drawable/profile_avater"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                app:layout_constraintVertical_bias="0.0" />-->
-
-<!--            -->
-<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
@@ -89,16 +61,45 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <androidx.coordinatorlayout.widget.CoordinatorLayout
+                        android:id="@+id/header"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:background="@color/colorWhite">
+
+                        <ImageView
+                            android:id="@+id/cover"
+                            android:scaleType="centerCrop"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/splash_background"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"/>
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="96dp"
+                            android:layout_height="96dp"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/circle_white"
+                            android:padding="16dp"
+                            android:elevation="5dp"
+                            android:src="@drawable/profile_avater"
+                            android:layout_marginBottom="10dp"
+                            app:layout_anchor="@id/cover"
+                            app:layout_anchorGravity="center_horizontal|bottom"/>
+                    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
                     <TextView
                         android:id="@+id/name"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginEnd="16dp"
                         android:text="@{viewModel.name}"
                         android:textColor="@color/colorPrimaryLight"
-                        android:textSize="18sp"
+                        android:textSize="24sp"
                         android:textStyle="bold"/>
 
                     <LinearLayout
@@ -108,21 +109,43 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:tint="@color/colorPrimaryLight"
+                            android:src="@drawable/ic_monetization_on_black_24dp"/>
 
                         <TextView
                             android:id="@+id/textView1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Balance"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorPrimaryLight"/>
 
                         <TextView
                             android:id="@+id/balance"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="16sp"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.balance}" />
                     </LinearLayout>
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@color/colorSilver" />
 
                     <LinearLayout
                         android:id="@+id/linear8"
@@ -131,21 +154,43 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:tint="@color/colorPrimaryLight"
+                            android:src="@drawable/ic_announcement_black_24dp"/>
 
                         <TextView
                             android:id="@+id/textView8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Dues"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorPrimaryLight"/>
 
                         <TextView
                             android:id="@+id/dues"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="16sp"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.dues}" />
                     </LinearLayout>
+
+                    <View
+                        android:id="@+id/divider3"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@color/colorSilver" />
 
                     <LinearLayout
                         android:id="@+id/linear2"
@@ -154,21 +199,43 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:tint="@color/colorPrimaryLight"
+                            android:src="@drawable/ic_check_circle_24dp"/>
 
                         <TextView
                             android:id="@+id/textView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Created On"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorPrimaryLight"/>
 
                         <TextView
                             android:id="@+id/createDate"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="16sp"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.createDate}" />
                     </LinearLayout>
+
+                    <View
+                        android:id="@+id/divider6"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@color/colorSilver" />
 
                     <LinearLayout
                         android:id="@+id/linear5"
@@ -177,21 +244,43 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:tint="@color/colorPrimaryLight"
+                            android:src="@drawable/ic_mail_black_24dp"/>
 
                         <TextView
                             android:id="@+id/textView5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Email"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorPrimaryLight"/>
 
                         <TextView
                             android:id="@+id/email"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="16sp"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.email}" />
                     </LinearLayout>
+
+                    <View
+                        android:id="@+id/divider4"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@color/colorSilver" />
 
                     <LinearLayout
                         android:id="@+id/linear6"
@@ -200,30 +289,53 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="16dp"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:tint="@color/colorPrimaryLight"
+                            android:src="@drawable/ic_call_black_24dp"/>
 
                         <TextView
                             android:id="@+id/textView6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Phone"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorPrimaryLight"/>
 
                         <TextView
                             android:id="@+id/phone"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:gravity="end"
+                            android:textSize="16sp"
                             android:layout_height="wrap_content"
                             android:text="@{viewModel.phone}" />
                     </LinearLayout>
+
+                    <View
+                        android:id="@+id/divider5"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@color/colorSilver" />
 
                     <TextView
                         android:id="@+id/textView7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
-                        android:layout_marginTop="24dp"
-                        android:textColor="@color/colorPrimaryLight"
-                        android:text="Your Services"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="4dp"
+                        android:textColor="@color/colorGray"
+                        android:text="SERVICES"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 

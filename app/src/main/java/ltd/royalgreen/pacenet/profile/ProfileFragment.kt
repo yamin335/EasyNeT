@@ -23,6 +23,7 @@ import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 import ltd.royalgreen.pacenet.util.RecyclerItemDivider
 import ltd.royalgreen.pacenet.util.autoCleared
 import ltd.royalgreen.pacenet.util.showChangePasswordDialog
+import ltd.royalgreen.pacenet.util.showErrorToast
 import javax.inject.Inject
 
 /**
@@ -92,17 +93,32 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModel
 
-        viewModel.userPackServiceList.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                val userPackServiceAdapter = UserPackServiceListAdapter(it, object : UserPackServiceListAdapter.ChangeButtonCallback {
-                    override fun onChangeClicked(userPackService: UserPackService) {
-                        val action = ProfileFragmentDirections.actionProfileFragmentToPackageChangeFragment()
-                        findNavController().navigate(action)
-                    }
-                })
-                binding.serviceRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 16))
-                binding.serviceRecycler.adapter = userPackServiceAdapter
+        viewModel.userConnectionId = null
+        viewModel.changingUserPackage = null
+        viewModel.consumeData.value = null
+
+        viewModel.consumeData.observe(viewLifecycleOwner, Observer {
+            val connectionId = viewModel.userConnectionId
+            val packService = viewModel.changingUserPackage
+            if (it != null && connectionId != null && packService != null) {
+                if (it.isPossibleChange == true) {
+                    val action = ProfileFragmentDirections.actionProfileFragmentToPackageChangeFragment(packService, connectionId, it)
+                    findNavController().navigate(action)
+                } else {
+                    showErrorToast(requireContext(), "Try next day again! or contact with support")
+                }
             }
+        })
+
+        viewModel.userPackServiceList.observe(viewLifecycleOwner, Observer {
+            val userPackServiceAdapter = UserPackServiceListAdapter(it, object : UserPackServiceListAdapter.ChangeButtonCallback {
+                override fun onChangeClicked(userPackService: UserPackService) {
+                    viewModel.changingUserPackage = userPackService
+                    viewModel.getConsumeData(userPackService.userPackServiceId ?: 0)
+                }
+            })
+            binding.serviceRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 16))
+            binding.serviceRecycler.adapter = userPackServiceAdapter
         })
         viewModel.prepareProfile()
         viewModel.getUserPackServiceList()

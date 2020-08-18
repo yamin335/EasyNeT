@@ -15,7 +15,7 @@ class InvoiceDataSource(invoiceViewModel: InvoiceViewModel) : PageKeyedDataSourc
     val viewModel = invoiceViewModel
 
     override fun loadInitial(params: LoadInitialParams<Long>, callback: LoadInitialCallback<Long, Invoice>) {
-        if (viewModel.checkNetworkStatus(viewModel.application)) {
+        if (viewModel.checkNetworkStatus()) {
             viewModel.apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 viewModel.apiCallStatus.postValue("ERROR")
@@ -49,7 +49,7 @@ class InvoiceDataSource(invoiceViewModel: InvoiceViewModel) : PageKeyedDataSourc
     }
 
     override fun loadAfter(params: LoadParams<Long>, callback: LoadCallback<Long, Invoice>) {
-        if (viewModel.checkNetworkStatus(viewModel.application)) {
+        if (viewModel.checkNetworkStatus()) {
             viewModel.apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 viewModel.apiCallStatus.postValue("ERROR")

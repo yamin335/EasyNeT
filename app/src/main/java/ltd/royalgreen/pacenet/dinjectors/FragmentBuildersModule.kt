@@ -12,6 +12,8 @@ import ltd.royalgreen.pacenet.billing.foster.FosterPaymentWebDialog
 import ltd.royalgreen.pacenet.dashboard.DashboardFragment
 import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 import ltd.royalgreen.pacenet.login.LoginFragment
+import ltd.royalgreen.pacenet.pgw.BKashPGWDialog
+import ltd.royalgreen.pacenet.pgw.FosterPGWDialog
 import ltd.royalgreen.pacenet.profile.PackageChangeFragment
 import ltd.royalgreen.pacenet.profile.ProfileFragment
 import ltd.royalgreen.pacenet.support.SupportFragment
@@ -69,6 +71,12 @@ abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributePrivacyContactFragment(): ContactFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeBKashPGWDialog(): BKashPGWDialog
+
+    @ContributesAndroidInjector
+    abstract fun contributeFosterPGWDialog(): FosterPGWDialog
 
     @ContributesAndroidInjector
     abstract fun contributeInvoiceDetailDialog(): InvoiceDetailDialog

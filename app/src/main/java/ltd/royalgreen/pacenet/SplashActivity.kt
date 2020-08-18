@@ -1,7 +1,10 @@
 package ltd.royalgreen.pacenet
 
+import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Window
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -34,5 +37,11 @@ class SplashActivity : AppCompatActivity(), HasAndroidInjector, NavigationHost {
     override fun registerToolbarWithNavigation(toolbar: Toolbar) {
         setSupportActionBar(toolbar)
         setupActionBarWithNavController(findNavController(R.id.nav_host_fragment))
+    }
+
+    fun updateStatusBarBackgroundColor(color: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = Color.parseColor(color)
+        }
     }
 }

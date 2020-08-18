@@ -19,7 +19,7 @@ import ltd.royalgreen.pacenet.util.formatDateTime
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
-class ConversationDetailViewModel @Inject constructor(private val application: Application, private val repository: SupportRepository) : BaseViewModel() {
+class ConversationDetailViewModel @Inject constructor(private val application: Application, private val repository: SupportRepository) : BaseViewModel(application) {
 
     val newMessage: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -56,7 +56,7 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
     fun entryNewComment(ispTicketId: String): MutableLiveData<DefaultResponse> {
         val result = MutableLiveData<DefaultResponse>()
 
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -88,7 +88,7 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
     }
 
     fun getTicketConversation(id: Long) {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")

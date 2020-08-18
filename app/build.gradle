@@ -109,5 +109,6 @@ dependencies {
 
     //Paging for long-length list
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"
+    androidTestImplementation 'androidx.test:rules:1.3.0-alpha02'
 }
 apply plugin: "androidx.navigation.safeargs.kotlin"

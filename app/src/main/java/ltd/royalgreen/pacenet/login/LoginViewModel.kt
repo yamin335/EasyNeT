@@ -10,7 +10,7 @@ import ltd.royalgreen.pacenet.BaseViewModel
 import ltd.royalgreen.pacenet.network.*
 import javax.inject.Inject
 
-class LoginViewModel @Inject constructor(private val application: Application, private val repository: LoginRepository) : BaseViewModel() {
+class LoginViewModel @Inject constructor(private val application: Application, private val repository: LoginRepository) : BaseViewModel(application) {
 
     @Inject
     lateinit var preferences: SharedPreferences
@@ -91,7 +91,7 @@ class LoginViewModel @Inject constructor(private val application: Application, p
     }
 
     fun processSignIn() {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
 
             val handler = CoroutineExceptionHandler { _, exception ->
                 exception.printStackTrace()

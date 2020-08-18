@@ -24,7 +24,6 @@ import javax.inject.Singleton
 class BillingRepository @Inject constructor(private val apiService: ApiService, private val preferences: SharedPreferences) {
 
     suspend fun userBalanceRepo(): Response<UserBalanceResponse> {
-
         val user = Gson().fromJson(preferences.getString("LoggedUser", null), LoggedUser::class.java)
         val jsonObject = JsonObject()
         user?.let {
@@ -96,6 +95,25 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
 
         return withContext(Dispatchers.IO) {
             apiService.getispuserinvocedetail(param)
+        }
+    }
+
+    suspend fun childInvoiceRepo(SDate: String, EDate: String, CDate: String, invId: Int): Response<ChildInvoiceResponse> {
+        val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUser::class.java)
+        val jsonObject = JsonObject().apply {
+            addProperty("SDate", SDate)
+            addProperty("EDate", EDate)
+            addProperty("CDate", CDate)
+            addProperty("invId", invId)
+            addProperty("IspUserID", user.userID)
+        }
+
+        val param = JsonArray().apply {
+            add(jsonObject)
+        }.toString()
+
+        return withContext(Dispatchers.IO) {
+            apiService.getallispchildinvdetailsbyusrid(param)
         }
     }
 
@@ -201,14 +219,17 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
         }
     }
 
-    suspend fun bkashCreatePaymentRepo(paymentRequest: PaymentRequest?, createBkash: CreateBkashModel?): Response<BKashCreatePaymentResponse> {
+    suspend fun bkashCreatePaymentRepo(paymentRequest: PaymentRequest?, createBkash: CreateBkashModel?, billPaymentHelper: BillPaymentHelper): Response<BKashCreatePaymentResponse> {
 
         val jsonObject = JsonObject().apply {
             addProperty("authToken", createBkash?.authToken)
-            addProperty("rechargeAmount", createBkash?.rechargeAmount)
+            addProperty("rechargeAmount", billPaymentHelper.balanceAmount)
+            addProperty("deductedAmount", billPaymentHelper.deductedAmount)
             addProperty("Name", paymentRequest?.intent)
             addProperty("currency", createBkash?.currency)
             addProperty("mrcntNumber", createBkash?.mrcntNumber)
+            addProperty("canModify", billPaymentHelper.canModify)
+            addProperty("isChildInvoicePayment", billPaymentHelper.isChildInvoice)
         }
 
         val body = JsonArray().apply {
@@ -258,6 +279,7 @@ class BillingRepository @Inject constructor(private val apiService: ApiService, 
             addProperty("UserName", user?.displayName)
             addProperty("UserPackServiceId", billPaymentHelper.userPackServiceId)
             addProperty("UserTypeId", userLoggedData?.userTypeId)
+            addProperty("isChildInvoicePayment", billPaymentHelper.isChildInvoice)
         }
 
         val param = JsonArray().apply {

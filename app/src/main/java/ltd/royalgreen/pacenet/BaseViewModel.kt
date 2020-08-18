@@ -2,22 +2,28 @@ package ltd.royalgreen.pacenet
 
 import android.app.Application
 import android.content.SharedPreferences
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ltd.royalgreen.pacenet.util.isNetworkAvailable
 import ltd.royalgreen.pacenet.util.showErrorToast
+import ltd.royalgreen.pacenet.util.showSuccessToast
 
-open class BaseViewModel : ViewModel() {
+open class BaseViewModel constructor(val context: Application) : ViewModel() {
 
     val apiCallStatus: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
 
-    fun checkNetworkStatus(application: Application) = if (isNetworkAvailable(application)) {
+    val toastError = MutableLiveData<String>()
+    val toastSuccess = MutableLiveData<String>()
+    val popBackStack = MutableLiveData<Boolean>()
+
+    fun checkNetworkStatus() = if (isNetworkAvailable(context)) {
         true
     } else {
-        showErrorToast(application, application.getString(R.string.net_error_msg))
+        showErrorToast(context, context.getString(R.string.net_error_msg))
         false
     }
 

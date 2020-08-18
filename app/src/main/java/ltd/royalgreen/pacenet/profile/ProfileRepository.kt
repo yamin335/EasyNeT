@@ -10,6 +10,7 @@ import ltd.royalgreen.pacenet.LoggedUser
 import ltd.royalgreen.pacenet.billing.RechargeHistory
 import ltd.royalgreen.pacenet.login.LoggedUserID
 import ltd.royalgreen.pacenet.network.ApiService
+import ltd.royalgreen.pacenet.util.DefaultResponse
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -57,6 +58,48 @@ class ProfileRepository @Inject constructor(private val apiService: ApiService, 
 
         return withContext(Dispatchers.IO) {
             apiService.getprofileuserbyid(param)
+        }
+    }
+
+    suspend fun getConsumeDataRepo(userPackServiceId: Int): Response<ConsumeDataResponse> {
+        val jsonObject = JsonObject().apply {
+            addProperty("userPackServiceId", userPackServiceId)
+        }
+
+        val param = JsonArray().apply {
+            add(jsonObject)
+        }.toString()
+
+        return withContext(Dispatchers.IO) {
+            apiService.getuserpackserviceconsumdata(param)
+        }
+    }
+
+    suspend fun saveChangedPackageRepo(body: JsonArray): Response<DefaultResponse> {
+        return withContext(Dispatchers.IO) {
+            apiService.saveupdatesingleuserpackserivce(body)
+        }
+    }
+
+    suspend fun payMethodsRepo(): Response<PayMethodResponse> {
+        val param = JsonArray().apply {
+            JsonObject()
+        }.toString()
+
+        return withContext(Dispatchers.IO) {
+            apiService.getisppaymentmethod(param)
+        }
+    }
+
+    suspend fun saveChangedPackageByBkashRepo(body: JsonArray): Response<DefaultResponse> {
+        return withContext(Dispatchers.IO) {
+            apiService.changepaybybkashpayment(body)
+        }
+    }
+
+    suspend fun saveChangedPackageByFosterRepo(body: JsonArray): Response<DefaultResponse> {
+        return withContext(Dispatchers.IO) {
+            apiService.changepaybyfoster(body)
         }
     }
 }

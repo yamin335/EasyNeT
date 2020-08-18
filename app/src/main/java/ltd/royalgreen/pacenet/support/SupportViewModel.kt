@@ -8,7 +8,7 @@ import ltd.royalgreen.pacenet.BaseViewModel
 import java.util.*
 import javax.inject.Inject
 
-class SupportViewModel @Inject constructor(val application: Application, private val repository: SupportRepository) : BaseViewModel() {
+class SupportViewModel @Inject constructor(val application: Application, private val repository: SupportRepository) : BaseViewModel(application) {
 
     lateinit var supportTicketHistList: LiveData<PagedList<SupportTicket>>
 

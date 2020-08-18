@@ -17,7 +17,7 @@ import ltd.royalgreen.pacenet.util.showErrorToast
 import ltd.royalgreen.pacenet.util.showSuccessToast
 import javax.inject.Inject
 
-class BKashPaymentViewModel @Inject constructor(private val application: Application, private val repository: BillingRepository) : BaseViewModel() {
+class BKashPaymentViewModel @Inject constructor(private val application: Application, private val repository: BillingRepository) : BaseViewModel(application) {
 
     val resBkash: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -29,15 +29,15 @@ class BKashPaymentViewModel @Inject constructor(private val application: Applica
 
     var dismissListener = MutableLiveData<Pair<Boolean, String>>()
 
-    fun createBkashCheckout(paymentRequest: PaymentRequest?, createBkash: CreateBkashModel?) {
-        if (checkNetworkStatus(application)) {
+    fun createBkashCheckout(paymentRequest: PaymentRequest?, createBkash: CreateBkashModel?, billPaymentHelper: BillPaymentHelper) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
             }
             viewModelScope.launch(handler) {
-                when (val apiResponse = ApiResponse.create(repository.bkashCreatePaymentRepo(paymentRequest, createBkash))) {
+                when (val apiResponse = ApiResponse.create(repository.bkashCreatePaymentRepo(paymentRequest, createBkash, billPaymentHelper))) {
                     is ApiSuccessResponse -> {
                         apiCallStatus.postValue("SUCCESS")
                         val paymentCreateResponse = apiResponse.body.resdata
@@ -64,7 +64,7 @@ class BKashPaymentViewModel @Inject constructor(private val application: Applica
     }
 
     fun executeBkashPayment(billPaymentHelper: BillPaymentHelper) {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -97,7 +97,7 @@ class BKashPaymentViewModel @Inject constructor(private val application: Applica
     }
 
     fun saveBkashNewRecharge(bkashPaymentResponse: String, billPaymentHelper: BillPaymentHelper) {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -107,10 +107,10 @@ class BKashPaymentViewModel @Inject constructor(private val application: Applica
                 when (val apiResponse = ApiResponse.create(repository.bkashPaymentSaveRepo(bkashPaymentResponse, billPaymentHelper))) {
                     is ApiSuccessResponse -> {
                         val rechargeFinalSaveResponse = apiResponse.body.resdata
-                        if (rechargeFinalSaveResponse.resstate == true) {
-                            dismissListener.postValue(Pair(true, rechargeFinalSaveResponse.message))
+                        if (rechargeFinalSaveResponse?.resstate == true) {
+                            dismissListener.postValue(Pair(true, rechargeFinalSaveResponse.message ?: "Successful"))
                         } else {
-                            dismissListener.postValue(Pair(false, rechargeFinalSaveResponse.message))
+                            dismissListener.postValue(Pair(false, rechargeFinalSaveResponse?.message ?: "Not Successful!"))
                         }
                         apiCallStatus.postValue("SUCCESS")
                     }

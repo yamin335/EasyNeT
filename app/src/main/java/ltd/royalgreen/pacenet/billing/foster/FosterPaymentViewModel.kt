@@ -14,14 +14,14 @@ import ltd.royalgreen.pacenet.network.ApiResponse
 import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 import javax.inject.Inject
 
-class FosterPaymentViewModel @Inject constructor(private val application: Application, private val repository: BillingRepository) : BaseViewModel() {
+class FosterPaymentViewModel @Inject constructor(private val application: Application, private val repository: BillingRepository) : BaseViewModel(application) {
 
     val showMessage: MutableLiveData<Pair<Boolean, String>> by lazy {
         MutableLiveData<Pair<Boolean, String>>()
     }
 
     fun checkFosterPaymentStatus(fosterPaymentStatusUrl: String, billPaymentHelper: BillPaymentHelper) {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -52,7 +52,7 @@ class FosterPaymentViewModel @Inject constructor(private val application: Applic
     }
 
     private fun saveNewFosterRecharge(fosterString: String, billPaymentHelper: BillPaymentHelper) {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -62,10 +62,10 @@ class FosterPaymentViewModel @Inject constructor(private val application: Applic
                 when (val apiResponse = ApiResponse.create(repository.fosterRechargeSaveRepo(fosterString, billPaymentHelper))) {
                     is ApiSuccessResponse -> {
                         val rechargeFinalSaveResponse = apiResponse.body.resdata
-                        if (rechargeFinalSaveResponse.resstate == true) {
-                            showMessage.postValue(Pair(true, rechargeFinalSaveResponse.message))
+                        if (rechargeFinalSaveResponse?.resstate == true) {
+                            showMessage.postValue(Pair(true, rechargeFinalSaveResponse.message ?: "Successful"))
                         } else {
-                            showMessage.postValue(Pair(false, rechargeFinalSaveResponse.message))
+                            showMessage.postValue(Pair(false, rechargeFinalSaveResponse?.message ?: "Not Successful!"))
                         }
                         apiCallStatus.postValue("SUCCESS")
                     }

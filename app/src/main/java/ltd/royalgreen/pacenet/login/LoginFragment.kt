@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.MainActivity
 import ltd.royalgreen.pacenet.R
+import ltd.royalgreen.pacenet.SplashActivity
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.LoginFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
@@ -50,6 +51,8 @@ class LoginFragment : Fragment(), Injectable {
         // Get the ViewModel.
         viewModelFactory
     }
+
+    private var windowConfig: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,14 +79,35 @@ class LoginFragment : Fragment(), Injectable {
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+//        if (windowConfig != null) {
+//            requireActivity().window.decorView.systemUiVisibility = windowConfig!!
+//        }
+
+        //For updating status bar color
+//        val activity = requireActivity() as SplashActivity
+//        activity.updateStatusBarBackgroundColor("#ffffff")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
+        // Dark the status bar text.
+        //val uiOptions = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        //requireActivity().window.decorView.systemUiVisibility = uiOptions
+
+        //For updating status bar color
+//        val activity = requireActivity() as SplashActivity
+//        activity.updateStatusBarBackgroundColor("#4AAE34")
+
         // Hide the status bar.
-        val uiOptions = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        requireActivity().window.decorView.systemUiVisibility = uiOptions
+        windowConfig = requireActivity().window.decorView.systemUiVisibility
+        requireActivity().window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
 
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(

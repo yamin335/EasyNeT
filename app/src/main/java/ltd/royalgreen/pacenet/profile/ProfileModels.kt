@@ -52,3 +52,39 @@ data class UserPackService(
     val methodId: Int?,
     val isParent: Boolean?, val isUpGrade: Boolean?, val isDownGrade: Boolean?, val isNew: Boolean?,
     val isUpdate: Boolean?, val isDelete: Boolean?, val isChecked: Boolean? ) : Serializable
+
+data class ConsumeDataResponse(
+    val resdata: ConsumeData?
+)
+
+data class ConsumeData(
+    val consumAmount: Double?,
+    val restAmount: Double?,
+    val restDays: Int?,
+    val isPossibleChange: Boolean?,
+    val isDue: Boolean?,
+    val message: String?,
+    val todays: String?
+) : Serializable
+
+data class PayMethodResponse(
+    val resdata : PayMethodResdata?
+)
+
+data class PayMethodResdata(
+    val listPaymentMethod: ArrayList<PayMethod>?
+)
+
+data class PayMethod(
+    val methodId: Int,
+    val methodName: String?
+)
+
+data class PackageChangeHelper(
+    val isUpgrade: Boolean,
+    val requiredAmount: Double,
+    val actualPayAmount: Double,
+    val payAmount: Double,
+    val savedAmount: Double,
+    val deductedAmount: Double
+)

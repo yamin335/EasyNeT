@@ -22,14 +22,23 @@ class SplashFragment : Fragment(), Injectable {
     lateinit var preferences: SharedPreferences
 
     private lateinit var animation: Animation
+    private var windowConfig: Int? = null
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+//        if (windowConfig != null) {
+//            requireActivity().window.decorView.systemUiVisibility = windowConfig!!
+//        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Hide the status bar.
-        val uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
-        requireActivity().window.decorView.systemUiVisibility = uiOptions
+        windowConfig = requireActivity().window.decorView.systemUiVisibility
+        requireActivity().window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.splash_fragment, container, false)

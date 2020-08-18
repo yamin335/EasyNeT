@@ -44,4 +44,9 @@
     <color name="barColor4">#fd973c</color>
 
     <color name="test">#C6FF00</color>
+
+    // New theme colors
+    <color name="newThemeColor">#4AAE34</color>
+    <color name="chip_ripple_color">#330AB939</color>
+
 </resources>

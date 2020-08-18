@@ -11,9 +11,9 @@ fun convertToServiceString(intValue: Int): String {
 
 fun convertToSessionChartType(type: String?): String {
     return when (type) {
-        "monthly" -> "Monthly Data Traffic in:"
-        "daily" -> "Daily Data Traffic in:"
-        "hourly" -> "Hourly Data Traffic in:"
+        "monthly" -> "Monthly"
+        "daily" -> "Daily"
+        "hourly" -> "Hourly"
         else -> "Data Traffic in:"
     }
 }

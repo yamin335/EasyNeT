@@ -48,7 +48,7 @@
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
                             android:text="BKash Payment"
-                            android:textColor="@color/colorPrimaryLight"
+                            android:textColor="@color/colorGreenTheme"
                             android:textSize="22sp"
                             android:textStyle="normal"
                             app:layout_constraintBottom_toBottomOf="@+id/imageView7"
@@ -65,14 +65,13 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="16dp"
                             android:layout_marginBottom="8dp"
-                            android:tint="@color/colorPrimaryLight"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toEndOf="@id/goBack"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.0"
-                            app:srcCompat="@drawable/image_recharge" />
+                            app:srcCompat="@drawable/bkash_icon" />
 
                     <ImageView
                             android:id="@+id/goBack"

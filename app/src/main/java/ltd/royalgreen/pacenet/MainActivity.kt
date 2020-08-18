@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, Da
 
     private var currentNavController: LiveData<NavController>? = null
 
+    var navigatedFromDashboard = false
+
 
 //    var listener: SharedPreferences.OnSharedPreferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { prefs, key ->
 //        when (key) {
@@ -228,18 +230,15 @@ class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, Da
 
         when {
             navigation.equals("PROFILE", true) -> {
+                navigatedFromDashboard = true
                 bottom_nav.selectedItemId = R.id.profile_nav_graph
             }
-            navigation.equals("PAY_NOW", true) -> {
-                bottom_nav.selectedItemId = R.id.billing_nav_graph
-            }
             navigation.equals("PAY_HISTORY", true) -> {
+                navigatedFromDashboard = true
                 bottom_nav.selectedItemId = R.id.billing_nav_graph
-            }
-            navigation.equals("OPEN_TICKET", true) -> {
-                bottom_nav.selectedItemId = R.id.support_nav_graph
             }
             navigation.equals("TICKET_HISTORY", true) -> {
+                navigatedFromDashboard = true
                 bottom_nav.selectedItemId = R.id.support_nav_graph
             }
         }
@@ -270,14 +269,19 @@ class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, Da
     }
 
     override fun onAppExit() {
-        val exitDialog = CustomAlertDialog(object :
-            CustomAlertDialog.YesCallback {
-            override fun onYes() {
-                viewModel.onAppExit(preferences)
-                finish()
-            }
-        }, "Do you want to exit?", "")
-        exitDialog.show(supportFragmentManager, "#app_exit_dialog")
+        if (navigatedFromDashboard) {
+            navigatedFromDashboard = false
+            bottom_nav.selectedItemId = R.id.dashboard_nav_graph
+        } else {
+            val exitDialog = CustomAlertDialog(object :
+                CustomAlertDialog.YesCallback {
+                override fun onYes() {
+                    viewModel.onAppExit(preferences)
+                    finish()
+                }
+            }, "Do you want to exit?", "")
+            exitDialog.show(supportFragmentManager, "#app_exit_dialog")
+        }
     }
 
 }

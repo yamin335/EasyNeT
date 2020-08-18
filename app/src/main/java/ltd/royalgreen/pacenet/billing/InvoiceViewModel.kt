@@ -24,7 +24,7 @@ import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 import java.util.*
 import javax.inject.Inject
 
-class InvoiceViewModel @Inject constructor(val application: Application, private val repository: BillingRepository) : BaseViewModel() {
+class InvoiceViewModel @Inject constructor(val application: Application, private val repository: BillingRepository) : BaseViewModel(application) {
 
     @Inject
     lateinit var preferences: SharedPreferences
@@ -74,7 +74,7 @@ class InvoiceViewModel @Inject constructor(val application: Application, private
             = repository.invoiceRepo(pageNumber, pageSize, values, SDate, EDate)
 
     fun getFosterPaymentUrl(amount: Double) {
-        if (checkNetworkStatus(application) && billPaymentHelper != null) {
+        if (checkNetworkStatus() && billPaymentHelper != null) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -105,7 +105,7 @@ class InvoiceViewModel @Inject constructor(val application: Application, private
     }
 
     fun getBkashToken() {
-        if (checkNetworkStatus(application) && billPaymentHelper != null) {
+        if (checkNetworkStatus() && billPaymentHelper != null) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -149,7 +149,7 @@ class InvoiceViewModel @Inject constructor(val application: Application, private
     }
 
     fun getUserBalance() {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -175,7 +175,7 @@ class InvoiceViewModel @Inject constructor(val application: Application, private
     }
 
     fun saveNewPaymentFromBalance(billPaymentHelper: BillPaymentHelper) {
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
@@ -185,10 +185,10 @@ class InvoiceViewModel @Inject constructor(val application: Application, private
                 when (val apiResponse = ApiResponse.create(repository.newPaymentSaveRepo(billPaymentHelper))) {
                     is ApiSuccessResponse -> {
                         val response = apiResponse.body.resdata
-                        if (response.resstate == true) {
-                            toastPublisher.postValue(Pair(true, response.message))
+                        if (response?.resstate == true) {
+                            toastPublisher.postValue(Pair(true, response.message ?: "Successful"))
                         } else {
-                            toastPublisher.postValue(Pair(false, response.message))
+                            toastPublisher.postValue(Pair(false, response?.message ?: "Not Successful!"))
                         }
                         apiCallStatus.postValue("SUCCESS")
                     }

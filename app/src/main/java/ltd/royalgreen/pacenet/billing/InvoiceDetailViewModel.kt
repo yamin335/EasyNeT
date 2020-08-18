@@ -15,12 +15,10 @@ import ltd.royalgreen.pacenet.network.ApiResponse
 import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 import javax.inject.Inject
 
-class InvoiceDetailViewModel @Inject constructor(val application: Application, private val repository: BillingRepository) : BaseViewModel() {
+class InvoiceDetailViewModel @Inject constructor(val application: Application, private val repository: BillingRepository) : BaseViewModel(application) {
     fun getInvoiceDetail(SDate: String, EDate: String, CDate: String, invId: Int, userPackServiceId: Int): LiveData<ArrayList<InvoiceDetail>> {
-
         val invoiceDetails = MutableLiveData<ArrayList<InvoiceDetail>>()
-
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
 
             val handler = CoroutineExceptionHandler { _, exception ->
@@ -52,5 +50,41 @@ class InvoiceDetailViewModel @Inject constructor(val application: Application, p
             }
         }
         return invoiceDetails
+    }
+
+    fun getChildInvoice(SDate: String, EDate: String, CDate: String, invId: Int): LiveData<ArrayList<ChildInvoice>> {
+        val childInvoices = MutableLiveData<ArrayList<ChildInvoice>>()
+        if (checkNetworkStatus()) {
+            apiCallStatus.postValue("LOADING")
+
+            val handler = CoroutineExceptionHandler { _, exception ->
+                apiCallStatus.postValue("ERROR")
+                exception.printStackTrace()
+            }
+
+            viewModelScope.launch(handler) {
+                when (val apiResponse = ApiResponse.create(repository.childInvoiceRepo(SDate, EDate, CDate, invId))) {
+                    is ApiSuccessResponse -> {
+                        val response = apiResponse.body
+                        if (!response.resdata?.userChildInvoiceDetail.isNullOrBlank()) {
+                            val childInvoiceList = JsonParser.parseString(apiResponse.body.resdata?.userChildInvoiceDetail).asJsonArray
+                            val tempInvoiceList: ArrayList<ChildInvoice> = ArrayList()
+                            for (child in childInvoiceList) {
+                                tempInvoiceList.add(Gson().fromJson(child, ChildInvoice::class.java))
+                            }
+                            childInvoices.postValue(tempInvoiceList)
+                        }
+                        apiCallStatus.postValue("SUCCESS")
+                    }
+                    is ApiEmptyResponse -> {
+                        apiCallStatus.postValue("EMPTY")
+                    }
+                    is ApiErrorResponse -> {
+                        apiCallStatus.postValue("ERROR")
+                    }
+                }
+            }
+        }
+        return childInvoices
     }
 }

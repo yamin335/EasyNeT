@@ -16,7 +16,7 @@ import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 import java.util.*
 import javax.inject.Inject
 
-class DashboardViewModel @Inject constructor(private val application: Application, private val repository: DashRepository) : BaseViewModel() {
+class DashboardViewModel @Inject constructor(private val application: Application, private val repository: DashRepository) : BaseViewModel(application) {
 
     var selectedType = MutableLiveData<String>()
     var selectedMonth = MutableLiveData<Int>()
@@ -32,7 +32,7 @@ class DashboardViewModel @Inject constructor(private val application: Applicatio
 
     fun getChartData(): LiveData<DashboardChart> {
         val chartData = MutableLiveData<DashboardChart>()
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")
                 exception.printStackTrace()
@@ -55,7 +55,7 @@ class DashboardViewModel @Inject constructor(private val application: Applicatio
     fun getSessionChartData(month: Int, type: String) {
         selectedType.value = type
         selectedMonth.value = month
-        if (checkNetworkStatus(application)) {
+        if (checkNetworkStatus()) {
             apiCallStatus.postValue("LOADING")
             val handler = CoroutineExceptionHandler { _, exception ->
                 apiCallStatus.postValue("ERROR")

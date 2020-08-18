@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingComponent
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -112,12 +113,14 @@ class InvoiceFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
                         override fun onPayBill(
                             invoiceId: Int,
                             userPackServiceId: Int,
-                            amount: Double
+                            amount: Double,
+                            isChild: Boolean
                         ) {
                             if (amount > 0.0) {
                                 val userBalance = viewModel.userBalance.value?.balanceAmount
                                 if ( userBalance != null && userBalance >= amount) {
-                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = amount, deductedAmount = amount, invoiceId = invoiceId, userPackServiceId = userPackServiceId)
+                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = amount, deductedAmount = amount,
+                                        invoiceId = invoiceId, userPackServiceId = userPackServiceId, canModify = false, isChildInvoice = isChild)
                                     viewModel.billPaymentHelper?.let { billPayment ->
                                         val paymentConfirmDialog = CustomAlertDialog(object :
                                             CustomAlertDialog.YesCallback {
@@ -129,12 +132,14 @@ class InvoiceFragment : Fragment(), Injectable, RechargeConfirmDialog.RechargeCo
                                     }
                                 } else if (userBalance != null && userBalance < amount) {
                                     val balanceAmount = amount - userBalance
-                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = balanceAmount, deductedAmount = userBalance, invoiceId = invoiceId, userPackServiceId = userPackServiceId)
+                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = balanceAmount, deductedAmount = userBalance,
+                                        invoiceId = invoiceId, userPackServiceId = userPackServiceId, canModify = false, isChildInvoice = isChild)
                                     viewModel.billPaymentHelper?.let {
                                         showRechargeConfirmDialog(amount)
                                     }
                                 } else {
-                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = amount, deductedAmount = 0.0, invoiceId = invoiceId, userPackServiceId = userPackServiceId)
+                                    viewModel.billPaymentHelper = BillPaymentHelper(balanceAmount = amount, deductedAmount = 0.0, invoiceId = invoiceId,
+                                        userPackServiceId = userPackServiceId, canModify = false, isChildInvoice = isChild)
                                     viewModel.billPaymentHelper?.let {
                                         showRechargeConfirmDialog(amount)
                                     }
