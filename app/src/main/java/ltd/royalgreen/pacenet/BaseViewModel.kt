@@ -29,8 +29,8 @@ open class BaseViewModel constructor(val context: Application) : ViewModel() {
 
     fun onAppExit(preferences: SharedPreferences) {
         preferences.edit().apply {
-            putString("LoggedUserPassword",null)
-            putString("LoggedUserID", null)
+            //putString("LoggedUserPassword",null)
+            //putString("LoggedUserID", null)
             putBoolean("goToLogin", false)
             apply()
         }
@@ -41,6 +41,7 @@ open class BaseViewModel constructor(val context: Application) : ViewModel() {
             putString("LoggedUserPassword",null)
             putString("LoggedUserID", null)
             putBoolean("goToLogin", true)
+            putBoolean("isLoggedIn", false)
             apply()
         }
     }

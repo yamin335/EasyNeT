@@ -262,7 +262,11 @@ class MainActivity : AppCompatActivity(), NavigationHost, HasAndroidInjector, Da
         val exitDialog = CustomAlertDialog(object :
             CustomAlertDialog.YesCallback {
             override fun onYes() {
-                viewModel.doLogOut()
+                //viewModel.doLogOut()
+                viewModel.onLogOut(preferences)
+                showSuccessToast(this@MainActivity, "Signed Out Successfully!")
+                startActivity(Intent(this@MainActivity, SplashActivity::class.java))
+                finish()
             }
         }, "Do you want to Sign Out?", "")
         exitDialog.show(supportFragmentManager, "#sign_out_dialog")

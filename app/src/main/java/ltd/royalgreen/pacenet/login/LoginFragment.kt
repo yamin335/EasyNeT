@@ -14,19 +14,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ltd.royalgreen.pacenet.CustomAlertDialog
 import ltd.royalgreen.pacenet.MainActivity
 import ltd.royalgreen.pacenet.R
-import ltd.royalgreen.pacenet.SplashActivity
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.LoginFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
@@ -218,6 +212,7 @@ class LoginFragment : Fragment(), Injectable {
 
                     preferences.edit().apply {
                         putString("LoggedUserPassword", viewModel.password.value)
+                        putBoolean("isLoggedIn", true)
                         apply()
                     }
 

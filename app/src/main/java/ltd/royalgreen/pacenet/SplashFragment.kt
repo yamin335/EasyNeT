@@ -1,5 +1,6 @@
 package ltd.royalgreen.pacenet
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -60,14 +61,19 @@ class SplashFragment : Fragment(), Injectable {
             override fun onAnimationEnd(p0: Animation?) {
                 runBlocking {
                     launch {
-                        preferences.edit().apply {
-                            putBoolean("goToLogin", true)
-                            apply()
+                        if (preferences.getBoolean("isLoggedIn", false)) {
+                            delay(1500L)
+                            startActivity(Intent(requireActivity(), MainActivity::class.java))
+                            requireActivity().finish()
+                        } else {
+                            preferences.edit().apply {
+                                putBoolean("goToLogin", true)
+                                apply()
+                            }
+                            delay(1500L)
+                            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
                         }
-                        delay(1500L)
                     }
-
-                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
                 }
             }
 
