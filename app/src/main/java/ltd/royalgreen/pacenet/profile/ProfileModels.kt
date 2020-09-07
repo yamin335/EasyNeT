@@ -77,7 +77,7 @@ data class PayMethodResdata(
 
 data class PayMethod(
     val methodId: Int,
-    val methodName: String?
+    var methodName: String?
 )
 
 data class PackageChangeHelper(

@@ -74,10 +74,19 @@ class PackageChangePaymentDialog internal constructor(private val packageName: S
         }
 
         payNow.setOnClickListener {
-            val amount = payableAmount.text.toString().toDouble()
-            if (requiredAmount == amount) {
-                callBack.onPayClicked()
-                dismiss()
+            val amountText = payableAmount.text.toString()
+            if (amountText.isBlank()) {
+                showErrorToast(requireContext(), "Enter valid amount!")
+            } else if (selectedPayMethod == null) {
+                showErrorToast(requireContext(), "Please select a payment method!")
+            } else if (!amountText.isBlank() && "^(?=\\d)(?=.*[1-9])(\\d*)\\.?\\d+".toRegex().matches(amountText) && selectedPayMethod != null) {
+                val amount = amountText.toDouble()
+                if (requiredAmount == amount) {
+                    callBack.onPayClicked()
+                    dismiss()
+                } else {
+                    showErrorToast(requireContext(), "Enter valid amount!")
+                }
             } else {
                 showErrorToast(requireContext(), "Enter valid amount!")
             }

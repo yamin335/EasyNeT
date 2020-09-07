@@ -113,8 +113,12 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
         viewModel.userPackServiceList.observe(viewLifecycleOwner, Observer {
             val userPackServiceAdapter = UserPackServiceListAdapter(it, object : UserPackServiceListAdapter.ChangeButtonCallback {
                 override fun onChangeClicked(userPackService: UserPackService) {
-                    viewModel.changingUserPackage = userPackService
-                    viewModel.getConsumeData(userPackService.userPackServiceId ?: 0)
+                    if (userPackService.packServiceType == "Package") {
+                        viewModel.changingUserPackage = userPackService
+                        viewModel.getConsumeData(userPackService.userPackServiceId ?: 0)
+                    } else {
+                        showErrorToast(requireContext(), "Please contact with our office!")
+                    }
                 }
             })
             binding.serviceRecycler.addItemDecoration(RecyclerItemDivider(requireContext(), LinearLayoutManager.VERTICAL, 16))
