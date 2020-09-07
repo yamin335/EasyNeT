@@ -19,7 +19,6 @@ import ltd.royalgreen.pacenet.*
 import ltd.royalgreen.pacenet.binding.FragmentDataBindingComponent
 import ltd.royalgreen.pacenet.databinding.ProfileFragmentBinding
 import ltd.royalgreen.pacenet.dinjectors.Injectable
-import ltd.royalgreen.pacenet.login.ForgotPasswordDialog
 import ltd.royalgreen.pacenet.util.RecyclerItemDivider
 import ltd.royalgreen.pacenet.util.autoCleared
 import ltd.royalgreen.pacenet.util.showChangePasswordDialog
@@ -115,7 +114,7 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
                 override fun onChangeClicked(userPackService: UserPackService) {
                     if (userPackService.packServiceTypeId == 1) {
                         viewModel.changingUserPackage = userPackService
-                        viewModel.getConsumeData(userPackService.userPackServiceId ?: 0)
+                        viewModel.getConsumeData(userPackService.userPackServiceId)
                     } else {
                         showErrorToast(requireContext(), "Please contact with our office!")
                     }
