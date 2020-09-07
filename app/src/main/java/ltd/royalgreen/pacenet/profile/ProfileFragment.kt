@@ -113,7 +113,7 @@ class ProfileFragment : MainNavigationFragment(), Injectable {
         viewModel.userPackServiceList.observe(viewLifecycleOwner, Observer {
             val userPackServiceAdapter = UserPackServiceListAdapter(it, object : UserPackServiceListAdapter.ChangeButtonCallback {
                 override fun onChangeClicked(userPackService: UserPackService) {
-                    if (userPackService.packServiceType == "Package") {
+                    if (userPackService.packServiceTypeId == 1) {
                         viewModel.changingUserPackage = userPackService
                         viewModel.getConsumeData(userPackService.userPackServiceId ?: 0)
                     } else {
