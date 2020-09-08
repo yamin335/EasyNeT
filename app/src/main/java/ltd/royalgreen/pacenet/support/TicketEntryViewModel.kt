@@ -12,6 +12,7 @@ import ltd.royalgreen.pacenet.network.ApiErrorResponse
 import ltd.royalgreen.pacenet.network.ApiResponse
 import ltd.royalgreen.pacenet.network.ApiSuccessResponse
 import ltd.royalgreen.pacenet.util.DefaultResponse
+import ltd.royalgreen.pacenet.util.FileUtils
 import ltd.royalgreen.pacenet.util.asFile
 import ltd.royalgreen.pacenet.util.asFilePart
 import okhttp3.MultipartBody
@@ -49,12 +50,20 @@ class TicketEntryViewModel @Inject constructor(private val application: Applicat
             }
             viewModelScope.launch(handler) {
                 val attachedFileList = ArrayList<MultipartBody.Part>()
+
                 for (uri in fileUriList) {
-                    val file = uri.asFile(application)?.asFilePart()
-                    file?.let {
-                        attachedFileList.add(it)
+                    val path = FileUtils.getPathForMediaFile(application, uri)
+                    path?.let {
+                        attachedFileList.add(File(it).asFilePart())
                     }
                 }
+
+//                for (uri in fileUriList) {
+//                    val file = uri.asFile(application)?.asFilePart()
+//                    file?.let {
+//                        attachedFileList.add(it)
+//                    }
+//                }
                 when (val apiResponse = ApiResponse.create(repository.ticketEntryRepo(ticketSubject.value!!,
                     ticketDescription.value!!, selectedTicketCategory.value?.ispTicketCategoryId.toString(), attachedFileList))) {
                     is ApiSuccessResponse -> {

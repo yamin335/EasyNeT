@@ -190,15 +190,22 @@ class SupportTicketConversationFragment : MainNavigationFragment(), Injectable {
     }
 
     private fun showFileChooser() {
+
+        val intent = Intent()
+            .setType("image/*")
+            .setAction(Intent.ACTION_GET_CONTENT)
+
+        startActivityForResult(Intent.createChooser(intent, "Select a file"), fileChooserCode)
+
         // Use the GET_CONTENT intent from the utility class
-        val targetChooser = FileChooser.createGetContentIntent()
+//        val targetChooser = FileChooser.createGetContentIntent()
         // Create the chooser Intent
-        val intent = Intent.createChooser(targetChooser, "Choose File From")
-        try {
-            startActivityForResult(intent, fileChooserCode)
-        } catch (exception: ActivityNotFoundException) {
-            exception.printStackTrace()
-        }
+//        val intent = Intent.createChooser(targetChooser, "Choose File From")
+//        try {
+//            startActivityForResult(intent, fileChooserCode)
+//        } catch (exception: ActivityNotFoundException) {
+//            exception.printStackTrace()
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

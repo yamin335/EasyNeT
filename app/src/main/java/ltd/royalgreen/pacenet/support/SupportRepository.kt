@@ -110,15 +110,9 @@ class SupportRepository @Inject constructor(private val apiService: ApiService, 
         }
     }
 
-    suspend fun ticketCommentEntryRepo(ispTicketId: String, ticketComment: String, attachedFileList: ArrayList<MultipartBody.Part>): Response<DefaultResponse> {
+    suspend fun ticketCommentEntryRepo(ispTicketId: String, ticketComment: String, attachedFile: MultipartBody.Part?): Response<DefaultResponse> {
         val user = Gson().fromJson(preferences.getString("LoggedUserID", null), LoggedUserID::class.java)
         val ispUserId = user.userID.toString()
-
-        var attachedFile: MultipartBody.Part? = null
-
-        if (attachedFileList.size > 0) {
-            attachedFile = attachedFileList[0]
-        }
 
         return withContext(Dispatchers.IO) {
             apiService.saveispticketconversation(ispTicketId.toRequestBody("text/plain".toMediaTypeOrNull()),

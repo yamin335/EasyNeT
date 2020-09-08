@@ -12,11 +12,9 @@ import ltd.royalgreen.pacenet.network.ApiEmptyResponse
 import ltd.royalgreen.pacenet.network.ApiErrorResponse
 import ltd.royalgreen.pacenet.network.ApiResponse
 import ltd.royalgreen.pacenet.network.ApiSuccessResponse
-import ltd.royalgreen.pacenet.util.DefaultResponse
-import ltd.royalgreen.pacenet.util.asFile
-import ltd.royalgreen.pacenet.util.asFilePart
-import ltd.royalgreen.pacenet.util.formatDateTime
+import ltd.royalgreen.pacenet.util.*
 import okhttp3.MultipartBody
+import java.io.File
 import javax.inject.Inject
 
 class ConversationDetailViewModel @Inject constructor(private val application: Application, private val repository: SupportRepository) : BaseViewModel(application) {
@@ -63,14 +61,21 @@ class ConversationDetailViewModel @Inject constructor(private val application: A
                 exception.printStackTrace()
             }
             viewModelScope.launch(handler) {
-                val attachedFileList = ArrayList<MultipartBody.Part>()
+                var attachedFile: MultipartBody.Part? = null
+
                 for (uri in fileUriList) {
-                    val file = uri.asFile(application)?.asFilePart()
-                    file?.let {
-                        attachedFileList.add(it)
+                    val path = FileUtils.getPathForMediaFile(application, uri)
+                    path?.let {
+                        attachedFile = File(it).asFilePart()
                     }
                 }
-                when (val apiResponse = ApiResponse.create(repository.ticketCommentEntryRepo(ispTicketId, newMessage.value!!, attachedFileList))) {
+//                for (uri in fileUriList) {
+//                    val file = uri.asFile(application)?.asFilePart()
+//                    file?.let {
+//                        attachedFile = it
+//                    }
+//                }
+                when (val apiResponse = ApiResponse.create(repository.ticketCommentEntryRepo(ispTicketId, newMessage.value!!, attachedFile))) {
                     is ApiSuccessResponse -> {
                         result.postValue(apiResponse.body)
                         apiCallStatus.postValue("SUCCESS")

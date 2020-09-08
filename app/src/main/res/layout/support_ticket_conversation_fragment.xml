@@ -188,6 +188,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:padding="2dp"
+                        android:visibility="invisible"
                         android:text="Show Attachment"
                         android:textColor="@color/customColor9"
                         app:layout_constraintBottom_toBottomOf="parent"
