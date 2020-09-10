@@ -40,7 +40,8 @@ class PackageChangePaymentDialog internal constructor(private val packageName: S
         super.onViewCreated(view, savedInstanceState)
 
         title.text = "Additional payment for - $packageName"
-        reqAmount.text = "${requiredAmount.toString()} BDT"
+        reqAmount.text = "$requiredAmount BDT"
+        payableAmount.setText(requiredAmount.toString())
 
         val temp = Array(payMethods.size + 1){""}
         temp[0] = "--Select Category--"

@@ -126,10 +126,13 @@ class PackageChangeFragment : MainNavigationFragment() {
         binding.save.setOnClickListener {
             calculateAmount()
             val helper = viewModel.packageChangeHelper
-            val payMethods = viewModel.payMethods.value?.filter { payMethod ->
-                payMethod.methodName == "Card"
+            val methods = viewModel.payMethods.value
+            val payMethods = methods?.filter { payMethod ->
+                payMethod.methodName == "Card" || payMethod.methodName == "Card/BKash"
             }?.map { payMethod ->
-                payMethod.methodName = "${payMethod.methodName}/BKash"
+                if (payMethod.methodName == "Card") {
+                    payMethod.methodName = "${payMethod.methodName}/BKash"
+                }
                 payMethod
             } as? ArrayList<PayMethod>
             val userPackServiceId = viewModel.changingPackage?.userPackServiceId
